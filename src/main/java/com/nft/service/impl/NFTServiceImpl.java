@@ -1,12 +1,20 @@
 package com.nft.service.impl;
 
 import com.nft.dao.entity.FilePO;
-import com.nft.service.FileUploadService;
+import com.nft.dao.mapper.FileMapper;
+import com.nft.service.NFTService;
 import com.nft.service.dto.FileDTO;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
+import javax.annotation.Resource;
 import java.util.List;
 
-public class FileUploadServiceImpl implements FileUploadService {
+@Service
+public class NFTServiceImpl implements NFTService {
+
+    @Resource
+    private FileMapper fileMapper;
 
     /**
      * 保存文件
@@ -15,6 +23,12 @@ public class FileUploadServiceImpl implements FileUploadService {
      */
     @Override
     public int save(FilePO filePO) {
+
+        FilePO fileItem = fileMapper.selectById(filePO.getId());
+        if(fileItem != null || !StringUtils.isEmpty(fileItem.getId())){
+            return -1;
+        }
+
         return 0;
     }
 

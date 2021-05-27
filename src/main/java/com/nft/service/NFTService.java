@@ -5,7 +5,7 @@ import com.nft.service.dto.FileDTO;
 
 import java.util.List;
 
-public interface FileUploadService {
+public interface NFTService {
 
     /**
      * 保存文件

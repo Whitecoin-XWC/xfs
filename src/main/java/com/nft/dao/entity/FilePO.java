@@ -6,8 +6,10 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
+import java.util.Date;
+
 @Data
-@TableName("xfs_file")
+@TableName("nft_file")
 public class FilePO {
     /**
      * 主键
@@ -28,15 +30,30 @@ public class FilePO {
      * 付费时间，null 表示没付费
      */
     @TableField("pay_time")
-    private String payTime;
+    private Date payTime;
     /**
      * 创建时间
      */
     @TableField("create_time")
-    private String createTime;
+    private Date createTime;
+    /**
+     * 发布时间
+     */
+    @TableField("pub_time")
+    private Date pubTime;
     /**
      * 用户标识
      */
     @TableField("user_tag")
     private String userTag;
+    /**
+     * 媒体类型 1 图片，2视频，3音频
+     */
+    @TableField("media_type")
+    private Integer mediaType;
+    /**
+     * 状态，1. 已上传，2. 已发布，3. 已付费
+     */
+    @TableField("file_status")
+    private Integer fileStatus;
 }

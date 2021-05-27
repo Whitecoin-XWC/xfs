@@ -5,7 +5,7 @@ spring:
     type: com.alibaba.druid.pool.DruidDataSource
     driverClassName: com.mysql.cj.jdbc.Driver
     druid:
-      url: jdbc:mysql://154.209.69.121:3306/xfs?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+      url: jdbc:mysql://154.209.69.121:3306/nft?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
       username: root
       password: root!@0915
       # 初始连接数
@@ -53,3 +53,8 @@ logging:
   config: classpath:log/logback-dev.xml
   level:
     com.xfs: DEBUG
+
+# 文件上传，本地测试的时候要加上盘符
+fileUpload:
+  save-path: /data/app/nft/media
+  img-url: http://154.209.69.121:8089/
