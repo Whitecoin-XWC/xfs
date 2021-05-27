@@ -1,7 +1,7 @@
-package com.xfs.dao.mapper;
+package com.nft.dao.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.xfs.dao.entity.FilePO;
+import com.nft.dao.entity.FilePO;
 import org.springframework.stereotype.Repository;
 
 @Repository

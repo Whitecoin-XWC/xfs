@@ -1,4 +1,4 @@
-package com.xfs.commons.config;
+package com.nft.commons.config;
 
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;

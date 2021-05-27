@@ -1,4 +1,4 @@
-package com.xfs;
+package com.nft;
 
 public class Start {
 }

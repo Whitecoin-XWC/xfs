@@ -1,4 +1,4 @@
-package com.xfs.service.dto;
+package com.nft.service.dto;
 
 public class FileDTO {
 

@@ -9,8 +9,8 @@
         <version>2.3.5.RELEASE</version>
         <relativePath/>
     </parent>
-    <groupId>com.xfs</groupId>
-    <artifactId>XFS</artifactId>
+    <groupId>com.nft</groupId>
+    <artifactId>nft</artifactId>
     <version>1.0</version>
 
     <properties>
@@ -125,9 +125,9 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <finalName>service-xfs</finalName>
+                    <finalName>service-nft</finalName>
                     <executable>true</executable>
-                    <mainClass>com.xfs.Start</mainClass>
+                    <mainClass>com.nft.Start</mainClass>
                 </configuration>
             </plugin>
         </plugins>

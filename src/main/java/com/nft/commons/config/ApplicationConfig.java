@@ -1,4 +1,4 @@
-package com.xfs.commons.config;
+package com.nft.commons.config;
 
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Configuration;

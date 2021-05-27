@@ -1,4 +1,4 @@
-package com.xfs.dao.entity;
+package com.nft.dao.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;

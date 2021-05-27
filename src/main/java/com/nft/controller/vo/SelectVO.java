@@ -1,4 +1,4 @@
-package com.xfs.controller.vo;
+package com.nft.controller.vo;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

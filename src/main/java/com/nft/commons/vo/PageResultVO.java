@@ -1,4 +1,4 @@
-package com.xfs.commons.vo;
+package com.nft.commons.vo;
 
 import lombok.Data;
 

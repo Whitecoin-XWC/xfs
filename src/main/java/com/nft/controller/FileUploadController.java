@@ -1,8 +1,8 @@
-package com.xfs.controller;
+package com.nft.controller;
 
-import com.xfs.commons.vo.PageResultVO;
-import com.xfs.commons.vo.ResultVO;
-import com.xfs.controller.vo.SelectVO;
+import com.nft.commons.vo.PageResultVO;
+import com.nft.commons.vo.ResultVO;
+import com.nft.controller.vo.SelectVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

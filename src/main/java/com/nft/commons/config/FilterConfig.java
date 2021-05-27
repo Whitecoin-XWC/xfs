@@ -1,4 +1,4 @@
-package com.xfs.commons.config;
+package com.nft.commons.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;

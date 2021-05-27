@@ -1,8 +1,8 @@
-package com.xfs.service.impl;
+package com.nft.service.impl;
 
-import com.xfs.dao.entity.FilePO;
-import com.xfs.service.FileUploadService;
-import com.xfs.service.dto.FileDTO;
+import com.nft.dao.entity.FilePO;
+import com.nft.service.FileUploadService;
+import com.nft.service.dto.FileDTO;
 
 import java.util.List;
 
