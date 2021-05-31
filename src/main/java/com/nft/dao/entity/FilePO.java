@@ -17,6 +17,11 @@ public class FilePO {
     @TableId(value = "id", type = IdType.INPUT)
     private String id;
     /**
+     * 标题
+     */
+    @TableField("file_title")
+    private String fileTitle;
+    /**
      * 文件名
      */
     @TableField("file_name")
@@ -56,4 +61,9 @@ public class FilePO {
      */
     @TableField("file_status")
     private Integer fileStatus;
+    /**
+     * 描述
+     */
+    @TableField("file_des")
+    private String fileDes;
 }

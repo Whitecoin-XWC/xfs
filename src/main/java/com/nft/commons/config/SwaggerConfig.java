@@ -23,23 +23,24 @@ public class SwaggerConfig {
     @Bean
     public Docket api() {
 
-        ParameterBuilder tokenPar = new ParameterBuilder();
-        List<Parameter> pars = new ArrayList<>();
-        tokenPar.name("user_tag").description("用户标识").modelRef(new ModelRef("string")).parameterType("header").required(false).build();
-        pars.add(tokenPar.build());
+//        ParameterBuilder tokenPar = new ParameterBuilder();
+//        List<Parameter> pars = new ArrayList<>();
+//        tokenPar.name("user_tag").description("用户标识").modelRef(new ModelRef("string")).parameterType("header").required(false).build();
+//        pars.add(tokenPar.build());
 
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
                 .select()
                 .apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))
                 .paths(PathSelectors.any())
-                .build().globalOperationParameters(pars);
+                .build();
+//        .globalOperationParameters(pars);
     }
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("XFS接口")
-                .description("XFS接口文档")
+                .title("NFT接口")
+                .description("NFT接口文档")
                 .version("1.0")
                 .build();
     }

@@ -9,8 +9,8 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.util.DigestUtils;
 import org.springframework.util.MultiValueMap;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,8 +22,8 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
+import java.io.FileInputStream;
 import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 
 /**
@@ -48,6 +48,12 @@ public class FileUploadController {
     private String imgUrl;
 
     /**
+     * 文件后缀
+     */
+    @Value("${fileUpload.type}")
+    private String mediaType;
+
+    /**
      * nft服务层
      */
     @Resource
@@ -61,8 +67,6 @@ public class FileUploadController {
      */
     @ApiOperation("文件上传")
     @ApiImplicitParams({
-        @ApiImplicitParam(name = "id", value = "id"),
-        @ApiImplicitParam(name = "mediaType", value = "文件类型，1 图片，2视频，3音频"),
         @ApiImplicitParam(name = "file", value = "文件流")
     })
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
@@ -71,23 +75,8 @@ public class FileUploadController {
             if (request instanceof MultipartHttpServletRequest) {
                 MultipartHttpServletRequest params = (MultipartHttpServletRequest) request;
 
-                String id = params.getParameter("id");
-                String mediaType = params.getParameter("mediaType");
-                if (StringUtils.isEmpty(id)) {
-                    return ResultVO.fail("id不可以为空");
-                }
-                if (StringUtils.isEmpty(mediaType)) {
-                    return ResultVO.fail("文件类型不可以为空");
-                }
-
                 // 保存图片
                 FilePO filePO = upload(params);
-                filePO.setUserTag(id);
-                filePO.setMediaType(Integer.parseInt(mediaType));
-                int result =nftService.save(filePO);
-                if(result < 0){
-                    return ResultVO.fail("已经存在相同的文件");
-                }
 
                 // 返回文件url和tokenId
                 UploadResultVO uploadResultVO = new UploadResultVO();
@@ -99,7 +88,7 @@ public class FileUploadController {
             }
         } catch (Exception e) {
             log.error("上传失败", e);
-            return ResultVO.fail("上传出现异常" + e.getMessage());
+            return ResultVO.fail("上传出现异常:" + e.getMessage());
         }
     }
 
@@ -120,16 +109,39 @@ public class FileUploadController {
         MultipartFile multipartFile = multipartFileMultiValueMap.getFirst("file");
         String fileName = UUID.randomUUID().toString();
         String oldFileName = multipartFile.getOriginalFilename();
-        String newFileName = fileName + oldFileName.substring(oldFileName.lastIndexOf("."));
+        String suffix = oldFileName.substring(oldFileName.lastIndexOf("."));
+        String newFileName = fileName + suffix;
 
-        multipartFile.transferTo(new File(savePath + "/" + newFileName));
+        if(!StringUtils.isEmpty(mediaType)){
+            boolean isMatch = false;
+            String[] mediaTypes = mediaType.split(",");
+            for(String type : mediaTypes){
+                if(suffix.toUpperCase().endsWith(type)){
+                    isMatch = true;
+                    break;
+                }
+            }
+            if(!isMatch){
+                throw new Exception("不支持此类型的文件");
+            }
+        }
 
-        String id = DigestUtils.md5DigestAsHex(multipartFile.getBytes());
+        File file = new File(savePath + "/" + newFileName);
+        multipartFile.transferTo(file);
+
+        String id = DigestUtils.md5Hex(new FileInputStream(file));
         filePO.setId(id);
         filePO.setCreateTime(new Date());
         filePO.setFileName(newFileName);
-        filePO.setFileStatus(0);
-        filePO.setFilePath("");
+        filePO.setFileStatus(-1);
+        filePO.setFilePath(savePath + "/" + newFileName);
+
+        int result = nftService.upload(filePO);
+        if(result < 0){
+            file.delete();
+            throw  new Exception("已经存在相同的文件");
+        }
+
         return filePO;
     }
 }

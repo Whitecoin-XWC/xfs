@@ -10,7 +10,7 @@ spring:
     basename: il8n.messages
 
 mybatis-plus:
-  type-aliases-package: com.tokenswap.manager.*.dao.entity
+  type-aliases-package: com.nft.dao.entity
   mapper-locations: classpath*:mapper/**/*.xml
   global-config:
     db-config:

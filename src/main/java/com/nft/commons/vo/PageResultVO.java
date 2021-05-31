@@ -22,6 +22,10 @@ public class PageResultVO {
      */
     private long pageTotal;
     /**
+     * 图片url前缀
+     */
+    private String imgUrl;
+    /**
      * 数据
      */
     private Object records;

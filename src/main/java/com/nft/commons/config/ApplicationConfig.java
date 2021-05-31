@@ -12,7 +12,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 // 表示通过aop框架暴露该代理对象,AopContext能够访问
 @EnableAspectJAutoProxy(exposeProxy = true)
 // 指定要扫描的Mapper类的包的路径
-@MapperScan("com.xfs.dao.mapper")
+@MapperScan("com.nft.dao.mapper")
 @EnableScheduling
 public class ApplicationConfig
 {

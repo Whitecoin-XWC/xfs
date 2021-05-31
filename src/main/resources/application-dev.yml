@@ -47,7 +47,12 @@ spring:
         wall:
           config:
             multi-statement-allow: true
-
+  servlet:
+    multipart:
+      # 上传文件总的最大值
+      max-request-size: 20MB
+      # 单个文件的最大值
+      max-file-size: 20MB
 
 logging:
   config: classpath:log/logback-dev.xml
@@ -56,5 +61,6 @@ logging:
 
 # 文件上传，本地测试的时候要加上盘符
 fileUpload:
-  save-path: /data/app/nft/media
+  type: "JPG,PNG,GIF,SVG,MP4,WEBM,MP3,WAV,OGG"
+  save-path: D:/data/app/nft/media
   img-url: http://154.209.69.121:8089/

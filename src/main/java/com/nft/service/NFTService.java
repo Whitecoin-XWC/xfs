@@ -1,11 +1,18 @@
 package com.nft.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.nft.controller.vo.PubVO;
 import com.nft.dao.entity.FilePO;
 import com.nft.service.dto.FileDTO;
 
-import java.util.List;
-
 public interface NFTService {
+
+    /**
+     * 上传文件
+     * @param filePO
+     * @return
+     */
+    int upload(FilePO filePO);
 
     /**
      * 保存文件
@@ -13,6 +20,13 @@ public interface NFTService {
      * @return
      */
     int save(FilePO filePO);
+
+    /**
+     * 发布文件
+     * @param pubVO
+     * @return
+     */
+    int pub(PubVO pubVO);
 
     /**
      * 获取一个文件
@@ -23,10 +37,10 @@ public interface NFTService {
 
     /**
      * 查询当前用户的所有文件
-     * @param filePO
+     * @param userTag
      * @param page
      * @param pageSize
      * @return
      */
-    List<FileDTO> selectFiles(FilePO filePO, int page, int pageSize);
+    IPage<FilePO> selectFiles(String userTag, int page, int pageSize);
 }
