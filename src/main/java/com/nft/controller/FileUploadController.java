@@ -139,7 +139,7 @@ public class FileUploadController {
         int result = nftService.upload(filePO);
         if(result < 0){
             file.delete();
-            throw  new Exception("已经存在相同的文件");
+            throw new Exception("已经存在相同的文件");
         }
 
         return filePO;
