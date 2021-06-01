@@ -128,6 +128,7 @@ public class NFTServiceImpl implements NFTService {
 
         QueryWrapper<FileLogPO> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("file_id", fileDetail.getId());
+        queryWrapper.orderByDesc("create_time");
         List<FileLogPO> fileLogPOList = fileLogMapper.selectList(queryWrapper);
 
         FileDTO fileDTO = new FileDTO();

@@ -85,18 +85,18 @@ public class NFTController {
      * @param pubVO
      * @return
      */
-    @ApiOperation("付费")
+    @ApiOperation("付费，已可用，但是因为目前免费 所以此接口暂时用不到")
     @RequestMapping(value = "/pay", method = RequestMethod.POST)
     public ResultVO pay(@RequestBody PubVO pubVO){
         try {
             int result = nftService.pay(pubVO);
             if(result > 0){
-                return ResultVO.successMsg("发布成功");
+                return ResultVO.successMsg("付费成功");
             }
-            return ResultVO.fail("发布失败");
+            return ResultVO.fail("付费失败");
         }catch (Exception e){
-            log.error("发布异常", e);
-            return ResultVO.fail("发布异常" + e.getMessage());
+            log.error("付费异常", e);
+            return ResultVO.fail("付费异常" + e.getMessage());
         }
     }
 
