@@ -1,5 +1,5 @@
 CREATE TABLE `nft_file` (
-  `id` varchar(255) NOT NULL COMMENT '主键，uuid',
+  `id` varchar(255) NOT NULL COMMENT '主键，文件的md5',
   `file_title` varchar(255) DEFAULT NULL COMMENT '标题',
   `file_name` varchar(255) DEFAULT NULL COMMENT '文件名',
   `file_path` varchar(255) DEFAULT NULL COMMENT '文件路径',
