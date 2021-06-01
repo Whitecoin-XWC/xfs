@@ -91,6 +91,26 @@ public class NFTServiceImpl implements NFTService {
     }
 
     /**
+     * 付费
+     * @param pubVO
+     * @return
+     */
+    @Override
+    public int pay(PubVO pubVO) {
+        FilePO fileItem = fileMapper.selectById(pubVO.getTokenId());
+        if(fileItem == null || StringUtils.isEmpty(fileItem.getId())){
+            return -1;
+        }
+        fileItem.setFileStatus(3);
+        fileItem.setPayTime(new Date());
+        fileMapper.updateById(fileItem);
+
+        saveLog(fileItem.getId(), fileItem.getUserTag(),"付费");
+
+        return 1;
+    }
+
+    /**
      * 获取一个文件
      * @param filePO
      * @return

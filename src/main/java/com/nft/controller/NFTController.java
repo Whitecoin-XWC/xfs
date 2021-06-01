@@ -81,6 +81,26 @@ public class NFTController {
     }
 
     /**
+     * 付费
+     * @param pubVO
+     * @return
+     */
+    @ApiOperation("付费")
+    @RequestMapping(value = "/pay", method = RequestMethod.POST)
+    public ResultVO pay(@RequestBody PubVO pubVO){
+        try {
+            int result = nftService.pay(pubVO);
+            if(result > 0){
+                return ResultVO.successMsg("发布成功");
+            }
+            return ResultVO.fail("发布失败");
+        }catch (Exception e){
+            log.error("发布异常", e);
+            return ResultVO.fail("发布异常" + e.getMessage());
+        }
+    }
+
+    /**
      * 获取文件
      * @return
      */

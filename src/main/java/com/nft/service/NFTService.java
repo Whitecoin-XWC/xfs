@@ -29,6 +29,13 @@ public interface NFTService {
     int pub(PubVO pubVO);
 
     /**
+     * 付费
+     * @param pubVO
+     * @return
+     */
+    int pay(PubVO pubVO);
+
+    /**
      * 获取一个文件
      * @param filePO
      * @return

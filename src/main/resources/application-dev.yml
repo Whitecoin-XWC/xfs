@@ -1,5 +1,5 @@
 server:
-  port: 8087
+  port: 8089
 spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
@@ -62,5 +62,5 @@ logging:
 # 文件上传，本地测试的时候要加上盘符
 fileUpload:
   type: "JPG,PNG,GIF,SVG,MP4,WEBM,MP3,WAV,OGG"
-  save-path: D:/data/app/nft/media
+  save-path: /data/app/nft/media
   img-url: http://154.209.69.121:8089/
