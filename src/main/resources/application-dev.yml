@@ -57,7 +57,7 @@ spring:
 logging:
   config: classpath:log/logback-dev.xml
   level:
-    com.xfs: DEBUG
+    com.nft: DEBUG
 
 # 文件上传，本地测试的时候要加上盘符
 fileUpload:
