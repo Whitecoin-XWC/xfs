@@ -51,7 +51,7 @@ public class FileUploadController {
      * 文件后缀
      */
     @Value("${fileUpload.type}")
-    private String mediaType;
+    private String mediaSuffix;
 
     /**
      * nft服务层
@@ -112,11 +112,15 @@ public class FileUploadController {
         String suffix = oldFileName.substring(oldFileName.lastIndexOf("."));
         String newFileName = fileName + suffix;
 
-        if(!StringUtils.isEmpty(mediaType)){
+        String mediaType = "-1";
+
+        if(!StringUtils.isEmpty(mediaSuffix)){
             boolean isMatch = false;
-            String[] mediaTypes = mediaType.split(",");
+            String[] mediaTypes = mediaSuffix.split(",");
             for(String type : mediaTypes){
-                if(suffix.toUpperCase().endsWith(type)){
+                String tp[] =type.split("_");
+                if(suffix.toUpperCase().endsWith(tp[0])){
+                    mediaType = tp[1];
                     isMatch = true;
                     break;
                 }
@@ -133,6 +137,7 @@ public class FileUploadController {
         filePO.setId(id);
         filePO.setCreateTime(new Date());
         filePO.setFileName(newFileName);
+        filePO.setMediaType(Integer.parseInt(mediaType));
         filePO.setFileStatus(-1);
         filePO.setFilePath(savePath + "/" + newFileName);
 
