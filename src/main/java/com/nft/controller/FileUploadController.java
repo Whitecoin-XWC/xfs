@@ -11,6 +11,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.MultiValueMap;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -106,10 +108,19 @@ public class FileUploadController {
 
         FilePO filePO = new FilePO();
 
-        MultipartFile multipartFile = multipartFileMultiValueMap.getFirst("file");
+        List<MultipartFile> multipartFileList = multipartFileMultiValueMap.get("file");
+        if(CollectionUtils.isEmpty(multipartFileList)){
+            throw new Exception("上传失败,请选择文件");
+        }
+
+        MultipartFile multipartFile = multipartFileList.get(0);
         String fileName = UUID.randomUUID().toString();
         String oldFileName = multipartFile.getOriginalFilename();
-        String suffix = oldFileName.substring(oldFileName.lastIndexOf("."));
+        String suffix = "blank";
+        if(oldFileName.lastIndexOf(".") > -1){
+            suffix = oldFileName.substring(oldFileName.lastIndexOf("."));
+        }
+
         String newFileName = fileName + suffix;
 
         String mediaType = "-1";
