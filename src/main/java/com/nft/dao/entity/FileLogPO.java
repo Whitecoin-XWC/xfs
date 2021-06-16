@@ -34,4 +34,16 @@ public class FileLogPO {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @TableField("create_time")
     private Date createTime;
+
+    /**
+     * 类型：0 普通变化，1 竞拍，2 出售
+     */
+    @TableField("type")
+    private Integer type;
+
+    /**
+     * 其他数据，以json字符串的形式存储
+     */
+    @TableField("other")
+    private String other;
 }
