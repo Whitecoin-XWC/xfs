@@ -5,7 +5,6 @@ import com.nft.commons.vo.PageResultVO;
 import com.nft.commons.vo.ResultVO;
 import com.nft.controller.vo.FileVO;
 import com.nft.controller.vo.PubVO;
-import com.nft.controller.vo.SaveVO;
 import com.nft.controller.vo.SelectVO;
 import com.nft.dao.entity.FilePO;
 import com.nft.service.NFTService;
@@ -35,30 +34,6 @@ public class NFTController {
 
     @Resource
     private NFTService nftService;
-
-    /**
-     * 保存文件
-     * @return
-     */
-    @ApiOperation("保存文件")
-    @RequestMapping(value = "/save",method = RequestMethod.POST)
-    public ResultVO save(@RequestBody SaveVO saveVO){
-        try {
-            FilePO filePO = new FilePO();
-            filePO.setId(saveVO.getTokenId());
-            filePO.setFileTitle(saveVO.getTitle());
-            filePO.setFileDes(saveVO.getDes());
-            filePO.setUserTag(saveVO.getUserTag());
-            int result= nftService.save(filePO);
-            if(result > 0){
-                return ResultVO.successMsg("保存成功");
-            }
-            return ResultVO.fail("保存失败");
-        }catch (Exception e){
-            log.error("保存异常", e);
-            return ResultVO.fail("保存异常" + e.getMessage());
-        }
-    }
 
     /**
      * 发布
@@ -105,12 +80,31 @@ public class NFTController {
      * @return
      */
     @ApiOperation("获取文件")
+    @RequestMapping(value = "/getFileDetail", method = RequestMethod.POST)
+    public ResultVO getFileDetail(@RequestBody FileVO fileVO){
+        try {
+            FilePO filePO = new FilePO();
+            filePO.setId(fileVO.getTokenId());
+            filePO.setUserTag(fileVO.getUserTag());
+            FileDTO fileDTO = nftService.getFileDetail(filePO);
+            fileDTO.setImgUrl(imgUrl);
+            return ResultVO.success(fileDTO);
+        }catch (Exception e){
+            log.error("获取文件异常", e);
+            return ResultVO.fail("获取文件异常" + e.getMessage());
+        }
+    }
+
+    /**
+     * 获取文件
+     * @return
+     */
+    @ApiOperation("获取文件")
     @RequestMapping(value = "/getFile", method = RequestMethod.POST)
     public ResultVO getFile(@RequestBody FileVO fileVO){
         try {
             FilePO filePO = new FilePO();
             filePO.setId(fileVO.getTokenId());
-            filePO.setUserTag(fileVO.getUserTag());
             FileDTO fileDTO = nftService.getFile(filePO);
             fileDTO.setImgUrl(imgUrl);
             return ResultVO.success(fileDTO);
