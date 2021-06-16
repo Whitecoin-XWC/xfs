@@ -7,6 +7,7 @@ import com.nft.controller.vo.FileLogVO;
 import com.nft.controller.vo.FileVO;
 import com.nft.controller.vo.PubVO;
 import com.nft.controller.vo.SelectVO;
+import com.nft.dao.entity.FileLogPO;
 import com.nft.dao.entity.FilePO;
 import com.nft.service.NFTService;
 import com.nft.service.dto.FileDTO;
@@ -101,14 +102,26 @@ public class NFTController {
      * 获取文件变化日志
      * @return
      */
-    @ApiOperation("获取文件")
+    @ApiOperation("获取文件变化日志")
     @RequestMapping(value = "/getFileLog", method = RequestMethod.POST)
     public ResultVO getFileLog(@RequestBody FileLogVO fileLogVO){
         try {
-            return ResultVO.success(nftService.getFileLog(fileLogVO));
+            PageResultVO pageResultVO = new PageResultVO();
+
+            IPage<FileLogPO> iPage = nftService.getFileLog(fileLogVO);
+            if(iPage != null){
+                pageResultVO.setCount(iPage.getTotal());
+                pageResultVO.setCurrentPage(iPage.getCurrent());
+                pageResultVO.setPageSize(iPage.getSize());
+                pageResultVO.setPageTotal(iPage.getPages());
+                pageResultVO.setImgUrl(imgUrl);
+                pageResultVO.setRecords(iPage.getRecords());
+            }
+
+            return ResultVO.success(pageResultVO);
         }catch (Exception e){
-            log.error("获取文件异常", e);
-            return ResultVO.fail("获取文件异常" + e.getMessage());
+            log.error("获取文件变化日志异常", e);
+            return ResultVO.fail("获取文件变化日志异常" + e.getMessage());
         }
     }
 

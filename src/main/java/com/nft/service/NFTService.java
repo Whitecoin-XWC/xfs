@@ -46,7 +46,7 @@ public interface NFTService {
 
     /**
      * 获取一个文件
-     * @param tokenId
+     * @param fileLogVO
      * @return
      */
     IPage<FileLogPO> getFileLog(FileLogVO fileLogVO);

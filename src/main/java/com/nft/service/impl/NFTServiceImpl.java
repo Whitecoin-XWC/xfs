@@ -158,7 +158,7 @@ public class NFTServiceImpl implements NFTService {
         Page<FilePO> poPage = new Page<>(page, pageSize);
 
         QueryWrapper<FilePO> wrapper = new QueryWrapper<>();
-        wrapper.eq("user_tag", userTag);
+        wrapper.eq(!StringUtils.isEmpty(userTag),"user_tag", userTag);
         return fileMapper.selectPage(poPage, wrapper);
     }
 
