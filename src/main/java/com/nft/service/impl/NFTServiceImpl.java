@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.nft.commons.util.LogUtil;
+import com.nft.controller.vo.FileLogVO;
 import com.nft.controller.vo.PubVO;
 import com.nft.dao.entity.FileLogPO;
 import com.nft.dao.entity.FilePO;
@@ -116,7 +117,7 @@ public class NFTServiceImpl implements NFTService {
      * @return
      */
     @Override
-    public FileDTO getFileDetail(FilePO filePO) {
+    public FilePO getFileDetail(FilePO filePO) {
         FilePO fileDetail = fileMapper.selectById(filePO.getId());
         if(fileDetail == null || StringUtils.isEmpty(fileDetail.getId())){
             return null;
@@ -126,32 +127,22 @@ public class NFTServiceImpl implements NFTService {
             return null;
         }
 
-        QueryWrapper<FileLogPO> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("file_id", fileDetail.getId());
-        queryWrapper.orderByDesc("create_time");
-        List<FileLogPO> fileLogPOList = fileLogMapper.selectList(queryWrapper);
-
-        FileDTO fileDTO = new FileDTO();
-        fileDTO.setFilePO(fileDetail);
-        fileDTO.setFileLogPOList(fileLogPOList);
-        return fileDTO;
+        return fileDetail;
     }
 
     /**
      * 获取一个文件
-     * @param filePO
+     * @param fileLogVO
      * @return
      */
     @Override
-    public FileDTO getFile(FilePO filePO) {
-        FilePO fileDetail = fileMapper.selectById(filePO.getId());
-        if(fileDetail == null || StringUtils.isEmpty(fileDetail.getId())){
-            return null;
-        }
+    public IPage<FileLogPO> getFileLog(FileLogVO fileLogVO) {
+        QueryWrapper<FileLogPO> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("file_id", fileLogVO.getTokenId());
+        queryWrapper.orderByDesc("create_time");
 
-        FileDTO fileDTO = new FileDTO();
-        fileDTO.setFilePO(fileDetail);
-        return fileDTO;
+        Page<FileLogPO> fileLogPOPage = new Page<>(fileLogVO.getPage(), fileLogVO.getPageSize());
+        return fileLogMapper.selectPage(fileLogPOPage, queryWrapper);
     }
 
     /**

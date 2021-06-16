@@ -1,7 +1,9 @@
 package com.nft.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.nft.controller.vo.FileLogVO;
 import com.nft.controller.vo.PubVO;
+import com.nft.dao.entity.FileLogPO;
 import com.nft.dao.entity.FilePO;
 import com.nft.service.dto.FileDTO;
 
@@ -40,14 +42,14 @@ public interface NFTService {
      * @param filePO
      * @return
      */
-    FileDTO getFileDetail(FilePO filePO);
+    FilePO getFileDetail(FilePO filePO);
 
     /**
      * 获取一个文件
-     * @param filePO
+     * @param tokenId
      * @return
      */
-    FileDTO getFile(FilePO filePO);
+    IPage<FileLogPO> getFileLog(FileLogVO fileLogVO);
 
     /**
      * 查询当前用户的所有文件

@@ -3,6 +3,7 @@ package com.nft.controller;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.nft.commons.vo.PageResultVO;
 import com.nft.commons.vo.ResultVO;
+import com.nft.controller.vo.FileLogVO;
 import com.nft.controller.vo.FileVO;
 import com.nft.controller.vo.PubVO;
 import com.nft.controller.vo.SelectVO;
@@ -86,8 +87,9 @@ public class NFTController {
             FilePO filePO = new FilePO();
             filePO.setId(fileVO.getTokenId());
             filePO.setUserTag(fileVO.getUserTag());
-            FileDTO fileDTO = nftService.getFileDetail(filePO);
+            FileDTO fileDTO = new FileDTO();
             fileDTO.setImgUrl(imgUrl);
+            fileDTO.setFilePO(nftService.getFileDetail(filePO));
             return ResultVO.success(fileDTO);
         }catch (Exception e){
             log.error("获取文件异常", e);
@@ -96,18 +98,14 @@ public class NFTController {
     }
 
     /**
-     * 获取文件
+     * 获取文件变化日志
      * @return
      */
     @ApiOperation("获取文件")
-    @RequestMapping(value = "/getFile", method = RequestMethod.POST)
-    public ResultVO getFile(@RequestBody FileVO fileVO){
+    @RequestMapping(value = "/getFileLog", method = RequestMethod.POST)
+    public ResultVO getFileLog(@RequestBody FileLogVO fileLogVO){
         try {
-            FilePO filePO = new FilePO();
-            filePO.setId(fileVO.getTokenId());
-            FileDTO fileDTO = nftService.getFile(filePO);
-            fileDTO.setImgUrl(imgUrl);
-            return ResultVO.success(fileDTO);
+            return ResultVO.success(nftService.getFileLog(fileLogVO));
         }catch (Exception e){
             log.error("获取文件异常", e);
             return ResultVO.fail("获取文件异常" + e.getMessage());
