@@ -40,6 +40,13 @@ public interface NFTService {
      * @param filePO
      * @return
      */
+    FileDTO getFileDetail(FilePO filePO);
+
+    /**
+     * 获取一个文件
+     * @param filePO
+     * @return
+     */
     FileDTO getFile(FilePO filePO);
 
     /**

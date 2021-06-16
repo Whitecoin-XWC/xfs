@@ -69,10 +69,14 @@ public class FileUploadController {
      */
     @ApiOperation("文件上传")
     @ApiImplicitParams({
-        @ApiImplicitParam(name = "file", value = "文件流")
+            @ApiImplicitParam(name = "file", value = "文件流"),
+            @ApiImplicitParam(name = "title", value = "标题"),
+            @ApiImplicitParam(name = "des", value = "描述"),
+            @ApiImplicitParam(name = "userTag", value = "用户标识"),
+            @ApiImplicitParam(name = "copyrightFee", value = "版权费")
     })
-    @RequestMapping(value = "/upload", method = RequestMethod.POST)
-    public ResultVO upload(HttpServletRequest request) {
+    @RequestMapping(value = "/save", method = RequestMethod.POST)
+    public ResultVO save(HttpServletRequest request) {
         try {
             if (request instanceof MultipartHttpServletRequest) {
                 MultipartHttpServletRequest params = (MultipartHttpServletRequest) request;
@@ -109,7 +113,7 @@ public class FileUploadController {
         FilePO filePO = new FilePO();
 
         List<MultipartFile> multipartFileList = multipartFileMultiValueMap.get("file");
-        if(CollectionUtils.isEmpty(multipartFileList)){
+        if (CollectionUtils.isEmpty(multipartFileList)) {
             throw new Exception("上传失败,请选择文件");
         }
 
@@ -117,7 +121,7 @@ public class FileUploadController {
         String fileName = UUID.randomUUID().toString();
         String oldFileName = multipartFile.getOriginalFilename();
         String suffix = "blank";
-        if(oldFileName.lastIndexOf(".") > -1){
+        if (oldFileName.lastIndexOf(".") > -1) {
             suffix = oldFileName.substring(oldFileName.lastIndexOf("."));
         }
 
@@ -125,18 +129,18 @@ public class FileUploadController {
 
         String mediaType = "-1";
 
-        if(!StringUtils.isEmpty(mediaSuffix)){
+        if (!StringUtils.isEmpty(mediaSuffix)) {
             boolean isMatch = false;
             String[] mediaTypes = mediaSuffix.split(",");
-            for(String type : mediaTypes){
-                String tp[] =type.split("_");
-                if(suffix.toUpperCase().endsWith(tp[0])){
+            for (String type : mediaTypes) {
+                String tp[] = type.split("_");
+                if (suffix.toUpperCase().endsWith(tp[0])) {
                     mediaType = tp[1];
                     isMatch = true;
                     break;
                 }
             }
-            if(!isMatch){
+            if (!isMatch) {
                 throw new Exception("不支持此类型的文件");
             }
         }
@@ -144,16 +148,26 @@ public class FileUploadController {
         File file = new File(savePath + "/" + newFileName);
         multipartFile.transferTo(file);
 
+        String title = params.getParameter("title");
+        String des = params.getParameter("des");
+        String userTag = params.getParameter("userTag");
+        String copyright = params.getParameter("copyrightFee");
+
+
         String id = DigestUtils.md5Hex(new FileInputStream(file));
         filePO.setId(id);
         filePO.setCreateTime(new Date());
         filePO.setFileName(newFileName);
         filePO.setMediaType(Integer.parseInt(mediaType));
-        filePO.setFileStatus(-1);
+        filePO.setFileStatus(1);
         filePO.setFilePath(savePath + "/" + newFileName);
+        filePO.setFileTitle(title);
+        filePO.setFileDes(des);
+        filePO.setUserTag(userTag);
+        filePO.setCopyrightFee(copyright);
 
         int result = nftService.upload(filePO);
-        if(result < 0){
+        if (result < 0) {
             file.delete();
             throw new Exception("已经存在相同的文件");
         }

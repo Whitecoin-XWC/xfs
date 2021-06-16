@@ -8,7 +8,9 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import org.springframework.util.StringUtils;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Data
@@ -84,4 +86,32 @@ public class FilePO {
     @ApiModelProperty("描述")
     @TableField("file_des")
     private String fileDes;
+
+    /**
+     * 版权费（百分比）
+     */
+    @ApiModelProperty("版权费（百分比）")
+    @TableField("copyright_fee")
+    private BigDecimal copyrightFee;
+
+    /**
+     * 售价
+     */
+    @ApiModelProperty("售价")
+    @TableField("price")
+    private BigDecimal price;
+
+    public void setCopyrightFee(String copyrightFeeStr) {
+        if(StringUtils.isEmpty(copyrightFeeStr)){
+            copyrightFeeStr = "0";
+        }
+        this.copyrightFee = new BigDecimal(copyrightFeeStr);
+    }
+
+    public void setPrice(String priceStr) {
+        if(StringUtils.isEmpty(priceStr)){
+            priceStr = "0";
+        }
+        this.price = new BigDecimal(priceStr);
+    }
 }

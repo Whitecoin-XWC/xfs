@@ -116,13 +116,13 @@ public class NFTServiceImpl implements NFTService {
      * @return
      */
     @Override
-    public FileDTO getFile(FilePO filePO) {
+    public FileDTO getFileDetail(FilePO filePO) {
         FilePO fileDetail = fileMapper.selectById(filePO.getId());
         if(fileDetail == null || StringUtils.isEmpty(fileDetail.getId())){
             return null;
         }
 
-        if(!filePO.getUserTag().equals(fileDetail.getUserTag())){
+        if(!StringUtils.isEmpty(filePO.getUserTag()) && !filePO.getUserTag().equals(fileDetail.getUserTag())){
             return null;
         }
 
@@ -134,6 +134,23 @@ public class NFTServiceImpl implements NFTService {
         FileDTO fileDTO = new FileDTO();
         fileDTO.setFilePO(fileDetail);
         fileDTO.setFileLogPOList(fileLogPOList);
+        return fileDTO;
+    }
+
+    /**
+     * 获取一个文件
+     * @param filePO
+     * @return
+     */
+    @Override
+    public FileDTO getFile(FilePO filePO) {
+        FilePO fileDetail = fileMapper.selectById(filePO.getId());
+        if(fileDetail == null || StringUtils.isEmpty(fileDetail.getId())){
+            return null;
+        }
+
+        FileDTO fileDTO = new FileDTO();
+        fileDTO.setFilePO(fileDetail);
         return fileDTO;
     }
 
