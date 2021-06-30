@@ -99,19 +99,12 @@ public class FilePO {
      */
     @ApiModelProperty("售价")
     @TableField("price")
-    private BigDecimal price;
+    private Integer type;
 
     public void setCopyrightFee(String copyrightFeeStr) {
         if(StringUtils.isEmpty(copyrightFeeStr)){
             copyrightFeeStr = "0";
         }
         this.copyrightFee = new BigDecimal(copyrightFeeStr);
-    }
-
-    public void setPrice(String priceStr) {
-        if(StringUtils.isEmpty(priceStr)){
-            priceStr = "0";
-        }
-        this.price = new BigDecimal(priceStr);
     }
 }
