@@ -1,22 +1,20 @@
-package com.nft.dao.entity;
+package com.nft.service.dto;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
-@Data
 @ApiModel
-@TableName("nft_file")
-public class FilePO {
+@Data
+public class FileResultDTO {
+
     /**
      * 主键
      */
@@ -88,17 +86,33 @@ public class FilePO {
     @TableField("copyright_fee")
     private BigDecimal copyrightFee;
 
-    @TableField(exist = false)
+    /**
+     * 用户地址
+     */
+    @ApiModelProperty("用户钱包地址")
     private String userAddress;
 
+    /**
+     * 用户名
+     */
+    @ApiModelProperty("用户昵称")
+    private String userName;
 
-    @TableField(exist = false)
-    private String type;
+    /**
+     * 售价
+     */
+    @ApiModelProperty("售价")
+    private BigDecimal price;
 
-    public void setCopyrightFee(String copyrightFeeStr) {
-        if(StringUtils.isEmpty(copyrightFeeStr)){
-            copyrightFeeStr = "0";
-        }
-        this.copyrightFee = new BigDecimal(copyrightFeeStr);
-    }
+    /**
+     * 起拍价
+     */
+    @ApiModelProperty("起拍价")
+    private BigDecimal pmPrice;
+
+    /**
+     * 文件来源
+     */
+    @ApiModelProperty("文件来源 0创建， 1 商品，2 关注")
+    private Integer source;
 }

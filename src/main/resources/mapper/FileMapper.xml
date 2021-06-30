@@ -2,4 +2,36 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.nft.dao.mapper.FileMapper">
 
+    <select id="selectFileList" parameterType="com.nft.service.dto.FileResultDTO" resultType="com.nft.service.dto.FileResultDTO">
+        SELECT
+            nft_file.id,
+            nft_file.file_title fileTitle,
+            nft_file.file_name fileName,
+            nft_file.file_path filePath,
+            nft_file.pay_time payTime,
+            nft_file.create_time createTime,
+            nft_file.pub_time pubTime,
+            nft_file.media_type mediaType,
+            nft_file.file_status fileStatus,
+            nft_file.file_des fileDes,
+            nft_file.copyright_fee copyrightFee,
+            nft_sell_info.price price,
+            nft_sell_info.unit unit,
+            nft_sell_info.`status` status,
+            nft_auction.auction_retain_price pmPrice,
+            nft_user_file.user_id userAddress,
+            nft_user_file.type type,
+            nft_userinfo.nick_name userName
+        FROM
+            nft_file
+        LEFT JOIN nft_sell_info ON nft_sell_info.token_id = nft_file.id
+        LEFT JOIN nft_auction ON nft_auction.file_token_id = nft_file.id
+        LEFT JOIN nft_user_file ON nft_user_file.file_id = nft_file.id
+        LEFT JOIN nft_userinfo ON nft_userinfo.id = nft_user_file.user_id
+        WHERE 1=1
+        <if test="fileResultDTO.userAddress != null and fileResultDTO.userAddress != ''">
+            nft_user_file.user_id = #{fileResultDTO.userAddress}
+        </if>
+    </select>
+
 </mapper>

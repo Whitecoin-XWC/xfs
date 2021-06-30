@@ -5,7 +5,7 @@ import com.nft.controller.vo.FileLogVO;
 import com.nft.controller.vo.PubVO;
 import com.nft.dao.entity.FileLogPO;
 import com.nft.dao.entity.FilePO;
-import com.nft.service.dto.FileDTO;
+import com.nft.service.dto.FileResultDTO;
 
 public interface NFTService {
 
@@ -15,13 +15,6 @@ public interface NFTService {
      * @return
      */
     int upload(FilePO filePO);
-
-    /**
-     * 保存文件
-     * @param filePO
-     * @return
-     */
-    int save(FilePO filePO);
 
     /**
      * 发布文件
@@ -52,11 +45,11 @@ public interface NFTService {
     IPage<FileLogPO> getFileLog(FileLogVO fileLogVO);
 
     /**
-     * 查询当前用户的所有文件
+     * 查询本站的所有文件
      * @param userTag
      * @param page
      * @param pageSize
      * @return
      */
-    IPage<FilePO> selectFiles(String userTag, int page, int pageSize);
+    IPage<FileResultDTO> selectFiles(String userTag, int page, int pageSize);
 }

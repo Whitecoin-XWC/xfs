@@ -13,4 +13,10 @@ public class PubVO {
      */
     @ApiModelProperty("tokenId，从上传接口返回")
     private String tokenId;
+
+    /**
+     * 用户钱包地址
+     */
+    @ApiModelProperty("用户钱包地址")
+    private String userAddress;
 }

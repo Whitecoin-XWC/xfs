@@ -8,15 +8,18 @@ import com.nft.controller.vo.FileLogVO;
 import com.nft.controller.vo.PubVO;
 import com.nft.dao.entity.FileLogPO;
 import com.nft.dao.entity.FilePO;
+import com.nft.dao.entity.UserFilePO;
 import com.nft.dao.mapper.FileLogMapper;
 import com.nft.dao.mapper.FileMapper;
+import com.nft.dao.mapper.UserFileMapper;
 import com.nft.service.NFTService;
-import com.nft.service.dto.FileDTO;
+import com.nft.service.dto.FileResultDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -29,43 +32,34 @@ public class NFTServiceImpl implements NFTService {
     @Resource
     private FileLogMapper fileLogMapper;
 
+    @Resource
+    private UserFileMapper userFileMapper;
+
     /**
      * 上传文件
      * @param filePO
      * @return
      */
     @Override
+    @Transactional(rollbackFor = Throwable.class)
     public int upload(FilePO filePO) {
         FilePO fileItem = fileMapper.selectById(filePO.getId());
         if(fileItem != null && !StringUtils.isEmpty(fileItem.getId())){
             return -1;
         }
 
-        return fileMapper.insert(filePO);
-    }
+        // 保存文件
+        int result = fileMapper.insert(filePO);
 
-    /**
-     * 保存文件
-     * @param filePO
-     * @return
-     */
-    @Override
-    @Transactional
-    public int save(FilePO filePO) {
-
-        FilePO fileItem = fileMapper.selectById(filePO.getId());
-        if(fileItem == null || StringUtils.isEmpty(fileItem.getId())){
-            return -1;
+        // 跟用户产生关联
+        if(result > 0){
+            UserFilePO userFilePO = new UserFilePO();
+            userFilePO.setCreateTime(new Date());
+            userFilePO.setType(0);
+            userFilePO.setFileId(filePO.getId());
+            userFilePO.setUserId(filePO.getUserAddress());
+            userFileMapper.insert(userFilePO);
         }
-
-        fileItem.setFileDes(filePO.getFileDes());
-        fileItem.setFileTitle(filePO.getFileTitle());
-        fileItem.setFileStatus(1);
-        fileItem.setUserTag(filePO.getUserTag());
-
-        fileMapper.updateById(fileItem);
-
-        saveLog(filePO.getId(), filePO.getUserTag(),"铸造");
 
         return 1;
     }
@@ -86,7 +80,7 @@ public class NFTServiceImpl implements NFTService {
         fileItem.setPayTime(new Date());
         fileMapper.updateById(fileItem);
 
-        saveLog(fileItem.getId(), fileItem.getUserTag(),"发布");
+        saveLog(fileItem.getId(), pubVO.getUserAddress(),"发布");
 
         return 1;
     }
@@ -106,7 +100,7 @@ public class NFTServiceImpl implements NFTService {
         fileItem.setPayTime(new Date());
         fileMapper.updateById(fileItem);
 
-        saveLog(fileItem.getId(), fileItem.getUserTag(),"付费");
+        saveLog(fileItem.getId(), pubVO.getUserAddress(),"付费");
 
         return 1;
     }
@@ -122,11 +116,6 @@ public class NFTServiceImpl implements NFTService {
         if(fileDetail == null || StringUtils.isEmpty(fileDetail.getId())){
             return null;
         }
-
-        if(!StringUtils.isEmpty(filePO.getUserTag()) && !filePO.getUserTag().equals(fileDetail.getUserTag())){
-            return null;
-        }
-
         return fileDetail;
     }
 
@@ -153,13 +142,14 @@ public class NFTServiceImpl implements NFTService {
      * @return
      */
     @Override
-    public IPage<FilePO> selectFiles(String userTag, int page, int pageSize) {
+    public IPage<FileResultDTO> selectFiles(String userTag, int page, int pageSize) {
+        IPage<FileResultDTO> pageWrapper = new Page<>(pageSize, pageSize);
 
-        Page<FilePO> poPage = new Page<>(page, pageSize);
-
-        QueryWrapper<FilePO> wrapper = new QueryWrapper<>();
-        wrapper.eq(!StringUtils.isEmpty(userTag),"user_tag", userTag);
-        return fileMapper.selectPage(poPage, wrapper);
+        FileResultDTO fileResultDTO = new FileResultDTO();
+        if(!StringUtils.isEmpty(userTag)){
+            fileResultDTO.setUserAddress(userTag);
+        }
+        return fileMapper.selectFileList(pageWrapper, fileResultDTO);
     }
 
     /**

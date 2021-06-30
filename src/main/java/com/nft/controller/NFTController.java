@@ -87,7 +87,6 @@ public class NFTController {
         try {
             FilePO filePO = new FilePO();
             filePO.setId(fileVO.getTokenId());
-            filePO.setUserTag(fileVO.getUserTag());
             FileDTO fileDTO = new FileDTO();
             fileDTO.setImgUrl(imgUrl);
             fileDTO.setFilePO(nftService.getFileDetail(filePO));
@@ -122,32 +121,6 @@ public class NFTController {
         }catch (Exception e){
             log.error("获取文件变化日志异常", e);
             return ResultVO.fail("获取文件变化日志异常" + e.getMessage());
-        }
-    }
-
-    /**
-     * 查询当前用户的所有文件
-     * @return
-     */
-    @ApiOperation("查询当前用户上传的文件")
-    @RequestMapping(value = "/selectFiles", method = RequestMethod.POST)
-    public ResultVO selectFiles(@RequestBody SelectVO selectVO){
-        try {
-            PageResultVO pageResultVO = new PageResultVO();
-
-            IPage<FilePO> iPage = nftService.selectFiles(selectVO.getUserTag(), selectVO.getPage(), selectVO.getPageSize());
-            if(iPage != null){
-                pageResultVO.setCount(iPage.getTotal());
-                pageResultVO.setCurrentPage(iPage.getCurrent());
-                pageResultVO.setPageSize(iPage.getSize());
-                pageResultVO.setPageTotal(iPage.getPages());
-                pageResultVO.setImgUrl(imgUrl);
-                pageResultVO.setRecords(iPage.getRecords());
-            }
-            return ResultVO.success(pageResultVO);
-        } catch (Exception e){
-            log.error("查询异常", e);
-            return ResultVO.fail("查询异常"+e.getMessage());
         }
     }
 }

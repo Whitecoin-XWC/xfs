@@ -163,7 +163,7 @@ public class FileUploadController {
         filePO.setFilePath(savePath + "/" + newFileName);
         filePO.setFileTitle(title);
         filePO.setFileDes(des);
-        filePO.setUserTag(userTag);
+        filePO.setUserAddress(userTag);
         filePO.setCopyrightFee(copyright);
 
         int result = nftService.upload(filePO);
