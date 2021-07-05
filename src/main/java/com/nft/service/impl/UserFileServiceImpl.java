@@ -1,6 +1,7 @@
 package com.nft.service.impl;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.nft.controller.vo.FileVO;
 import com.nft.service.NFTService;
 import com.nft.service.UserFileService;
 import com.nft.service.dto.FileResultDTO;
@@ -16,13 +17,10 @@ public class UserFileServiceImpl implements UserFileService {
 
     /**
      * 查询当前用户的文件
-     * @param userTag
-     * @param page
-     * @param pageSize
      * @return
      */
     @Override
-    public IPage<FileResultDTO> selectFiles(String userTag, int page, int pageSize) {
-        return nftService.selectFiles(userTag, page, pageSize);
+    public IPage<FileResultDTO> selectFiles(FileVO fileVO) {
+        return nftService.selectFiles(fileVO);
     }
 }

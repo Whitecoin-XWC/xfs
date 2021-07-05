@@ -3,6 +3,7 @@ package com.nft.controller;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.nft.commons.vo.PageResultVO;
 import com.nft.commons.vo.ResultVO;
+import com.nft.controller.vo.FileVO;
 import com.nft.controller.vo.SelectVO;
 import com.nft.dao.entity.UserinfoPO;
 import com.nft.service.UserFileService;
@@ -79,7 +80,13 @@ public class UserInfoController {
         try {
             PageResultVO pageResultVO = new PageResultVO();
 
-            IPage<FileResultDTO> iPage = userFileService.selectFiles(selectVO.getUserTag(), selectVO.getPage(), selectVO.getPageSize());
+            FileVO fileVO = new FileVO();
+            fileVO.setUserAddress(selectVO.getUserAddress());
+            fileVO.setPage(selectVO.getPage());
+            fileVO.setPageSize(selectVO.getPageSize());
+            fileVO.setMediaType(null);
+            fileVO.setStatus(null);
+            IPage<FileResultDTO> iPage = userFileService.selectFiles(fileVO);
             if(iPage != null){
                 pageResultVO.setCount(iPage.getTotal());
                 pageResultVO.setCurrentPage(iPage.getCurrent());

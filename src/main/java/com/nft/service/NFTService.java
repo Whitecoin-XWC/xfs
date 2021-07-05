@@ -2,6 +2,7 @@ package com.nft.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.nft.controller.vo.FileLogVO;
+import com.nft.controller.vo.FileVO;
 import com.nft.controller.vo.PubVO;
 import com.nft.dao.entity.FileLogPO;
 import com.nft.dao.entity.FilePO;
@@ -46,10 +47,7 @@ public interface NFTService {
 
     /**
      * 查询本站的所有文件
-     * @param userTag
-     * @param page
-     * @param pageSize
      * @return
      */
-    IPage<FileResultDTO> selectFiles(String userTag, int page, int pageSize);
+    IPage<FileResultDTO> selectFiles(FileVO fileVO);
 }

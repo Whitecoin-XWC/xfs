@@ -12,7 +12,7 @@ public class SelectVO {
      * 公告
      */
     @ApiModelProperty(value = "用户标识")
-    private String userTag;
+    private String userAddress;
     /**
      * 第几页
      */

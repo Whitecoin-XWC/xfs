@@ -11,6 +11,7 @@ import com.nft.dao.entity.FileLogPO;
 import com.nft.dao.entity.FilePO;
 import com.nft.service.NFTService;
 import com.nft.service.dto.FileDTO;
+import com.nft.service.dto.FileResultDTO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -36,6 +37,34 @@ public class NFTController {
 
     @Resource
     private NFTService nftService;
+
+    /**
+     * 查询首页文件列表
+     * @param fileVO
+     * @return
+     */
+    @ApiOperation("查询首页文件列表")
+    @RequestMapping(value = "/selectIndexList", method = RequestMethod.POST)
+    public ResultVO selectIndexList(@RequestBody FileVO fileVO){
+        try {
+            PageResultVO pageResultVO = new PageResultVO();
+            fileVO.setMediaType(null);
+            fileVO.setStatus(null);
+            IPage<FileResultDTO> iPage = nftService.selectFiles(fileVO);
+            if(iPage != null){
+                pageResultVO.setCount(iPage.getTotal());
+                pageResultVO.setCurrentPage(iPage.getCurrent());
+                pageResultVO.setPageSize(iPage.getSize());
+                pageResultVO.setPageTotal(iPage.getPages());
+                pageResultVO.setImgUrl(imgUrl);
+                pageResultVO.setRecords(iPage.getRecords());
+            }
+            return ResultVO.success(pageResultVO);
+        } catch (Exception e){
+            log.error("查询异常", e);
+            return ResultVO.fail("查询异常"+e.getMessage());
+        }
+    }
 
     /**
      * 发布

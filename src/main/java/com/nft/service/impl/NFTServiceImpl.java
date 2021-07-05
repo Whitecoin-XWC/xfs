@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.nft.commons.util.LogUtil;
 import com.nft.controller.vo.FileLogVO;
+import com.nft.controller.vo.FileVO;
 import com.nft.controller.vo.PubVO;
 import com.nft.dao.entity.FileLogPO;
 import com.nft.dao.entity.FilePO;
@@ -120,7 +121,7 @@ public class NFTServiceImpl implements NFTService {
     }
 
     /**
-     * 获取一个文件
+     * 获取一个文件变化日志
      * @param fileLogVO
      * @return
      */
@@ -136,18 +137,24 @@ public class NFTServiceImpl implements NFTService {
 
     /**
      * 查询当前用户的所有文件
-     * @param userTag
-     * @param page
-     * @param pageSize
      * @return
      */
     @Override
-    public IPage<FileResultDTO> selectFiles(String userTag, int page, int pageSize) {
-        IPage<FileResultDTO> pageWrapper = new Page<>(pageSize, pageSize);
+    public IPage<FileResultDTO> selectFiles(FileVO fileVO) {
+        IPage<FileResultDTO> pageWrapper = new Page<>(fileVO.getPage(), fileVO.getPageSize());
 
         FileResultDTO fileResultDTO = new FileResultDTO();
-        if(!StringUtils.isEmpty(userTag)){
-            fileResultDTO.setUserAddress(userTag);
+        if(!StringUtils.isEmpty(fileVO.getUserAddress())){
+            fileResultDTO.setUserAddress(fileVO.getUserAddress());
+        }
+        if(fileVO.getMediaType() != null && fileVO.getMediaType() > -1){
+            fileResultDTO.setMediaType(fileVO.getMediaType());
+        }
+        if(fileVO.getStatus() != null && fileVO.getStatus() > -1){
+            fileResultDTO.setFileStatus(fileVO.getStatus());
+        }
+        if(!StringUtils.isEmpty(fileVO.getTokenId())){
+            fileResultDTO.setId(fileVO.getTokenId());
         }
         return fileMapper.selectFileList(pageWrapper, fileResultDTO);
     }
