@@ -3,10 +3,7 @@ package com.nft.controller;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.nft.commons.vo.PageResultVO;
 import com.nft.commons.vo.ResultVO;
-import com.nft.controller.vo.FileLogVO;
-import com.nft.controller.vo.FileVO;
-import com.nft.controller.vo.PubVO;
-import com.nft.controller.vo.SelectVO;
+import com.nft.controller.vo.*;
 import com.nft.dao.entity.FileLogPO;
 import com.nft.dao.entity.FilePO;
 import com.nft.service.NFTService;
@@ -37,6 +34,23 @@ public class NFTController {
 
     @Resource
     private NFTService nftService;
+
+
+    /**
+     * 搜索
+     * @param searchVO
+     * @return
+     */
+    @ApiOperation("搜索")
+    @RequestMapping(value = "/search", method = RequestMethod.POST)
+    public ResultVO search(SearchVO searchVO){
+        try {
+            return ResultVO.success(nftService.search(searchVO.getKeyWord()));
+        } catch (Exception e){
+            log.error("查询异常", e);
+            return ResultVO.fail("查询异常"+e.getMessage());
+        }
+    }
 
     /**
      * 查询首页文件列表
@@ -107,10 +121,10 @@ public class NFTController {
     }
 
     /**
-     * 获取文件
+     * 查询文件详情
      * @return
      */
-    @ApiOperation("获取文件")
+    @ApiOperation("查询文件详情")
     @RequestMapping(value = "/getFileDetail", method = RequestMethod.POST)
     public ResultVO getFileDetail(@RequestBody FileVO fileVO){
         try {

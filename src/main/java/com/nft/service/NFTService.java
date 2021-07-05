@@ -8,6 +8,8 @@ import com.nft.dao.entity.FileLogPO;
 import com.nft.dao.entity.FilePO;
 import com.nft.service.dto.FileResultDTO;
 
+import java.util.Map;
+
 public interface NFTService {
 
     /**
@@ -50,4 +52,11 @@ public interface NFTService {
      * @return
      */
     IPage<FileResultDTO> selectFiles(FileVO fileVO);
+
+    /**
+     * 搜索
+     * @param keyWord
+     * @return
+     */
+    Map<String,Object> search(String keyWord);
 }

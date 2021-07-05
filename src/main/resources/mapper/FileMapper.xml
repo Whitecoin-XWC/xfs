@@ -20,7 +20,7 @@
             nft_sell_info.`status` status,
             nft_auction.auction_retain_price pmPrice,
             nft_user_file.user_id userAddress,
-            nft_user_file.type type,
+            nft_user_file.type source,
             nft_userinfo.nick_name userName
         FROM
             nft_file
@@ -30,7 +30,16 @@
         LEFT JOIN nft_userinfo ON nft_userinfo.id = nft_user_file.user_id
         WHERE 1=1
         <if test="fileResultDTO.userAddress != null and fileResultDTO.userAddress != ''">
-            nft_user_file.user_id = #{fileResultDTO.userAddress}
+            and nft_user_file.user_id = #{fileResultDTO.userAddress}
+        </if>
+        <if test="fileResultDTO.mediaType != null and fileResultDTO.mediaType != ''">
+            and nft_file.media_type = #{fileResultDTO.mediaType}
+        </if>
+        <if test="fileResultDTO.fileStatus != null and fileResultDTO.fileStatus != ''">
+            and nft_file.status = #{fileResultDTO.fileStatus}
+        </if>
+        <if test="fileResultDTO.id != null and fileResultDTO.id != ''">
+            and nft_file.id = #{fileResultDTO.id}
         </if>
     </select>
 

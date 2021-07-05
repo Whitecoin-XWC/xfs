@@ -13,6 +13,7 @@ import com.nft.dao.entity.UserFilePO;
 import com.nft.dao.mapper.FileLogMapper;
 import com.nft.dao.mapper.FileMapper;
 import com.nft.dao.mapper.UserFileMapper;
+import com.nft.dao.mapper.UserInfoMapper;
 import com.nft.service.NFTService;
 import com.nft.service.dto.FileResultDTO;
 import org.springframework.stereotype.Service;
@@ -20,9 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class NFTServiceImpl implements NFTService {
@@ -35,6 +34,9 @@ public class NFTServiceImpl implements NFTService {
 
     @Resource
     private UserFileMapper userFileMapper;
+
+    @Resource
+    private UserInfoMapper userInfoMapper;
 
     /**
      * 上传文件
@@ -171,5 +173,30 @@ public class NFTServiceImpl implements NFTService {
         fileLogPO.setLogInfo(LogUtil.getLogInfo(userTag,action));
         fileLogPO.setCreateTime(new Date());
         fileLogMapper.insert(fileLogPO);
+    }
+
+    /**
+     * 搜索
+     * @param keyWord
+     * @return
+     */
+    @Override
+    public Map<String, Object> search(String keyWord) {
+
+        Map<String, Object> resultMap = new HashMap<>();
+
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.like("id",keyWord);
+        queryWrapper.or();
+        queryWrapper.like("nick_name", keyWord);
+
+        resultMap.put("users", userInfoMapper.selectList(queryWrapper));
+
+
+        QueryWrapper queryWrapper1 = new QueryWrapper();
+        queryWrapper1.like("file_name",keyWord);
+
+        resultMap.put("files", fileMapper.selectList(queryWrapper1));
+        return resultMap;
     }
 }

@@ -63,5 +63,5 @@ logging:
 fileUpload:
   # 媒体类型，后缀_类型，【0 文件，1图片，2 视频，3 音频】
   type: "TXT_0,MD_0,PDF_0,PSD_0,AI_0,JPG_1,PNG_1,GIF_1,MP4_2,MOV_2,MP3_3,WAV_3"
-  save-path: /data/app/nft/media
+  save-path: D:/data/app/nft/media
   img-url: http://154.209.69.121:8089/

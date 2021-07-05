@@ -72,7 +72,7 @@ public class FileUploadController {
             @ApiImplicitParam(name = "file", value = "文件流"),
             @ApiImplicitParam(name = "title", value = "标题"),
             @ApiImplicitParam(name = "des", value = "描述"),
-            @ApiImplicitParam(name = "userTag", value = "用户标识"),
+            @ApiImplicitParam(name = "userAddress", value = "用户标识"),
             @ApiImplicitParam(name = "copyrightFee", value = "版权费")
     })
     @RequestMapping(value = "/save", method = RequestMethod.POST)
@@ -150,7 +150,7 @@ public class FileUploadController {
 
         String title = params.getParameter("title");
         String des = params.getParameter("des");
-        String userTag = params.getParameter("userTag");
+        String userTag = params.getParameter("userAddress");
         String copyright = params.getParameter("copyrightFee");
 
 
