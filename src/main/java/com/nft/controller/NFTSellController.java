@@ -27,4 +27,12 @@ public class NFTSellController {
     public ResultVO sellSuccess(){
         return null;
     }
+
+    /**
+     * 购买成功
+     * @return
+     */
+    public ResultVO buySuccess(){
+        return null;
+    }
 }
