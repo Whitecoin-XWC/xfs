@@ -43,7 +43,7 @@ public class NFTController {
      */
     @ApiOperation("搜索")
     @RequestMapping(value = "/search", method = RequestMethod.POST)
-    public ResultVO search(SearchVO searchVO){
+    public ResultVO search(@RequestBody SearchVO searchVO){
         try {
             return ResultVO.success(nftService.search(searchVO.getKeyWord()));
         } catch (Exception e){

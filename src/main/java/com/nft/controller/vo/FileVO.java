@@ -23,7 +23,7 @@ public class FileVO {
     /**
      * 文件类型
      */
-    @ApiModelProperty("文件类型，0文件，1 图片，2视频，3音频")
+    @ApiModelProperty("文件类型，0文件，1 图片，2视频，3音频，4动图")
     private Integer mediaType;
 
     /**

@@ -190,13 +190,23 @@ public class NFTServiceImpl implements NFTService {
         queryWrapper.or();
         queryWrapper.like("nick_name", keyWord);
 
-        resultMap.put("users", userInfoMapper.selectList(queryWrapper));
+        Page page = userInfoMapper.selectPage(new Page<>(1,100), queryWrapper);
+        if(page != null && page.getRecords() != null){
+            resultMap.put("users", page.getRecords());
+        } else {
+            resultMap.put("users", new ArrayList<>());
+        }
 
 
         QueryWrapper queryWrapper1 = new QueryWrapper();
         queryWrapper1.like("file_name",keyWord);
 
-        resultMap.put("files", fileMapper.selectList(queryWrapper1));
+        Page page1 = fileMapper.selectPage(new Page<>(1,100), queryWrapper1);
+        if(page1 != null && page1.getRecords() != null){
+            resultMap.put("files", page1.getRecords());
+        } else {
+            resultMap.put("files", new ArrayList<>());
+        }
         return resultMap;
     }
 }
