@@ -84,6 +84,7 @@ public class UserInfoController {
             fileVO.setUserAddress(selectVO.getUserAddress());
             fileVO.setPage(selectVO.getPage());
             fileVO.setPageSize(selectVO.getPageSize());
+            fileVO.setSource(selectVO.getSource());
             fileVO.setMediaType(null);
             fileVO.setStatus(null);
             IPage<FileResultDTO> iPage = userFileService.selectFiles(fileVO);

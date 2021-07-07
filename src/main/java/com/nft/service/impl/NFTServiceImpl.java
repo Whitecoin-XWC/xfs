@@ -158,6 +158,9 @@ public class NFTServiceImpl implements NFTService {
         if(!StringUtils.isEmpty(fileVO.getTokenId())){
             fileResultDTO.setId(fileVO.getTokenId());
         }
+        if(fileVO.getSource() != null && fileVO.getSource() > -1){
+            fileResultDTO.setSource(fileVO.getSource());
+        }
         return fileMapper.selectFileList(pageWrapper, fileResultDTO);
     }
 

@@ -42,4 +42,10 @@ public class FileVO {
      */
     @ApiModelProperty("每页大小，默认20")
     private int pageSize = 20;
+
+    /**
+     * update moloqu 2021-07-07
+     */
+    @ApiModelProperty("媒体数据来源，0创建， 1 商品，2 关注")
+    private Integer source;
 }
