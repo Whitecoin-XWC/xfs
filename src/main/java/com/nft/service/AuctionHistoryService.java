@@ -11,5 +11,7 @@ import java.util.List;
 public interface AuctionHistoryService {
     int insertAuctionHistory(AuctionHistoryEntity historyEntity);
 
-    List<AuctionHistoryEntity> queryAll(String mediaId);
+    List<AuctionHistoryEntity> queryAll(String mediaId,String auctionId);
+
+    int count(Long auctionId);
 }

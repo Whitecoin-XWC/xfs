@@ -1,6 +1,7 @@
 package com.nft.dao.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.nft.dao.entity.AuctionHistoryEntity;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -8,5 +9,5 @@ import org.apache.ibatis.annotations.Mapper;
  * Created by moloq on 2021/6/28 11:34
  */
 @Mapper
-public interface AuctionHistoryMapper extends BaseMapper {
+public interface AuctionHistoryMapper extends BaseMapper<AuctionHistoryEntity> {
 }

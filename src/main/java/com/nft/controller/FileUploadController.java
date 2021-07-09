@@ -165,6 +165,7 @@ public class FileUploadController {
         filePO.setFileDes(des);
         filePO.setUserAddress(userTag);
         filePO.setCopyrightFee(copyright);
+        filePO.setCreater(userTag);
 
         int result = nftService.upload(filePO);
         if (result < 0) {

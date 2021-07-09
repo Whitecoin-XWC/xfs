@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -25,36 +26,46 @@ public class AuctionEntity {
      * 主键
      */
     @TableId(value = "id", type = IdType.AUTO)
+    @ApiModelProperty(value = "id")
     private Long id;
+
+    @TableField("auction_creater")
+    @ApiModelProperty(value = "拍卖创建者",required = true)
+    private String auctionCreater;
 
     /**
      * 拍卖的产品id
      */
     @TableField("file_token_id")
+    @ApiModelProperty(value = "拍卖的产品id",required = true)
     private String fileTokenId;
 
     /**
      * 拍卖id
      */
     @TableField("auction_id")
+    @ApiModelProperty(value = "拍卖id")
     private String auctionId;
 
     /**
      * 拍卖的代币
      */
     @TableField("auction_coin")
+    @ApiModelProperty(value = "代币类型",required = true)
     private String auctionCoin;
 
     /**
      * 拍卖保留价
      */
     @TableField("auction_retain_price")
+    @ApiModelProperty(value = "拍卖保留价",required = true)
     private BigDecimal auctionRetainPrice;
 
     /**
      * 最低加价幅度
      */
     @TableField("auction_min_markup")
+    @ApiModelProperty(value = "最低加价幅度",required = true)
     private BigDecimal auctionMinMarkup;
 
     /**
@@ -63,10 +74,14 @@ public class AuctionEntity {
     @TableField("auction_max_price")
     private BigDecimal auctionMaxPrice;
 
+    @TableField("auction_max_er")
+    private String auctionMaxEr;
+
     /**
      * 拍卖状态
      */
     @TableField("auction_status")
+    @ApiModelProperty(value = "拍卖状态，0-创建拍卖，未开始竞拍；1-竞拍中；2-竞拍结束，待领取；3-领取完成",required = true)
     private Integer auctionStatus;
 
     /**

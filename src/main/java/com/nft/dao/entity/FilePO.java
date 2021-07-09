@@ -55,6 +55,10 @@ public class FilePO {
     @ApiModelProperty("创建时间")
     @TableField("create_time")
     private Date createTime;
+
+    @ApiModelProperty("创建时间")
+    @TableField("creater")
+    private String creater;
     /**
      * 发布时间
      */
