@@ -2,6 +2,7 @@ package com.nft.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.nft.controller.vo.FileLogVO;
+import com.nft.controller.vo.FileUserChangeVO;
 import com.nft.controller.vo.FileVO;
 import com.nft.controller.vo.PubVO;
 import com.nft.dao.entity.FileLogPO;
@@ -32,6 +33,12 @@ public interface NFTService {
      * @return
      */
     int pay(PubVO pubVO);
+
+    /**
+     * 转移
+     * @return
+     */
+    int fileUserChange(FileUserChangeVO fileUserChangeVO);
 
     /**
      * 获取一个文件

@@ -1,10 +1,12 @@
 package com.nft.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.nft.commons.util.LogUtil;
 import com.nft.controller.vo.FileLogVO;
+import com.nft.controller.vo.FileUserChangeVO;
 import com.nft.controller.vo.FileVO;
 import com.nft.controller.vo.PubVO;
 import com.nft.dao.entity.FileLogPO;
@@ -111,6 +113,27 @@ public class NFTServiceImpl implements NFTService {
         fileMapper.updateById(fileItem);
 
         saveLog(fileItem.getId(), pubVO.getUserAddress(), "付费");
+
+        return 1;
+    }
+
+    /**
+     * 转移
+     * @return
+     */
+    @Override
+    public int fileUserChange(FileUserChangeVO fileUserChangeVO) {
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("file_id", fileUserChangeVO.getTokenId());
+        UserFilePO userFilePO = userFileMapper.selectOne(queryWrapper);
+        if(userFilePO == null){
+            return -1;
+        }
+
+        userFilePO.setUserId(fileUserChangeVO.getUserAddress());
+        userFileMapper.updateById(userFilePO);
+
+        saveLog(fileUserChangeVO.getTokenId(), fileUserChangeVO.getUserAddress(), "收到了这个NFT的转移");
 
         return 1;
     }

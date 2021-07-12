@@ -120,6 +120,27 @@ public class NFTController {
         }
     }
 
+
+    /**
+     * 转移
+     * @param fileUserChangeVO
+     * @return
+     */
+    @ApiOperation("文件转移")
+    @RequestMapping(value = "/fileUserChange", method = RequestMethod.POST)
+    public ResultVO fileUserChange(@RequestBody FileUserChangeVO fileUserChangeVO){
+        try {
+            int result = nftService.fileUserChange(fileUserChangeVO);
+            if(result > 0){
+                return ResultVO.successMsg("转移成功");
+            }
+            return ResultVO.fail("转移失败");
+        }catch (Exception e){
+            log.error("转移异常", e);
+            return ResultVO.fail("转移异常" + e.getMessage());
+        }
+    }
+
     /**
      * 查询文件详情
      * @return
