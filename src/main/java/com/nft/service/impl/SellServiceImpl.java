@@ -12,12 +12,12 @@ import com.nft.dao.mapper.FileLogMapper;
 import com.nft.dao.mapper.FileMapper;
 import com.nft.dao.mapper.SellInfoMapper;
 import com.nft.dao.mapper.UserFileMapper;
+import com.nft.service.FileLogService;
 import com.nft.service.SellService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.Date;
 
 @Service("sellService")
 public class SellServiceImpl implements SellService {
@@ -32,7 +32,7 @@ public class SellServiceImpl implements SellService {
     private FileMapper fileMapper;
 
     @Resource
-    private FileLogMapper fileLogMapper;
+    private FileLogService fileLogService;
 
     @Override
     @Transactional
@@ -111,10 +111,6 @@ public class SellServiceImpl implements SellService {
      * @param action
      */
     private void saveLog(String fileId, String userTag, String action){
-        FileLogPO fileLogPO = new FileLogPO();
-        fileLogPO.setFileId(fileId);
-        fileLogPO.setLogInfo(userTag + action);
-        fileLogPO.setCreateTime(new Date());
-        fileLogMapper.insert(fileLogPO);
+        fileLogService.saveLog(fileId,userTag + action, 2, null);
     }
 }

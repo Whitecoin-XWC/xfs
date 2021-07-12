@@ -16,6 +16,7 @@ import com.nft.dao.mapper.FileLogMapper;
 import com.nft.dao.mapper.FileMapper;
 import com.nft.dao.mapper.UserFileMapper;
 import com.nft.dao.mapper.UserInfoMapper;
+import com.nft.service.FileLogService;
 import com.nft.service.NFTService;
 import com.nft.service.dto.FileResultDTO;
 import org.springframework.beans.factory.annotation.Value;
@@ -34,6 +35,9 @@ public class NFTServiceImpl implements NFTService {
 
     @Resource
     private FileLogMapper fileLogMapper;
+
+    @Resource
+    private FileLogService fileLogService;
 
     @Resource
     private UserFileMapper userFileMapper;
@@ -70,7 +74,7 @@ public class NFTServiceImpl implements NFTService {
             userFilePO.setUserId(filePO.getUserAddress());
             userFileMapper.insert(userFilePO);
 
-            saveLog(filePO.getId(), filePO.getUserAddress(), "上传");
+            fileLogService.saveLog(filePO.getId(), filePO.getUserAddress() + "上传了这个NFT", 0,null);
         }
         return 1;
     }
@@ -91,8 +95,7 @@ public class NFTServiceImpl implements NFTService {
         fileItem.setPubTime(new Date());
         fileMapper.updateById(fileItem);
 
-        saveLog(fileItem.getId(), pubVO.getUserAddress(), "发布");
-
+        fileLogService.saveLog(fileItem.getId(), pubVO.getUserAddress() + "发布了这个NFT", 0,null);
         return 1;
     }
 
@@ -112,7 +115,7 @@ public class NFTServiceImpl implements NFTService {
         fileItem.setPayTime(new Date());
         fileMapper.updateById(fileItem);
 
-        saveLog(fileItem.getId(), pubVO.getUserAddress(), "付费");
+        fileLogService.saveLog(fileItem.getId(), pubVO.getUserAddress() + "付费了这个NFT", 0,null);
 
         return 1;
     }
@@ -126,14 +129,14 @@ public class NFTServiceImpl implements NFTService {
         QueryWrapper queryWrapper = new QueryWrapper();
         queryWrapper.eq("file_id", fileUserChangeVO.getTokenId());
         UserFilePO userFilePO = userFileMapper.selectOne(queryWrapper);
-        if(userFilePO == null){
+        if (userFilePO == null) {
             return -1;
         }
-
+        String oldUser = userFilePO.getUserId();
         userFilePO.setUserId(fileUserChangeVO.getUserAddress());
         userFileMapper.updateById(userFilePO);
 
-        saveLog(fileUserChangeVO.getTokenId(), fileUserChangeVO.getUserAddress(), "收到了这个NFT的转移");
+        fileLogService.saveLog(fileUserChangeVO.getTokenId(), "这个NFT转从" + oldUser + "手里移给了" + fileUserChangeVO.getUserAddress(), 0, null);
 
         return 1;
     }
@@ -199,21 +202,6 @@ public class NFTServiceImpl implements NFTService {
             fileResultDTO.setSource(fileVO.getSource());
         }
         return fileMapper.selectFileList(pageWrapper, fileResultDTO);
-    }
-
-    /**
-     * 保存日志
-     *
-     * @param fileId
-     * @param userTag
-     * @param action
-     */
-    private void saveLog(String fileId, String userTag, String action) {
-        FileLogPO fileLogPO = new FileLogPO();
-        fileLogPO.setFileId(fileId);
-        fileLogPO.setLogInfo(LogUtil.getLogInfo(userTag, action));
-        fileLogPO.setCreateTime(new Date());
-        fileLogMapper.insert(fileLogPO);
     }
 
     /**
