@@ -67,8 +67,9 @@ public class NFTServiceImpl implements NFTService {
             userFilePO.setFileId(filePO.getId());
             userFilePO.setUserId(filePO.getUserAddress());
             userFileMapper.insert(userFilePO);
+
+            saveLog(filePO.getId(), filePO.getUserAddress(), "上传");
         }
-        saveLog(fileItem.getId(), filePO.getUserAddress(), "上传");
         return 1;
     }
 
