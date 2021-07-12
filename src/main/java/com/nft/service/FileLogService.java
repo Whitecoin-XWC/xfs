@@ -1,7 +1,6 @@
 package com.nft.service;
 
-import com.alibaba.fastjson.JSONObject;
-import com.nft.service.dto.FileLogMessage;
+import com.nft.service.dto.FileLogAttach;
 
 public interface FileLogService {
 
@@ -12,5 +11,5 @@ public interface FileLogService {
      * @param type
      * @return
      */
-    int saveLog(String fileId, String action, Integer type, FileLogMessage fileLogMessage);
+    int saveLog(String fileId, String action, Integer type, FileLogAttach fileLogAttach);
 }
