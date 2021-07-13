@@ -13,4 +13,6 @@ public interface AuctionService extends IService<AuctionEntity> {
     int updateAuction(AuctionEntity update);
 
     AuctionEntity queryAuction(AuctionEntity query);
+
+    int cancelAuction(String fileTokenId);
 }

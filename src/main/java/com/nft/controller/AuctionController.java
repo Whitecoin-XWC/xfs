@@ -63,6 +63,23 @@ public class AuctionController {
         }
     }
 
+    @ApiOperation("取消拍卖")
+    @PostMapping("/cancel")
+    public ResultVO cancelAuction(@RequestBody AuctionEntity auctionEntity) {
+        try {
+            AuctionEntity query = auctionService.queryAuction(auctionEntity);
+            if (query == null || query.getAuctionStatus() != 0) {
+                return ResultVO.fail("竞拍中,不允许取消拍卖");
+            }
+            String fileTokenId = auctionEntity.getFileTokenId();
+            auctionService.cancelAuction(fileTokenId);
+            return ResultVO.successMsg("取消成功");
+        } catch (Exception e) {
+            log.error("cancel auction fail,{}", e);
+            return ResultVO.fail("取消拍卖失败");
+        }
+    }
+
     @ApiOperation("获取最新的拍卖记录")
     @PostMapping("/query")
     public ResultVO query(@RequestBody AuctionEntity query) {
@@ -71,7 +88,7 @@ public class AuctionController {
             return ResultVO.success(auctionEntity);
         } catch (Exception e) {
             log.error("update auction fail,{}", e);
-            return ResultVO.fail("更新拍卖记录失败");
+            return ResultVO.fail("获取最新的拍卖记录失败");
         }
     }
 
