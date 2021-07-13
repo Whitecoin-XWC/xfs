@@ -11,11 +11,9 @@ import com.nft.controller.vo.FileVO;
 import com.nft.controller.vo.PubVO;
 import com.nft.dao.entity.FileLogPO;
 import com.nft.dao.entity.FilePO;
+import com.nft.dao.entity.SellInfoPO;
 import com.nft.dao.entity.UserFilePO;
-import com.nft.dao.mapper.FileLogMapper;
-import com.nft.dao.mapper.FileMapper;
-import com.nft.dao.mapper.UserFileMapper;
-import com.nft.dao.mapper.UserInfoMapper;
+import com.nft.dao.mapper.*;
 import com.nft.service.FileLogService;
 import com.nft.service.NFTService;
 import com.nft.service.dto.FileLogAttach;
@@ -45,6 +43,9 @@ public class NFTServiceImpl implements NFTService {
 
     @Resource
     private UserInfoMapper userInfoMapper;
+
+    @Resource
+    private SellInfoMapper sellInfoMapper;
 
     @Value("${fileUpload.img-url}")
     private String imgUrl;
@@ -164,6 +165,16 @@ public class NFTServiceImpl implements NFTService {
         queryWrapper.eq("file_id", filePO.getId());
         UserFilePO userFilePO = userFileMapper.selectOne(queryWrapper);
         fileDetail.setUserAddress(userFilePO.getUserId());
+
+
+        QueryWrapper queryWrapper1 = new QueryWrapper();
+        queryWrapper1.eq("token_id", filePO.getId());
+        SellInfoPO sellInfoPO = sellInfoMapper.selectOne(queryWrapper1);
+        if(sellInfoPO != null){
+            fileDetail.setUnit(sellInfoPO.getUnit());
+            fileDetail.setPrice(sellInfoPO.getPrice());
+        }
+
         return fileDetail;
     }
 
