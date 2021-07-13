@@ -1,10 +1,7 @@
 package com.nft.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.nft.controller.vo.FileLogVO;
-import com.nft.controller.vo.FileUserChangeVO;
-import com.nft.controller.vo.FileVO;
-import com.nft.controller.vo.PubVO;
+import com.nft.controller.vo.*;
 import com.nft.dao.entity.FileLogPO;
 import com.nft.dao.entity.FilePO;
 import com.nft.service.dto.FileResultDTO;
@@ -12,6 +9,13 @@ import com.nft.service.dto.FileResultDTO;
 import java.util.Map;
 
 public interface NFTService {
+
+    /**
+     * 关注
+     * @param followVO
+     * @return
+     */
+    int follow(FollowVO followVO);
 
     /**
      * 上传文件

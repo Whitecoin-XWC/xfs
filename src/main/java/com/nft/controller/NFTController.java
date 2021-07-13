@@ -37,6 +37,23 @@ public class NFTController {
 
 
     /**
+     * 关注
+     * @param followVO
+     * @return
+     */
+    @ApiOperation("关注")
+    @RequestMapping(value = "/follow", method = RequestMethod.POST)
+    public ResultVO follow(@RequestBody FollowVO followVO){
+        try {
+            nftService.follow(followVO);
+            return ResultVO.successMsg("关注成功");
+        }catch (Exception e){
+            log.error("关注异常", e);
+            return ResultVO.fail("关注异常");
+        }
+    }
+
+    /**
      * 搜索
      * @param searchVO
      * @return
@@ -64,6 +81,7 @@ public class NFTController {
             PageResultVO pageResultVO = new PageResultVO();
             fileVO.setMediaType(null);
             fileVO.setStatus(null);
+            fileVO.setSource(null);
             IPage<FileResultDTO> iPage = nftService.selectFiles(fileVO);
             if(iPage != null){
                 pageResultVO.setCount(iPage.getTotal());

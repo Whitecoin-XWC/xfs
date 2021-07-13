@@ -5,10 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.nft.commons.util.LogUtil;
-import com.nft.controller.vo.FileLogVO;
-import com.nft.controller.vo.FileUserChangeVO;
-import com.nft.controller.vo.FileVO;
-import com.nft.controller.vo.PubVO;
+import com.nft.controller.vo.*;
 import com.nft.dao.entity.FileLogPO;
 import com.nft.dao.entity.FilePO;
 import com.nft.dao.entity.SellInfoPO;
@@ -49,6 +46,21 @@ public class NFTServiceImpl implements NFTService {
 
     @Value("${fileUpload.img-url}")
     private String imgUrl;
+
+    /**
+     * 关注
+     * @param followVO
+     * @return
+     */
+    @Override
+    public int follow(FollowVO followVO) {
+        UserFilePO userFilePO = new UserFilePO();
+        userFilePO.setUserId(followVO.getUserAddress());
+        userFilePO.setFileId(followVO.getTokenId());
+        userFilePO.setType(2);
+        userFilePO.setCreateTime(new Date());
+        return userFileMapper.insert(userFilePO);
+    }
 
     /**
      * 上传文件

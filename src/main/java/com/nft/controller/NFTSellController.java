@@ -48,7 +48,7 @@ public class NFTSellController {
     @RequestMapping(value = "/delSell", method = RequestMethod.POST)
     public ResultVO delSell(@RequestBody SellVO sellVO){
         try {
-            sellService.sell(sellVO);
+            sellService.delSell(sellVO);
             return ResultVO.successMsg("取消售价成功");
         }catch (Exception e){
             log.error("取消售价异常", e);
