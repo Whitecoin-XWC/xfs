@@ -118,7 +118,9 @@ public class NFTServiceImpl implements NFTService {
         fileItem.setPayTime(new Date());
         fileMapper.updateById(fileItem);
 
-        fileLogService.saveLog(fileItem.getId(), pubVO.getUserAddress() + "付费了这个NFT", 0,null);
+        FileLogAttach fileLogAttach = new FileLogAttach();
+        fileLogAttach.setTractionId(pubVO.getTractionId());
+        fileLogService.saveLog(fileItem.getId(), pubVO.getUserAddress() + "付费了这个NFT", 0,fileLogAttach);
 
         return 1;
     }
