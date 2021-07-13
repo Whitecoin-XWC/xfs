@@ -18,6 +18,7 @@ import com.nft.dao.mapper.UserFileMapper;
 import com.nft.dao.mapper.UserInfoMapper;
 import com.nft.service.FileLogService;
 import com.nft.service.NFTService;
+import com.nft.service.dto.FileLogAttach;
 import com.nft.service.dto.FileResultDTO;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -95,7 +96,9 @@ public class NFTServiceImpl implements NFTService {
         fileItem.setPubTime(new Date());
         fileMapper.updateById(fileItem);
 
-        fileLogService.saveLog(fileItem.getId(), pubVO.getUserAddress() + "发布了这个NFT", 0,null);
+        FileLogAttach fileLogAttach = new FileLogAttach();
+        fileLogAttach.setTractionId(pubVO.getTractionId());
+        fileLogService.saveLog(fileItem.getId(), pubVO.getUserAddress() + "发布了这个NFT", 0,fileLogAttach);
         return 1;
     }
 
@@ -136,7 +139,9 @@ public class NFTServiceImpl implements NFTService {
         userFilePO.setUserId(fileUserChangeVO.getUserAddress());
         userFileMapper.updateById(userFilePO);
 
-        fileLogService.saveLog(fileUserChangeVO.getTokenId(), "这个NFT转从" + oldUser + "手里移给了" + fileUserChangeVO.getUserAddress(), 0, null);
+        FileLogAttach fileLogAttach = new FileLogAttach();
+        fileLogAttach.setTractionId(fileUserChangeVO.getTractionId());
+        fileLogService.saveLog(fileUserChangeVO.getTokenId(), "这个NFT转从" + oldUser + "手里移给了" + fileUserChangeVO.getUserAddress(), 0, fileLogAttach);
 
         return 1;
     }

@@ -19,4 +19,10 @@ public class PubVO {
      */
     @ApiModelProperty("用户钱包地址")
     private String userAddress;
+
+    /**
+     * 交易ID
+     */
+    @ApiModelProperty("交易ID")
+    private String tractionId;
 }

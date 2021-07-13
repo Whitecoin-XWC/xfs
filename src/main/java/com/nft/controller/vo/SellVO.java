@@ -32,4 +32,10 @@ public class SellVO {
      */
     @ApiModelProperty("用户地址")
     private String userAddress;
+
+    /**
+     * 交易ID
+     */
+    @ApiModelProperty("交易ID")
+    private String tractionId;
 }

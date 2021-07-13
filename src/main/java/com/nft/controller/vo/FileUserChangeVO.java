@@ -20,4 +20,9 @@ public class FileUserChangeVO {
     @ApiModelProperty("用户地址（要转移给谁就写谁的地址）")
     private String userAddress;
 
+    /**
+     * 交易ID
+     */
+    @ApiModelProperty("交易ID")
+    private String tractionId;
 }

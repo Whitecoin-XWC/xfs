@@ -14,6 +14,7 @@ import com.nft.dao.mapper.SellInfoMapper;
 import com.nft.dao.mapper.UserFileMapper;
 import com.nft.service.FileLogService;
 import com.nft.service.SellService;
+import com.nft.service.dto.FileLogAttach;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,6 +39,9 @@ public class SellServiceImpl implements SellService {
     @Transactional
     public int sell(SellVO sellVO) {
 
+        FileLogAttach fileLogAttach = new FileLogAttach();
+        fileLogAttach.setTractionId(sellVO.getTractionId());
+
         QueryWrapper queryWrapper = new QueryWrapper();
         queryWrapper.eq("token_id", sellVO.getTokenId());
         SellInfoPO sellInfoPO = sellInfoMapper.selectOne(queryWrapper);
@@ -45,7 +49,7 @@ public class SellServiceImpl implements SellService {
             sellInfoPO.setPrice(sellVO.getPrice());
             sellInfoPO.setUnit(sellVO.getUnit());
             sellInfoMapper.updateById(sellInfoPO);
-            saveLog(sellVO.getTokenId(), sellVO.getUserAddress(), "更改了这个NFT的售价");
+            saveLog(sellVO.getTokenId(), sellVO.getUserAddress(), "更改了这个NFT的售价", fileLogAttach);
         } else {
             sellInfoPO = new SellInfoPO();
             sellInfoPO.setUnit(sellVO.getUnit());
@@ -56,7 +60,7 @@ public class SellServiceImpl implements SellService {
 
             updateFileStatus(sellVO.getTokenId(), 4);
 
-            saveLog(sellVO.getTokenId(), sellVO.getUserAddress(), "设置了这个NFT的售价");
+            saveLog(sellVO.getTokenId(), sellVO.getUserAddress(), "设置了这个NFT的售价", fileLogAttach);
         }
 
         return 1;
@@ -70,7 +74,9 @@ public class SellServiceImpl implements SellService {
 
         updateFileStatus(sellVO.getTokenId(), 2);
 
-        saveLog(sellVO.getTokenId(), sellVO.getUserAddress(), "取消了这个NFT的售价");
+        FileLogAttach fileLogAttach = new FileLogAttach();
+        fileLogAttach.setTractionId(sellVO.getTractionId());
+        saveLog(sellVO.getTokenId(), sellVO.getUserAddress(), "取消了这个NFT的售价", fileLogAttach);
         return sellInfoMapper.delete(wrapper);
     }
 
@@ -94,7 +100,9 @@ public class SellServiceImpl implements SellService {
 
         updateFileStatus(buyVO.getTokenId(), 2);
 
-        saveLog(buyVO.getTokenId(), buyVO.getBuyUserAddress(), "购买了这个NFT");
+        FileLogAttach fileLogAttach = new FileLogAttach();
+        fileLogAttach.setTractionId(buyVO.getTractionId());
+        saveLog(buyVO.getTokenId(), buyVO.getBuyUserAddress(), "购买了这个NFT", fileLogAttach);
         return 0;
     }
 
@@ -110,7 +118,7 @@ public class SellServiceImpl implements SellService {
      * @param userTag
      * @param action
      */
-    private void saveLog(String fileId, String userTag, String action){
-        fileLogService.saveLog(fileId,userTag + action, 2, null);
+    private void saveLog(String fileId, String userTag, String action, FileLogAttach logAttach){
+        fileLogService.saveLog(fileId,userTag + action, 2, logAttach);
     }
 }

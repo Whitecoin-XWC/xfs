@@ -20,5 +20,9 @@ public class BuyVO {
     @ApiModelProperty("tokenId")
     private String tokenId;
 
-
+    /**
+     * 交易ID
+     */
+    @ApiModelProperty("交易ID")
+    private String tractionId;
 }
