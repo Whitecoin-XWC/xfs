@@ -6,6 +6,8 @@ import com.nft.dao.entity.AuctionEntity;
 import com.nft.dao.entity.AuctionHistoryEntity;
 import com.nft.service.AuctionHistoryService;
 import com.nft.service.AuctionService;
+import com.nft.service.FileLogService;
+import com.nft.service.dto.FileLogAttach;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
@@ -30,12 +32,17 @@ public class AuctionController {
     private AuctionService auctionService;
     @Resource
     private AuctionHistoryService auctionHistoryService;
+    @Resource
+    private FileLogService fileLogService;
 
     @ApiOperation("新增拍卖记录")
     @PostMapping("/create")
     public ResultVO create(@RequestBody AuctionEntity auctionEntity) {
         try {
             int insert = auctionService.insertAuction(auctionEntity);
+            if (insert > 0) {
+                fileLogService.saveLog(auctionEntity.getFileTokenId(), "创建拍卖", 1, new FileLogAttach(auctionEntity.getTradeId()));
+            }
             return ResultVO.successMsg("插入拍卖记录成功");
         } catch (Exception e) {
             log.error("create auction fail,{}", e);
@@ -80,7 +87,7 @@ public class AuctionController {
             AuctionEntity update = new AuctionEntity();
             if (count == 0 && insert > 0) {
                 update.setAuctionStatus(AuctionStatus.AUCTIONING.getStatuCode());
-                auctionService.saveLog(historyEntity.getFileId(), historyEntity.getAuctioneer(), "开始拍卖");
+                fileLogService.saveLog(historyEntity.getFileId(), "拍卖开始", 1, new FileLogAttach(historyEntity.getTradeId()));
             }
             update.setId(historyEntity.getAuctionId());
             update.setUpdateTime(new Date());
@@ -97,9 +104,9 @@ public class AuctionController {
 
     @ApiOperation("查询所有的出价记录")
     @GetMapping("/history/query")
-    public ResultVO queryHistory(String mediaId,String auctionId) {
+    public ResultVO queryHistory(String mediaId, String auctionId) {
         try {
-            List<AuctionHistoryEntity> result = auctionHistoryService.queryAll(mediaId,auctionId);
+            List<AuctionHistoryEntity> result = auctionHistoryService.queryAll(mediaId, auctionId);
             return ResultVO.success(result);
         } catch (Exception e) {
             log.error("query auction history fail,{}", e);

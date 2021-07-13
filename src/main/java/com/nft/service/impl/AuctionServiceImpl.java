@@ -25,17 +25,12 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, AuctionEntity
 
     @Resource
     private AuctionMapper auctionMapper;
-    @Resource
-    private FileLogMapper fileLogMapper;
 
     @Override
     public int insertAuction(AuctionEntity auctionEntity) {
         auctionEntity.setAuctionStatus(AuctionStatus.AUCTION_START.getStatuCode());
         auctionEntity.setCreateTime(new Date());
         int insert = auctionMapper.insert(auctionEntity);
-        if (insert > 0) {
-            saveLog(auctionEntity.getFileTokenId(), auctionEntity.getAuctionCreater(), "创建拍卖");
-        }
         return insert;
     }
 
@@ -56,14 +51,5 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, AuctionEntity
             return new AuctionEntity();
         }
         return auctionEntities.get(0);
-    }
-
-    @Override
-    public void saveLog(String fileId, String userTag, String action) {
-        FileLogPO fileLogPO = new FileLogPO();
-        fileLogPO.setFileId(fileId);
-        fileLogPO.setLogInfo(LogUtil.getLogInfo(userTag, action));
-        fileLogPO.setCreateTime(new Date());
-        fileLogMapper.insert(fileLogPO);
     }
 }

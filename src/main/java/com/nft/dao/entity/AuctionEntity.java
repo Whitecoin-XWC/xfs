@@ -40,6 +40,9 @@ public class AuctionEntity {
     @ApiModelProperty(value = "拍卖的产品id",required = true)
     private String fileTokenId;
 
+    @TableField("trade_id")
+    private String tradeId;
+
     /**
      * 拍卖id
      */

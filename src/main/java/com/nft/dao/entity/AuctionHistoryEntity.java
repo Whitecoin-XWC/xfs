@@ -33,6 +33,9 @@ public class AuctionHistoryEntity {
     @ApiModelProperty(value = "拍卖的图片id", required = true)
     private String fileId;
 
+    @TableField("trade_id")
+    private String tradeId;
+
     /**
      * 拍卖记录
      */
