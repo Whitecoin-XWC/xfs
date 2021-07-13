@@ -6,8 +6,10 @@ import com.nft.bean.AuctionStatus;
 import com.nft.commons.util.LogUtil;
 import com.nft.dao.entity.AuctionEntity;
 import com.nft.dao.entity.FileLogPO;
+import com.nft.dao.entity.FilePO;
 import com.nft.dao.mapper.AuctionMapper;
 import com.nft.dao.mapper.FileLogMapper;
+import com.nft.dao.mapper.FileMapper;
 import com.nft.service.AuctionService;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -25,12 +27,20 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, AuctionEntity
 
     @Resource
     private AuctionMapper auctionMapper;
+    @Resource
+    private FileMapper fileMapper;
 
     @Override
     public int insertAuction(AuctionEntity auctionEntity) {
         auctionEntity.setAuctionStatus(AuctionStatus.AUCTION_START.getStatuCode());
         auctionEntity.setCreateTime(new Date());
         int insert = auctionMapper.insert(auctionEntity);
+        if (insert > 0) {
+            //修改主流程状态为5--拍卖中
+            FilePO filePO = new FilePO();
+            filePO.setId(auctionEntity.getFileTokenId());
+            fileMapper.updateById(filePO);
+        }
         return insert;
     }
 
