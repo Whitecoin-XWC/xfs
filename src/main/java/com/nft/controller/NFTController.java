@@ -54,6 +54,21 @@ public class NFTController {
     }
 
     /**
+     * 取消关注
+     * @param followVO
+     * @return
+     */
+    public ResultVO delFollow(@RequestBody FollowVO followVO){
+        try {
+            nftService.delFollow(followVO);
+            return ResultVO.successMsg("取消关注成功");
+        }catch (Exception e){
+            log.error("取消关注异常", e);
+            return ResultVO.fail("取消关注异常");
+        }
+    }
+
+    /**
      * 搜索
      * @param searchVO
      * @return
@@ -169,6 +184,7 @@ public class NFTController {
         try {
             FilePO filePO = new FilePO();
             filePO.setId(fileVO.getTokenId());
+            filePO.setUserAddress(fileVO.getUserAddress());
             FileDTO fileDTO = new FileDTO();
             fileDTO.setImgUrl(imgUrl);
             fileDTO.setFilePO(nftService.getFileDetail(filePO));

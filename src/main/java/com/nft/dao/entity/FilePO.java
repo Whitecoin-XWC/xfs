@@ -105,6 +105,9 @@ public class FilePO {
     @TableField(exist = false)
     private BigDecimal price;
 
+    @TableField(exist = false)
+    private Integer collect;
+
     public void setCopyrightFee(String copyrightFeeStr) {
         if(StringUtils.isEmpty(copyrightFeeStr)){
             copyrightFeeStr = "0";

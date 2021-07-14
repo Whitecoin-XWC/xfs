@@ -63,6 +63,20 @@ public class NFTServiceImpl implements NFTService {
     }
 
     /**
+     * 取消关注
+     * @param followVO
+     * @return
+     */
+    @Override
+    public int delFollow(FollowVO followVO) {
+        UpdateWrapper queryWrapper = new UpdateWrapper();
+        queryWrapper.eq("user_id", followVO.getUserAddress());
+        queryWrapper.eq("file_id", followVO.getTokenId());
+        queryWrapper.eq("type", 2);
+        return userFileMapper.delete(queryWrapper);
+    }
+
+    /**
      * 上传文件
      *
      * @param filePO
@@ -175,6 +189,7 @@ public class NFTServiceImpl implements NFTService {
         }
         QueryWrapper<UserFilePO> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("file_id", filePO.getId());
+        queryWrapper.eq("type", 0);
         UserFilePO userFilePO = userFileMapper.selectOne(queryWrapper);
         fileDetail.setUserAddress(userFilePO.getUserId());
 
@@ -186,7 +201,20 @@ public class NFTServiceImpl implements NFTService {
             fileDetail.setUnit(sellInfoPO.getUnit());
             fileDetail.setPrice(sellInfoPO.getPrice());
         }
-
+        if(StringUtils.isEmpty(filePO.getUserAddress())){
+            fileDetail.setCollect(0);
+        } else {
+            QueryWrapper queryWrapper2 = new QueryWrapper();
+            queryWrapper2.eq("user_id", filePO.getUserAddress());
+            queryWrapper2.eq("file_id", filePO.getId());
+            queryWrapper2.eq("type", 2);
+            UserFilePO userFilePO1 = userFileMapper.selectOne(queryWrapper2);
+            if (userFilePO1 != null) {
+                fileDetail.setCollect(1);
+            } else {
+                fileDetail.setCollect(0);
+            }
+        }
         return fileDetail;
     }
 

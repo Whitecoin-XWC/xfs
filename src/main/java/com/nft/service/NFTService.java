@@ -18,6 +18,13 @@ public interface NFTService {
     int follow(FollowVO followVO);
 
     /**
+     * 取消关注
+     * @param followVO
+     * @return
+     */
+    int delFollow(FollowVO followVO);
+
+    /**
      * 上传文件
      * @param filePO
      * @return
