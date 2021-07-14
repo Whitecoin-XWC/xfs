@@ -54,12 +54,22 @@ public class NFTServiceImpl implements NFTService {
      */
     @Override
     public int follow(FollowVO followVO) {
-        UserFilePO userFilePO = new UserFilePO();
-        userFilePO.setUserId(followVO.getUserAddress());
-        userFilePO.setFileId(followVO.getTokenId());
-        userFilePO.setType(2);
-        userFilePO.setCreateTime(new Date());
-        return userFileMapper.insert(userFilePO);
+
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("user_id", followVO.getUserAddress());
+        queryWrapper.eq("file_id", followVO.getTokenId());
+        queryWrapper.eq("type", 2);
+        List<UserFilePO> userFilePOList = userFileMapper.selectList(queryWrapper);
+
+        if(userFilePOList == null || userFilePOList.size() < 1){
+            UserFilePO userFilePO = new UserFilePO();
+            userFilePO.setUserId(followVO.getUserAddress());
+            userFilePO.setFileId(followVO.getTokenId());
+            userFilePO.setType(2);
+            userFilePO.setCreateTime(new Date());
+            return userFileMapper.insert(userFilePO);
+        }
+        return 1;
     }
 
     /**
