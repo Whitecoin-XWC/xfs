@@ -14,5 +14,5 @@ public interface AuctionService extends IService<AuctionEntity> {
 
     AuctionEntity queryAuction(AuctionEntity query);
 
-    void saveLog(String fileId, String userTag, String action);
+    int cancelAuction(String fileTokenId);
 }

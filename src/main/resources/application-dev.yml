@@ -65,3 +65,6 @@ fileUpload:
   type: "TXT_0,MD_0,JPG_1,PNG_1,SVG_1,TIFF_1,MP4_2,MOV_2,AVI_2,WEBM_2,MP3_3,WAV_3,OGG_3,GIF_4"
   save-path: /data/app/nft/media
   img-url: http://154.209.69.121:8089/
+
+
+tokenswap.api.url: http://154.209.69.121:8087/statistics/getPopularStatics

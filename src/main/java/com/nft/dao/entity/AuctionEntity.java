@@ -4,10 +4,12 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -40,6 +42,9 @@ public class AuctionEntity {
     @ApiModelProperty(value = "拍卖的产品id",required = true)
     private String fileTokenId;
 
+    @TableField("trade_id")
+    private String tradeId;
+
     /**
      * 拍卖id
      */
@@ -69,6 +74,18 @@ public class AuctionEntity {
     private BigDecimal auctionMinMarkup;
 
     /**
+     * 拍卖保留价美元
+     */
+    @TableField(exist = false)
+    private BigDecimal auctionRetainPriceUsdt;
+
+    /**
+     * 最低加价幅度美元
+     */
+    @TableField(exist = false)
+    private BigDecimal auctionMinMarkupUsdt;
+
+    /**
      * 拍卖最高价
      */
     @TableField("auction_max_price")
@@ -87,18 +104,25 @@ public class AuctionEntity {
     /**
      * 创建时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @TableField("create_time")
     private Date createTime;
 
     /**
      * 拍卖开始时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @TableField("auction_start_time")
     private Date auctionStartTime;
 
     /**
      * 记录修改时间
      */
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @TableField("update_time")
     private Date updateTime;
 }
