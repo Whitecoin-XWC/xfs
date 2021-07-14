@@ -86,6 +86,7 @@ public class SellServiceImpl implements SellService {
 
         QueryWrapper queryWrapper = new QueryWrapper();
         queryWrapper.eq("file_id", buyVO.getTokenId());
+        queryWrapper.eq("type", 0);
         UserFilePO userFilePO = userFileMapper.selectOne(queryWrapper);
         if(userFilePO == null){
             return -1;
