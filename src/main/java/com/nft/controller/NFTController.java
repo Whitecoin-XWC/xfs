@@ -58,6 +58,8 @@ public class NFTController {
      * @param followVO
      * @return
      */
+    @ApiOperation("取消关注")
+    @RequestMapping(value = "/delFollow", method = RequestMethod.POST)
     public ResultVO delFollow(@RequestBody FollowVO followVO){
         try {
             nftService.delFollow(followVO);
