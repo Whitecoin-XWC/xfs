@@ -7,8 +7,10 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.nft.bean.AuctionStatus;
 import com.nft.dao.entity.AuctionEntity;
 import com.nft.dao.entity.FilePO;
+import com.nft.dao.entity.UserFilePO;
 import com.nft.dao.mapper.AuctionMapper;
 import com.nft.dao.mapper.FileMapper;
+import com.nft.dao.mapper.UserFileMapper;
 import com.nft.service.AuctionService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -39,6 +41,8 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, AuctionEntity
     private AuctionMapper auctionMapper;
     @Resource
     private FileMapper fileMapper;
+    @Resource
+    private UserFileMapper userFileMapper;
 
     @Value("${tokenswap.api.url}")
     private String apiUrl;
@@ -87,6 +91,43 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, AuctionEntity
         filePO.setFileStatus(2);
         int update = fileMapper.updateById(filePO);
         return update;
+    }
+
+    @Override
+    public String receive(String fileTokenId, String userAddress, long auctionId) {
+        FilePO filePO = new FilePO();
+        filePO.setId(fileTokenId);
+        filePO.setFileStatus(2);
+        int update = fileMapper.updateById(filePO);
+        if (update <= 0) {
+            return "修改文件状态失败";
+        }
+
+        /* 修改拍卖状态为领取成功 */
+        AuctionEntity entity = auctionMapper.selectById(auctionId);
+        if (entity == null) {
+            return "不存在的拍卖";
+        }
+        entity.setAuctionStatus(AuctionStatus.RECEIVED.getStatuCode());
+        int updateAuction = auctionMapper.updateById(entity);
+        if (updateAuction <= 0) {
+            return "修改拍卖状态失败";
+        }
+
+
+        /* 修改nft拥有者 */
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("file_id", fileTokenId);
+        UserFilePO userFilePO = userFileMapper.selectOne(queryWrapper);
+        if (userFilePO == null) {
+            return "不存在的文件或用户";
+        }
+        userFilePO.setUserId(userAddress);
+        int updateUserFile = userFileMapper.updateById(userFilePO);
+        if (updateUserFile <= 0) {
+            return "修改文件用户对应关系失败";
+        }
+        return "领取成功";
     }
 
 

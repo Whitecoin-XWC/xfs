@@ -4,15 +4,14 @@ import com.nft.bean.AuctionStatus;
 import com.nft.commons.vo.ResultVO;
 import com.nft.dao.entity.AuctionEntity;
 import com.nft.dao.entity.AuctionHistoryEntity;
+import com.nft.dao.entity.ReceivePO;
 import com.nft.service.AuctionHistoryService;
 import com.nft.service.AuctionService;
 import com.nft.service.FileLogService;
 import com.nft.service.dto.FileLogAttach;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -74,6 +73,26 @@ public class AuctionController {
             String fileTokenId = auctionEntity.getFileTokenId();
             auctionService.cancelAuction(fileTokenId);
             return ResultVO.successMsg("取消成功");
+        } catch (Exception e) {
+            log.error("cancel auction fail,{}", e);
+            return ResultVO.fail("取消拍卖失败");
+        }
+    }
+
+    @ApiOperation("领取成功")
+    @PostMapping("/receive")
+    public ResultVO receive(@RequestBody ReceivePO receivePO) {
+        try {
+            String fileTokenId = receivePO.getFileTokenId();
+            String userAddress = receivePO.getUserAddress();
+            AuctionEntity auctionEntity = new AuctionEntity();
+            auctionEntity.setFileTokenId(fileTokenId);
+            AuctionEntity query = auctionService.queryAuction(auctionEntity);
+            if (query == null || query.getAuctionStatus() != 2) {
+                return ResultVO.fail("竞拍未结束,不能领取");
+            }
+            String receive = auctionService.receive(fileTokenId, userAddress, query.getId());
+            return ResultVO.successMsg(receive);
         } catch (Exception e) {
             log.error("cancel auction fail,{}", e);
             return ResultVO.fail("取消拍卖失败");
