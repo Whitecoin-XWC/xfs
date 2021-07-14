@@ -41,7 +41,7 @@
         <if test="fileResultDTO.id != null and fileResultDTO.id != ''">
             and nft_file.id = #{fileResultDTO.id}
         </if>
-        <if test="fileResultDTO.source != null and fileResultDTO.source != ''">
+        <if test="fileResultDTO.id != null">
             and nft_user_file.type = #{fileResultDTO.source}
         </if>
     </select>
