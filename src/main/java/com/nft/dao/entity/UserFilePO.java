@@ -34,4 +34,10 @@ public class UserFilePO {
      */
     @TableField("type")
     private Integer type;
+
+    /**
+     * 用户昵称
+     */
+    @TableField("user_name")
+    private String userName;
 }

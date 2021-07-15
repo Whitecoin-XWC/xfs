@@ -15,6 +15,7 @@ import com.nft.service.FileLogService;
 import com.nft.service.NFTService;
 import com.nft.service.dto.FileLogAttach;
 import com.nft.service.dto.FileResultDTO;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -302,7 +303,24 @@ public class NFTServiceImpl implements NFTService {
         Page page1 = fileMapper.selectPage(new Page<>(1, 100), queryWrapper1);
         if (page1 != null && page1.getRecords() != null) {
             resultMap.put("imagUrl", imgUrl);
-            resultMap.put("files", page1.getRecords());
+
+            List<FileResultDTO> fileResultDTOList = new ArrayList<>();
+
+            List<FilePO> filePOList = page1.getRecords();
+            for(FilePO filePO : filePOList){
+                FileResultDTO fileResultDTO = new FileResultDTO();
+                BeanUtils.copyProperties(filePO, fileResultDTO);
+
+                QueryWrapper queryWrapper2 = new QueryWrapper();
+                queryWrapper2.eq("file_id", filePO.getId());
+                List<UserFilePO> userFilePOList = userFileMapper.selectList(queryWrapper2);
+                if(userFilePOList != null && userFilePOList.size() > 0){
+                    fileResultDTO.setUserName(userFilePOList.get(0).getUserName());
+                }
+                fileResultDTOList.add(fileResultDTO);
+            }
+
+            resultMap.put("files", fileResultDTOList);
         } else {
             resultMap.put("files", new ArrayList<>());
         }

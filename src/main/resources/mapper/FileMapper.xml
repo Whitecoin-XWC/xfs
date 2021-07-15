@@ -32,16 +32,16 @@
         <if test="fileResultDTO.userAddress != null and fileResultDTO.userAddress != ''">
             and nft_user_file.user_id = #{fileResultDTO.userAddress}
         </if>
-        <if test="fileResultDTO.mediaType != null and fileResultDTO.mediaType != ''">
+        <if test="fileResultDTO.mediaType != null and fileResultDTO.mediaType > -1">
             and nft_file.media_type = #{fileResultDTO.mediaType}
         </if>
-        <if test="fileResultDTO.fileStatus != null and fileResultDTO.fileStatus != ''">
-            and nft_file.status = #{fileResultDTO.fileStatus}
+        <if test="fileResultDTO.fileStatus != null and fileResultDTO.fileStatus > -1">
+            and nft_file.file_status = #{fileResultDTO.fileStatus}
         </if>
         <if test="fileResultDTO.id != null and fileResultDTO.id != ''">
             and nft_file.id = #{fileResultDTO.id}
         </if>
-        <if test="fileResultDTO.source != null and fileResultDTO.source != ''">
+        <if test="fileResultDTO.source != null and fileResultDTO.source > -1">
             and nft_user_file.type = #{fileResultDTO.source}
         </if>
     </select>

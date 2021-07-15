@@ -1,6 +1,9 @@
 package com.nft.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.nft.dao.entity.UserFilePO;
 import com.nft.dao.entity.UserinfoPO;
+import com.nft.dao.mapper.UserFileMapper;
 import com.nft.dao.mapper.UserInfoMapper;
 import com.nft.service.UserInfoService;
 import org.springframework.stereotype.Service;
@@ -14,6 +17,9 @@ public class UserInfoServiceImpl implements UserInfoService {
     @Resource
     private UserInfoMapper userInfoMapper;
 
+    @Resource
+    private UserFileMapper userFileMapper;
+
     /**
      * 更新用户资料
      * @param userinfoPO
@@ -25,11 +31,20 @@ public class UserInfoServiceImpl implements UserInfoService {
         if(userinfoPO1 == null){
             userinfoPO.setCreateTime(new Date());
             userInfoMapper.insert(userinfoPO);
+
+
         } else {
             userinfoPO1.setNickName(userinfoPO.getNickName());
             userinfoPO1.setIntroduction(userinfoPO.getIntroduction());
             userInfoMapper.updateById(userinfoPO1);
         }
+
+        UpdateWrapper updateWrapper = new UpdateWrapper();
+        updateWrapper.eq("user_id", userinfoPO.getId());
+
+        UserFilePO userFilePO = new UserFilePO();
+        userFilePO.setUserName(userinfoPO.getNickName());
+        userFileMapper.update(userFilePO, updateWrapper);
         return 1;
     }
 

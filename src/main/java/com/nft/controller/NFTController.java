@@ -96,9 +96,9 @@ public class NFTController {
     public ResultVO selectIndexList(@RequestBody FileVO fileVO){
         try {
             PageResultVO pageResultVO = new PageResultVO();
-            fileVO.setMediaType(null);
-            fileVO.setStatus(null);
-            fileVO.setSource(null);
+            fileVO.setMediaType(fileVO.getMediaType());
+            fileVO.setStatus(fileVO.getStatus());
+            fileVO.setSource(fileVO.getSource());
             IPage<FileResultDTO> iPage = nftService.selectFiles(fileVO);
             if(iPage != null){
                 pageResultVO.setCount(iPage.getTotal());
