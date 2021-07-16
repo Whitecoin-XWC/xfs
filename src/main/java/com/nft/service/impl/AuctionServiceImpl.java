@@ -26,6 +26,9 @@ import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 
@@ -69,9 +72,9 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, AuctionEntity
     }
 
     @Override
-    public AuctionEntity queryAuction(AuctionEntity query) {
+    public AuctionEntity queryAuction(String fileTokenId) {
         QueryWrapper<AuctionEntity> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("file_token_id", query.getFileTokenId());
+        queryWrapper.eq("file_token_id", fileTokenId);
         queryWrapper.orderByDesc("create_time");
         List<AuctionEntity> auctionEntities = auctionMapper.selectList(queryWrapper);
         if (CollectionUtils.isEmpty(auctionEntities)) {
@@ -81,6 +84,16 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, AuctionEntity
         BigDecimal coinPrice = getCoinPrice(auctionEntity.getAuctionCoin());
         auctionEntity.setAuctionMinMarkupUsdt(auctionEntity.getAuctionMinMarkup().multiply(coinPrice));
         auctionEntity.setAuctionRetainPriceUsdt(auctionEntity.getAuctionRetainPrice().multiply(coinPrice));
+        /* 计算倒计时剩余时间 */
+        if (auctionEntity.getAuctionStatus() > 0){
+            Date auctionStartTime = auctionEntity.getAuctionStartTime();
+            LocalDateTime localDateTime = auctionStartTime.toInstant().atZone(ZoneId.of("GMT")).toLocalDateTime();
+            Duration between = Duration.between(LocalDateTime.now(), localDateTime.plusHours(24));
+            long millis = between.toMillis();
+            if (millis >= 0){
+                auctionEntity.setRemainingTime(between.toMillis());
+            }
+        }
         return auctionEntity;
     }
 
@@ -131,7 +144,8 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, AuctionEntity
     }
 
 
-    private BigDecimal getCoinPrice(String coin) {
+    @Override
+    public BigDecimal getCoinPrice(String coin) {
         HttpGet httpGet = new HttpGet(apiUrl);
         CloseableHttpClient httpClient = HttpClientBuilder.create().build();
         CloseableHttpResponse response = null;

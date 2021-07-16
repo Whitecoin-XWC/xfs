@@ -110,6 +110,13 @@ public class FileResultDTO {
     @ApiModelProperty("起拍价")
     private BigDecimal pmPrice;
 
+    @ApiModelProperty("拍卖最高价")
+    private BigDecimal auctionMaxPrice;
+
+    @ApiModelProperty("拍卖倒计时剩余时间")
+    private long remainingTime;
+
+
     /**
      * 文件来源
      */

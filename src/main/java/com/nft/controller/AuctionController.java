@@ -8,6 +8,7 @@ import com.nft.dao.entity.ReceivePO;
 import com.nft.service.AuctionHistoryService;
 import com.nft.service.AuctionService;
 import com.nft.service.FileLogService;
+import com.nft.service.NFTService;
 import com.nft.service.dto.FileLogAttach;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -33,6 +34,8 @@ public class AuctionController {
     private AuctionHistoryService auctionHistoryService;
     @Resource
     private FileLogService fileLogService;
+    @Resource
+    private NFTService nftService;
 
     @ApiOperation("新增拍卖记录")
     @PostMapping("/create")
@@ -66,7 +69,7 @@ public class AuctionController {
     @PostMapping("/cancel")
     public ResultVO cancelAuction(@RequestBody AuctionEntity auctionEntity) {
         try {
-            AuctionEntity query = auctionService.queryAuction(auctionEntity);
+            AuctionEntity query = auctionService.queryAuction(auctionEntity.getFileTokenId());
             if (query == null || query.getAuctionStatus() != 0) {
                 return ResultVO.fail("竞拍中,不允许取消拍卖");
             }
@@ -85,13 +88,13 @@ public class AuctionController {
         try {
             String fileTokenId = receivePO.getFileTokenId();
             String userAddress = receivePO.getUserAddress();
-            AuctionEntity auctionEntity = new AuctionEntity();
-            auctionEntity.setFileTokenId(fileTokenId);
-            AuctionEntity query = auctionService.queryAuction(auctionEntity);
+            AuctionEntity query = auctionService.queryAuction(fileTokenId);
             if (query == null || query.getAuctionStatus() != 2) {
                 return ResultVO.fail("竞拍未结束,不能领取");
             }
             String receive = auctionService.receive(fileTokenId, userAddress, query.getId());
+            /* 插入版权费通知 */
+            nftService.insertCopyrightFeeNotice(fileTokenId, userAddress, query.getAuctionMaxPrice(), query.getAuctionCoin());
             return ResultVO.successMsg(receive);
         } catch (Exception e) {
             log.error("cancel auction fail,{}", e);
@@ -103,7 +106,7 @@ public class AuctionController {
     @PostMapping("/query")
     public ResultVO query(@RequestBody AuctionEntity query) {
         try {
-            AuctionEntity auctionEntity = auctionService.queryAuction(query);
+            AuctionEntity auctionEntity = auctionService.queryAuction(query.getFileTokenId());
             return ResultVO.success(auctionEntity);
         } catch (Exception e) {
             log.error("update auction fail,{}", e);
@@ -131,6 +134,8 @@ public class AuctionController {
             update.setAuctionMaxEr(historyEntity.getAuctioneer());
             auctionService.updateAuction(update);
 
+            /* 插入拍卖的通知记录 */
+            nftService.insertAuctionNotice(historyEntity.getAuctionId(), historyEntity.getFileId(), historyEntity.getAuctioneer());
             return ResultVO.successMsg("插入拍卖成功");
         } catch (Exception e) {
             log.error("create history fail,{}", e);

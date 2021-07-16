@@ -4,15 +4,13 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.nft.controller.vo.BuyVO;
 import com.nft.controller.vo.SellVO;
-import com.nft.dao.entity.FileLogPO;
-import com.nft.dao.entity.FilePO;
-import com.nft.dao.entity.SellInfoPO;
-import com.nft.dao.entity.UserFilePO;
+import com.nft.dao.entity.*;
 import com.nft.dao.mapper.FileLogMapper;
 import com.nft.dao.mapper.FileMapper;
 import com.nft.dao.mapper.SellInfoMapper;
 import com.nft.dao.mapper.UserFileMapper;
 import com.nft.service.FileLogService;
+import com.nft.service.NFTService;
 import com.nft.service.SellService;
 import com.nft.service.dto.FileLogAttach;
 import org.springframework.stereotype.Service;
@@ -34,6 +32,9 @@ public class SellServiceImpl implements SellService {
 
     @Resource
     private FileLogService fileLogService;
+
+    @Resource
+    private NFTService nftService;
 
     @Override
     @Transactional
@@ -97,6 +98,7 @@ public class SellServiceImpl implements SellService {
 
         UpdateWrapper updateWrapper = new UpdateWrapper();
         updateWrapper.eq("token_id", buyVO.getTokenId());
+        SellInfoPO sellInfoPO = sellInfoMapper.selectOne(updateWrapper);
         sellInfoMapper.delete(updateWrapper);
 
         updateFileStatus(buyVO.getTokenId(), 2);
@@ -104,6 +106,8 @@ public class SellServiceImpl implements SellService {
         FileLogAttach fileLogAttach = new FileLogAttach();
         fileLogAttach.setTractionId(buyVO.getTractionId());
         saveLog(buyVO.getTokenId(), buyVO.getBuyUserAddress(), "购买了这个NFT", fileLogAttach);
+        /* 插入通知记录 */
+        nftService.insertCopyrightFeeNotice(buyVO.getTokenId(),buyVO.getBuyUserAddress(),sellInfoPO.getPrice(),sellInfoPO.getUnit());
         return 0;
     }
 

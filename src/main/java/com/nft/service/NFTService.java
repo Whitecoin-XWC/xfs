@@ -4,8 +4,12 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.nft.controller.vo.*;
 import com.nft.dao.entity.FileLogPO;
 import com.nft.dao.entity.FilePO;
+import com.nft.dao.entity.NoticeEntity;
 import com.nft.service.dto.FileResultDTO;
+import com.nft.service.dto.NoticeResult;
 
+import java.math.BigDecimal;
+import java.util.List;
 import java.util.Map;
 
 public interface NFTService {
@@ -77,4 +81,10 @@ public interface NFTService {
      * @return
      */
     Map<String,Object> search(String keyWord);
+
+    NoticeResult getNotice(NoticeVo noticeVo);
+
+    void insertCopyrightFeeNotice(String fileId, String buyUserAddress, BigDecimal price,String coinType);
+
+    void insertAuctionNotice(long auctionId,String fileId,String auctionner);
 }

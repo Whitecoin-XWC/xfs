@@ -4,6 +4,8 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 @Data
 @ApiModel
 public class FileUserChangeVO {
@@ -25,4 +27,10 @@ public class FileUserChangeVO {
      */
     @ApiModelProperty("交易ID")
     private String tractionId;
+
+    @ApiModelProperty("交易金额")
+    private BigDecimal price;
+
+    @ApiModelProperty("交易币种")
+    private String name;
 }

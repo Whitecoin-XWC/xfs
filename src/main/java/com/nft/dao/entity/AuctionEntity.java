@@ -85,6 +85,9 @@ public class AuctionEntity {
     @TableField(exist = false)
     private BigDecimal auctionMinMarkupUsdt;
 
+    @TableField(exist = false)
+    private long remainingTime;
+
     /**
      * 拍卖最高价
      */

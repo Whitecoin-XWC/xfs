@@ -5,7 +5,9 @@ import com.nft.commons.vo.PageResultVO;
 import com.nft.commons.vo.ResultVO;
 import com.nft.controller.vo.FileVO;
 import com.nft.controller.vo.SelectVO;
+import com.nft.dao.entity.AuctionEntity;
 import com.nft.dao.entity.UserinfoPO;
+import com.nft.service.AuctionService;
 import com.nft.service.UserFileService;
 import com.nft.service.UserInfoService;
 import com.nft.service.dto.FileResultDTO;
@@ -32,6 +34,9 @@ public class UserInfoController {
     @Resource
     private UserInfoService userInfoService;
 
+    @Resource
+    private AuctionService auctionService;
+
     /**
      * 图片访问前缀
      */
@@ -41,42 +46,45 @@ public class UserInfoController {
 
     /**
      * 修改用户资料
+     *
      * @return
      */
     @ApiOperation("修改用户资料")
     @RequestMapping(value = "/updateUserInfo", method = RequestMethod.POST)
-    public ResultVO updateUserInfo(@RequestBody UserinfoPO userinfoPO){
+    public ResultVO updateUserInfo(@RequestBody UserinfoPO userinfoPO) {
         try {
             userInfoService.updateUserInfo(userinfoPO);
             return ResultVO.successMsg("更新成功");
-        } catch (Exception e){
+        } catch (Exception e) {
             log.error("更新用户信息异常", e);
-            return ResultVO.fail("更新用户信息异常"+e.getMessage());
+            return ResultVO.fail("更新用户信息异常" + e.getMessage());
         }
     }
 
     /**
      * 查询用户资料
+     *
      * @return
      */
     @ApiOperation("查询用户资料")
     @RequestMapping(value = "/getUserInfo", method = RequestMethod.POST)
-    public ResultVO getUserInfo(@RequestBody UserinfoPO userinfoPO){
+    public ResultVO getUserInfo(@RequestBody UserinfoPO userinfoPO) {
         try {
             return ResultVO.success(userInfoService.getUserInfo(userinfoPO.getId()));
-        } catch (Exception e){
+        } catch (Exception e) {
             log.error("查询用户资料异常", e);
-            return ResultVO.fail("查询用户资料异常"+e.getMessage());
+            return ResultVO.fail("查询用户资料异常" + e.getMessage());
         }
     }
 
     /**
      * 查询当前用户的所有文件
+     *
      * @return
      */
     @ApiOperation("查询当前用户上传的文件")
     @RequestMapping(value = "/selectFiles", method = RequestMethod.POST)
-    public ResultVO selectFiles(@RequestBody SelectVO selectVO){
+    public ResultVO selectFiles(@RequestBody SelectVO selectVO) {
         try {
             PageResultVO pageResultVO = new PageResultVO();
 
@@ -88,7 +96,14 @@ public class UserInfoController {
             fileVO.setMediaType(null);
             fileVO.setStatus(null);
             IPage<FileResultDTO> iPage = userFileService.selectFiles(fileVO);
-            if(iPage != null){
+            if (iPage != null) {
+                for (FileResultDTO record : iPage.getRecords()) {
+                    if (record.getFileStatus() == 5) {
+                        AuctionEntity auctionEntity = auctionService.queryAuction(record.getId());
+                        record.setAuctionMaxPrice(auctionEntity.getAuctionMaxPrice());
+                        record.setRemainingTime(auctionEntity.getRemainingTime());
+                    }
+                }
                 pageResultVO.setCount(iPage.getTotal());
                 pageResultVO.setCurrentPage(iPage.getCurrent());
                 pageResultVO.setPageSize(iPage.getSize());
@@ -97,9 +112,9 @@ public class UserInfoController {
                 pageResultVO.setRecords(iPage.getRecords());
             }
             return ResultVO.success(pageResultVO);
-        } catch (Exception e){
+        } catch (Exception e) {
             log.error("查询异常", e);
-            return ResultVO.fail("查询异常"+e.getMessage());
+            return ResultVO.fail("查询异常" + e.getMessage());
         }
     }
 }
