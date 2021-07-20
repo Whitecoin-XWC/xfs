@@ -287,6 +287,8 @@ public class NFTServiceImpl implements NFTService {
         IPage<FileResultDTO> pageWrapper = new Page<>(fileVO.getPage(), fileVO.getPageSize());
 
         FileResultDTO fileResultDTO = new FileResultDTO();
+        fileResultDTO.setIsIndex(fileVO.getIsIndex());
+
         if (!StringUtils.isEmpty(fileVO.getUserAddress())) {
             fileResultDTO.setUserAddress(fileVO.getUserAddress());
         }

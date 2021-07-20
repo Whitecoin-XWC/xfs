@@ -107,6 +107,7 @@ public class NFTController {
             fileVO.setMediaType(fileVO.getMediaType());
             fileVO.setStatus(fileVO.getStatus());
             fileVO.setSource(fileVO.getSource());
+            fileVO.setIsIndex("yes");
             IPage<FileResultDTO> iPage = nftService.selectFiles(fileVO);
             if (iPage != null) {
                 for (FileResultDTO record : iPage.getRecords()) {

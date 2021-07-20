@@ -122,4 +122,9 @@ public class FileResultDTO {
      */
     @ApiModelProperty("文件来源 0创建， 1 商品，2 关注")
     private Integer source;
+
+    /**
+     * 是否首页
+     */
+    private String isIndex;
 }

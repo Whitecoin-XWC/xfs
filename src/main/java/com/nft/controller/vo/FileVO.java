@@ -48,4 +48,10 @@ public class FileVO {
      */
     @ApiModelProperty("媒体数据来源，0创建， 1 商品，2 关注")
     private Integer source;
+
+    /**
+     * 是否首页
+     */
+    @ApiModelProperty("是否首页，不用传")
+    private String isIndex;
 }
