@@ -1,0 +1,40 @@
+2021-07-20 08:39:18,134 [main] INFO (StartupInfoLogger.java:55)- Starting Start on moloqu with PID 41196 (D:\workspace\xfs\target\classes started by moloq in D:\workspace\xfs)
+2021-07-20 08:39:18,136 [main] DEBUG (StartupInfoLogger.java:56)- Running with Spring Boot v2.3.5.RELEASE, Spring v5.2.10.RELEASE
+2021-07-20 08:39:18,137 [main] INFO (SpringApplication.java:655)- The following profiles are active: dev
+2021-07-20 08:39:19,148 [main] INFO (TomcatWebServer.java:108)- Tomcat initialized with port(s): 8089 (http)
+2021-07-20 08:39:19,154 [main] INFO (DirectJDKLog.java:173)- Initializing ProtocolHandler ["http-nio-8089"]
+2021-07-20 08:39:19,155 [main] INFO (DirectJDKLog.java:173)- Starting service [Tomcat]
+2021-07-20 08:39:19,155 [main] INFO (DirectJDKLog.java:173)- Starting Servlet engine: [Apache Tomcat/9.0.39]
+2021-07-20 08:39:19,253 [main] INFO (DirectJDKLog.java:173)- Initializing Spring embedded WebApplicationContext
+2021-07-20 08:39:19,253 [main] INFO (ServletWebServerApplicationContext.java:285)- Root WebApplicationContext: initialization completed in 1074 ms
+2021-07-20 08:39:19,340 [main] INFO (DruidDataSourceAutoConfigure.java:56)- Init DruidDataSource
+2021-07-20 08:39:28,195 [main] INFO (DruidDataSource.java:985)- {dataSource-1} inited
+2021-07-20 08:39:29,273 [main] INFO (PropertySourcedRequestMappingHandlerMapping.java:69)- Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2Controller#getDocumentation(String, HttpServletRequest)]
+2021-07-20 08:39:29,334 [main] INFO (ExecutorConfigurationSupport.java:181)- Initializing ExecutorService 'applicationTaskExecutor'
+2021-07-20 08:39:29,433 [main] INFO (ExecutorConfigurationSupport.java:181)- Initializing ExecutorService 'taskScheduler'
+2021-07-20 08:39:29,461 [main] INFO (DirectJDKLog.java:173)- Starting ProtocolHandler ["http-nio-8089"]
+2021-07-20 08:39:29,476 [main] INFO (TomcatWebServer.java:220)- Tomcat started on port(s): 8089 (http) with context path ''
+2021-07-20 08:39:29,477 [main] INFO (DocumentationPluginsBootstrapper.java:160)- Context refreshed
+2021-07-20 08:39:29,487 [main] INFO (DocumentationPluginsBootstrapper.java:163)- Found 1 custom documentation plugin(s)
+2021-07-20 08:39:29,511 [main] INFO (ApiListingReferenceScanner.java:41)- Scanning for api listing references
+2021-07-20 08:39:29,668 [main] INFO (StartupInfoLogger.java:61)- Started Start in 11.928 seconds (JVM running for 12.828)
+2021-07-20 08:40:40,316 [http-nio-8089-exec-5] INFO (DirectJDKLog.java:173)- Initializing Spring DispatcherServlet 'dispatcherServlet'
+2021-07-20 08:40:40,316 [http-nio-8089-exec-5] INFO (FrameworkServlet.java:525)- Initializing Servlet 'dispatcherServlet'
+2021-07-20 08:40:40,324 [http-nio-8089-exec-5] INFO (FrameworkServlet.java:547)- Completed initialization in 8 ms
+2021-07-20 08:40:40,630 [http-nio-8089-exec-5] WARN (DruidAbstractDataSource.java:1489)- discard long time none received connection. , jdbcUrl : jdbc:mysql://154.209.69.121:3306/nft?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8, version : 1.2.2, lastPacketReceivedIdleMillis : 72974
+2021-07-20 08:40:40,791 [http-nio-8089-exec-5] WARN (DruidAbstractDataSource.java:1489)- discard long time none received connection. , jdbcUrl : jdbc:mysql://154.209.69.121:3306/nft?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8, version : 1.2.2, lastPacketReceivedIdleMillis : 74902
+2021-07-20 08:40:40,955 [http-nio-8089-exec-5] WARN (DruidAbstractDataSource.java:1489)- discard long time none received connection. , jdbcUrl : jdbc:mysql://154.209.69.121:3306/nft?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8, version : 1.2.2, lastPacketReceivedIdleMillis : 76675
+2021-07-20 08:40:41,122 [http-nio-8089-exec-5] WARN (DruidAbstractDataSource.java:1489)- discard long time none received connection. , jdbcUrl : jdbc:mysql://154.209.69.121:3306/nft?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8, version : 1.2.2, lastPacketReceivedIdleMillis : 78527
+2021-07-20 08:40:41,303 [http-nio-8089-exec-5] WARN (DruidAbstractDataSource.java:1489)- discard long time none received connection. , jdbcUrl : jdbc:mysql://154.209.69.121:3306/nft?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8, version : 1.2.2, lastPacketReceivedIdleMillis : 80463
+2021-07-20 08:40:42,232 [http-nio-8089-exec-5] DEBUG (BaseJdbcLogger.java:137)- ==>  Preparing: SELECT COUNT( 1 ) FROM nft_auction_history WHERE (auction_id = ?)
+2021-07-20 08:40:42,329 [http-nio-8089-exec-5] DEBUG (BaseJdbcLogger.java:137)- ==> Parameters: 1(Long)
+2021-07-20 08:40:42,508 [http-nio-8089-exec-5] DEBUG (BaseJdbcLogger.java:137)- <==      Total: 1
+2021-07-20 08:40:42,512 [http-nio-8089-exec-5] DEBUG (BaseJdbcLogger.java:137)- ==>  Preparing: INSERT INTO nft_auction_history ( file_id, trade_id, auction_id, auctioneer, auction_time, auction_max_price, auction_price ) VALUES ( ?, ?, ?, ?, ?, ?, ? )
+2021-07-20 08:40:42,534 [http-nio-8089-exec-5] DEBUG (BaseJdbcLogger.java:137)- ==> Parameters: e946f7fdd23c7a3bbde7b4d8513c8042(String), 2(String), 1(Long), XWCNNytuVhGn6uWbf6Sy2ti7HnAnizq8F5ZmA(String), 2021-07-20 08:40:42.51(Timestamp), 12(BigDecimal), 12(BigDecimal)
+2021-07-20 08:40:42,853 [http-nio-8089-exec-5] DEBUG (BaseJdbcLogger.java:137)- <==    Updates: 1
+2021-07-20 08:40:42,873 [http-nio-8089-exec-5] DEBUG (BaseJdbcLogger.java:137)- ==>  Preparing: UPDATE nft_auction SET auction_max_price=?, auction_max_er=?, update_time=? WHERE id=?
+2021-07-20 08:40:42,889 [http-nio-8089-exec-5] DEBUG (BaseJdbcLogger.java:137)- ==> Parameters: 12(BigDecimal), XWCNNytuVhGn6uWbf6Sy2ti7HnAnizq8F5ZmA(String), 2021-07-20 08:40:42.869(Timestamp), 1(Long)
+2021-07-20 08:40:43,208 [http-nio-8089-exec-5] DEBUG (BaseJdbcLogger.java:137)- <==    Updates: 1
+2021-07-20 08:40:43,218 [http-nio-8089-exec-5] DEBUG (BaseJdbcLogger.java:137)- ==>  Preparing: SELECT id,notice_type,notice_pople,notice_file,copyright_fee,recipient,coin_type,auction_id,notice_status,create_time FROM nft_notice WHERE (auction_id = ? AND notice_pople = ?)
+2021-07-20 08:40:43,220 [http-nio-8089-exec-5] DEBUG (BaseJdbcLogger.java:137)- ==> Parameters: 1(Long), XWCNNytuVhGn6uWbf6Sy2ti7HnAnizq8F5ZmA(String)
+2021-07-20 08:40:43,383 [http-nio-8089-exec-5] DEBUG (BaseJdbcLogger.java:137)- <==      Total: 0
