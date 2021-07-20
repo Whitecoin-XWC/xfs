@@ -35,8 +35,11 @@
         <if test="fileResultDTO.mediaType != null and fileResultDTO.mediaType > -1">
             and nft_file.media_type = #{fileResultDTO.mediaType}
         </if>
-        <if test="fileResultDTO.fileStatus != null and fileResultDTO.fileStatus > -1">
+        <if test="fileResultDTO.fileStatus != null and fileResultDTO.fileStatus > 0">
             and nft_file.file_status = #{fileResultDTO.fileStatus}
+        </if>
+        <if test="fileResultDTO.fileStatus == null or fileResultDTO.fileStatus &lt;= 0">
+            and nft_file.file_status &gt; 0
         </if>
         <if test="fileResultDTO.id != null and fileResultDTO.id != ''">
             and nft_file.id = #{fileResultDTO.id}
