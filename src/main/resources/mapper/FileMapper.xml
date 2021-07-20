@@ -48,7 +48,7 @@
             and nft_user_file.type = #{fileResultDTO.source}
         </if>
         <if test="fileResultDTO.isIndex != null and fileResultDTO.isIndex == 'yes'">
-            group by nft_file.id;
+            group by nft_file.id
         </if>
     </select>
 
