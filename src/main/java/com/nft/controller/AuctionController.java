@@ -5,10 +5,7 @@ import com.nft.commons.vo.ResultVO;
 import com.nft.dao.entity.AuctionEntity;
 import com.nft.dao.entity.AuctionHistoryEntity;
 import com.nft.dao.entity.ReceivePO;
-import com.nft.service.AuctionHistoryService;
-import com.nft.service.AuctionService;
-import com.nft.service.FileLogService;
-import com.nft.service.NFTService;
+import com.nft.service.*;
 import com.nft.service.dto.FileLogAttach;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -36,6 +33,8 @@ public class AuctionController {
     private FileLogService fileLogService;
     @Resource
     private NFTService nftService;
+    @Resource
+    private NoticeService noticeService;
 
     @ApiOperation("新增拍卖记录")
     @PostMapping("/create")
@@ -94,7 +93,7 @@ public class AuctionController {
             }
             String receive = auctionService.receive(fileTokenId, userAddress, query.getId());
             /* 插入版权费通知 */
-            nftService.insertCopyrightFeeNotice(fileTokenId, userAddress, query.getAuctionMaxPrice(), query.getAuctionCoin());
+            noticeService.insertCopyrightFeeNotice(fileTokenId, userAddress, query.getAuctionMaxPrice(), query.getAuctionCoin());
             return ResultVO.successMsg(receive);
         } catch (Exception e) {
             log.error("cancel auction fail,{}", e);
@@ -126,6 +125,7 @@ public class AuctionController {
             AuctionEntity update = new AuctionEntity();
             if (count == 0 && insert > 0) {
                 update.setAuctionStatus(AuctionStatus.AUCTIONING.getStatuCode());
+                update.setAuctionStartTime(new Date());
                 fileLogService.saveLog(historyEntity.getFileId(), "拍卖开始", 1, new FileLogAttach(historyEntity.getTradeId()));
             }
             update.setId(historyEntity.getAuctionId());
@@ -135,7 +135,7 @@ public class AuctionController {
             auctionService.updateAuction(update);
 
             /* 插入拍卖的通知记录 */
-            nftService.insertAuctionNotice(historyEntity.getAuctionId(), historyEntity.getFileId(), historyEntity.getAuctioneer());
+            noticeService.insertAuctionNotice(historyEntity.getAuctionId(), historyEntity.getFileId(), historyEntity.getAuctioneer());
             return ResultVO.successMsg("插入拍卖成功");
         } catch (Exception e) {
             log.error("create history fail,{}", e);

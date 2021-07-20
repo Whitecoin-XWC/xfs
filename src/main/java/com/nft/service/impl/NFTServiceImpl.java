@@ -12,6 +12,7 @@ import com.nft.dao.mapper.*;
 import com.nft.service.AuctionService;
 import com.nft.service.FileLogService;
 import com.nft.service.NFTService;
+import com.nft.service.NoticeService;
 import com.nft.service.dto.FileLogAttach;
 import com.nft.service.dto.FileResultDTO;
 import org.springframework.beans.BeanUtils;
@@ -51,14 +52,7 @@ public class NFTServiceImpl implements NFTService {
     private SellInfoMapper sellInfoMapper;
 
     @Resource
-    private NoticeMapper noticeMapper;
-
-    @Resource
-    private AuctionMapper auctionMapper;
-
-    @Resource
-    private AuctionService auctionService;
-
+    private NoticeService noticeService;
 
     @Value("${fileUpload.img-url}")
     private String imgUrl;
@@ -199,9 +193,11 @@ public class NFTServiceImpl implements NFTService {
 
         FileLogAttach fileLogAttach = new FileLogAttach();
         fileLogAttach.setTractionId(fileUserChangeVO.getTractionId());
-        fileLogService.saveLog(fileUserChangeVO.getTokenId(), "这个NFT转从" + oldUser + "手里移给了" + fileUserChangeVO.getUserAddress(), 0, fileLogAttach);
+        fileLogService.saveLog(fileUserChangeVO.getTokenId(),
+                "这个NFT转从" + oldUser + "手里移给了" + fileUserChangeVO.getUserAddress(), 0, fileLogAttach);
 
-        insertCopyrightFeeNotice(fileUserChangeVO.getTokenId(), fileUserChangeVO.getUserAddress(), fileUserChangeVO.getPrice(), fileUserChangeVO.getName());
+        noticeService.insertCopyrightFeeNotice(fileUserChangeVO.getTokenId(),
+                fileUserChangeVO.getUserAddress(), fileUserChangeVO.getPrice(), fileUserChangeVO.getName());
 
         return 1;
     }
@@ -327,14 +323,14 @@ public class NFTServiceImpl implements NFTService {
             List<FileResultDTO> fileResultDTOList = new ArrayList<>();
 
             List<FilePO> filePOList = page1.getRecords();
-            for(FilePO filePO : filePOList){
+            for (FilePO filePO : filePOList) {
                 FileResultDTO fileResultDTO = new FileResultDTO();
                 BeanUtils.copyProperties(filePO, fileResultDTO);
 
                 QueryWrapper queryWrapper2 = new QueryWrapper();
                 queryWrapper2.eq("file_id", filePO.getId());
                 List<UserFilePO> userFilePOList = userFileMapper.selectList(queryWrapper2);
-                if(userFilePOList != null && userFilePOList.size() > 0){
+                if (userFilePOList != null && userFilePOList.size() > 0) {
                     fileResultDTO.setUserName(userFilePOList.get(0).getUserName());
                 }
                 fileResultDTOList.add(fileResultDTO);
@@ -345,128 +341,5 @@ public class NFTServiceImpl implements NFTService {
             resultMap.put("files", new ArrayList<>());
         }
         return resultMap;
-    }
-
-    @Override
-    public NoticeResult getNotice(NoticeVo noticeVo) {
-        NoticeResult results = new NoticeResult();
-        List<NoticeResult.MyAuction> myAuctions = new ArrayList<>();
-        List<NoticeResult.CopyrightFee> copyrightFees = new ArrayList<>();
-
-        QueryWrapper<NoticeEntity> noticeQueryWrapper = new QueryWrapper<>();
-        noticeQueryWrapper.eq("notice_pople", noticeVo.getUserAddress());
-        noticeQueryWrapper.orderByDesc("create_time");
-        Page<NoticeEntity> noticeEntityPage = noticeMapper.selectPage(new Page<>(noticeVo.getPageNo(), noticeVo.getPageSize()), noticeQueryWrapper);
-        if (noticeEntityPage == null) {
-            return new NoticeResult();
-        }
-        List<NoticeEntity> records = noticeEntityPage.getRecords();
-        for (NoticeEntity record : records) {
-            String noticeFile = record.getNoticeFile();
-            /* 获取nft信息 */
-            QueryWrapper<FilePO> queryWrapper = new QueryWrapper<>();
-            queryWrapper.eq("id", noticeFile);
-            FilePO filePO = fileMapper.selectById(queryWrapper);
-            if (filePO == null) {
-                break;
-            }
-
-            if (record.getNoticeType() == 2) {
-                /* 版权费通知 */
-                NoticeResult.CopyrightFee copyrightFee = getCopyrightFee(record, filePO.getFileName());
-                copyrightFees.add(copyrightFee);
-            }
-            if (record.getNoticeType() == 1) {
-                /* 您的竞拍通知 */
-                long auctionId = record.getAuctionId();
-                AuctionEntity auctionEntity = auctionMapper.selectById(auctionId);
-                if (auctionEntity == null) {
-                    break;
-                }
-                NoticeResult.MyAuction myAuction = getMyAuction(auctionEntity, noticeVo.getUserAddress(), filePO.getFileName());
-
-                myAuctions.add(myAuction);
-            }
-
-        }
-        results.setMyAuction(myAuctions);
-        results.setCopyrightFee(copyrightFees);
-        return results;
-    }
-
-    @Override
-    public void insertCopyrightFeeNotice(String fileId, String buyUserAddress, BigDecimal price, String coinType) {
-        FilePO filePO = fileMapper.selectById(fileId);
-        if (filePO == null) {
-            return;
-        }
-        NoticeEntity noticeEntity = new NoticeEntity();
-        noticeEntity.setNoticeFile(fileId);
-        noticeEntity.setNoticePople(filePO.getCreater());
-        noticeEntity.setCopyrightFee(price.multiply(filePO.getCopyrightFee()).divide(new BigDecimal(100)));
-        noticeEntity.setCoinType(coinType);
-        noticeEntity.setNoticeType(2);
-        noticeEntity.setCreateTime(new Date());
-        noticeMapper.insert(noticeEntity);
-    }
-
-    @Override
-    public void insertAuctionNotice(long auctionId, String fileId, String auctionner) {
-        /* 查询本次拍卖是否有了通知记录 */
-        QueryWrapper<NoticeEntity> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("auction_id", auctionId);
-        queryWrapper.eq("notice_pople", auctionner);
-        List<NoticeEntity> noticeEntities = noticeMapper.selectList(queryWrapper);
-        if (!CollectionUtils.isEmpty(noticeEntities)) {
-            /* 已经有了拍卖记录 不需要重新插入 */
-            return;
-        }
-        NoticeEntity noticeEntity = new NoticeEntity();
-        noticeEntity.setAuctionId(auctionId);
-        noticeEntity.setNoticePople(auctionner);
-        noticeEntity.setNoticeFile(fileId);
-        noticeEntity.setNoticeType(1);
-        noticeEntity.setCreateTime(new Date());
-    }
-
-    private NoticeResult.CopyrightFee getCopyrightFee(NoticeEntity record, String fileName) {
-        NoticeResult.CopyrightFee copyrightFee = new NoticeResult.CopyrightFee();
-        copyrightFee.setCopyrightFee(record.getCopyrightFee());
-        BigDecimal coinPrice = auctionService.getCoinPrice(record.getCoinType());
-        copyrightFee.setCopyrightFeeUsdt(record.getCopyrightFee().multiply(coinPrice));
-        copyrightFee.setNFTName(fileName);
-        copyrightFee.setProvider(record.getRecipient());
-        return copyrightFee;
-    }
-
-    private NoticeResult.MyAuction getMyAuction(AuctionEntity auctionEntity, String userAddress, String fileName) {
-
-
-        NoticeResult.MyAuction myAuction = new NoticeResult.MyAuction();
-        /* 获取拍卖信息 */
-
-        if (auctionEntity.getAuctionStatus() == 1 && userAddress.equals(auctionEntity.getAuctionMaxEr())) {
-            myAuction.setAuctionResult("拍卖最高价");
-            myAuction.setAuctionPrice(auctionEntity.getAuctionMaxPrice());
-            BigDecimal coinPrice = auctionService.getCoinPrice(auctionEntity.getAuctionCoin());
-            myAuction.setAuctionPriceUsdt(auctionEntity.getAuctionMaxPrice().multiply(coinPrice));
-            /* 计算拍卖倒计时 */
-            Date auctionStartTime = auctionEntity.getAuctionStartTime();
-            LocalDateTime localDateTime = auctionStartTime.toInstant().atZone(ZoneId.of("GMT")).toLocalDateTime();
-            Duration between = Duration.between(LocalDateTime.now(), localDateTime.plusHours(24));
-            long millis = between.toMillis();
-            if (millis >= 0) {
-                myAuction.setRemainingTime(between.toMillis());
-            }
-        }
-        if (auctionEntity.getAuctionStatus() == 2 && userAddress.equals(auctionEntity.getAuctionMaxEr())) {
-            myAuction.setAuctionResult("获胜");
-        }
-
-        if (auctionEntity.getAuctionStatus() == 2 && !userAddress.equals(auctionEntity.getAuctionMaxEr())) {
-            myAuction.setAuctionResult("淘汰");
-        }
-        myAuction.setNFTName(fileName);
-        return myAuction;
     }
 }

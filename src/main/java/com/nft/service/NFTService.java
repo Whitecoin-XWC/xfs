@@ -82,9 +82,4 @@ public interface NFTService {
      */
     Map<String,Object> search(String keyWord);
 
-    NoticeResult getNotice(NoticeVo noticeVo);
-
-    void insertCopyrightFeeNotice(String fileId, String buyUserAddress, BigDecimal price,String coinType);
-
-    void insertAuctionNotice(long auctionId,String fileId,String auctionner);
 }

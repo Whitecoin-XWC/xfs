@@ -85,12 +85,12 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, AuctionEntity
         auctionEntity.setAuctionMinMarkupUsdt(auctionEntity.getAuctionMinMarkup().multiply(coinPrice));
         auctionEntity.setAuctionRetainPriceUsdt(auctionEntity.getAuctionRetainPrice().multiply(coinPrice));
         /* 计算倒计时剩余时间 */
-        if (auctionEntity.getAuctionStatus() > 0){
+        if (auctionEntity.getAuctionStatus() > 0 && auctionEntity.getAuctionStartTime() != null) {
             Date auctionStartTime = auctionEntity.getAuctionStartTime();
             LocalDateTime localDateTime = auctionStartTime.toInstant().atZone(ZoneId.of("GMT")).toLocalDateTime();
             Duration between = Duration.between(LocalDateTime.now(), localDateTime.plusHours(24));
             long millis = between.toMillis();
-            if (millis >= 0){
+            if (millis >= 0) {
                 auctionEntity.setRemainingTime(between.toMillis());
             }
         }

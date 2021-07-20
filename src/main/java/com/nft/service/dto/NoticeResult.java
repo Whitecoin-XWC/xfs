@@ -20,12 +20,30 @@ import java.util.List;
 @Data
 @ApiModel
 public class NoticeResult {
+    /**
+     * 当前页
+     */
+    private long currentPage;
+    /**
+     * 每页条数
+     */
+    private long pageSize;
+    /**
+     * 总条数
+     */
+    private long count;
+    /**
+     * 总页数
+     */
+    private long pageTotal;
 
     @ApiModelProperty("您的竞拍")
     private List<MyAuction> myAuction;
 
     @ApiModelProperty("版权费")
     private List<CopyrightFee> copyrightFee;
+
+    private String imgUrl;
 
 
     @Getter
@@ -41,6 +59,9 @@ public class NoticeResult {
         private BigDecimal auctionPriceUsdt;
         @ApiModelProperty("拍卖倒计时")
         private long remainingTime;
+        private String coinType;
+        private String filePath;
+        private String tokenId;
     }
 
     @Getter
@@ -54,5 +75,8 @@ public class NoticeResult {
         private BigDecimal copyrightFee;
         @ApiModelProperty("版权费美元")
         private BigDecimal copyrightFeeUsdt;
+        private String coinType;
+        private String filePath;
+        private String tokenId;
     }
 }

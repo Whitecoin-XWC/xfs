@@ -17,4 +17,6 @@ public class NoticeVo {
     private Integer pageNo;
     @ApiModelProperty("一页数量")
     private Integer pageSize;
+    @ApiModelProperty("通知类型 1-竞标；2-版权费")
+    private Integer type;
 }
