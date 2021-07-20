@@ -154,8 +154,8 @@ public class FileUploadController {
         String copyright = params.getParameter("copyrightFee");
 
 
-        String id = DigestUtils.md5Hex(new FileInputStream(file));
-        filePO.setId(id);
+        String md5 = DigestUtils.md5Hex(new FileInputStream(file));
+        filePO.setId(UUID.randomUUID().toString());
         filePO.setCreateTime(new Date());
         filePO.setFileName(newFileName);
         filePO.setMediaType(Integer.parseInt(mediaType));
@@ -165,6 +165,7 @@ public class FileUploadController {
         filePO.setFileDes(des);
         filePO.setUserAddress(userTag);
         filePO.setCopyrightFee(copyright);
+        filePO.setMd5(md5);
         filePO.setCreater(userTag);
 
         int result = nftService.upload(filePO);

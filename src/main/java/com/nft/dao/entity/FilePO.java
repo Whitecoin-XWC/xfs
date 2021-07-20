@@ -92,6 +92,13 @@ public class FilePO {
     @TableField("copyright_fee")
     private BigDecimal copyrightFee;
 
+    /**
+     * 文件的MD5
+     */
+    @ApiModelProperty("文件的MD5")
+    @TableField("md5")
+    private String md5;
+
     @TableField(exist = false)
     private String userAddress;
 

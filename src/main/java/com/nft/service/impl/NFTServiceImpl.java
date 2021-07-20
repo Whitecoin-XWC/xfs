@@ -15,21 +15,22 @@ import com.nft.service.NFTService;
 import com.nft.service.NoticeService;
 import com.nft.service.dto.FileLogAttach;
 import com.nft.service.dto.FileResultDTO;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import com.nft.service.dto.NoticeResult;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
-import java.math.BigDecimal;
-import java.time.Duration;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.*;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
+@Slf4j
 @Service
 public class NFTServiceImpl implements NFTService {
 
@@ -56,6 +57,8 @@ public class NFTServiceImpl implements NFTService {
 
     @Value("${fileUpload.img-url}")
     private String imgUrl;
+
+    private Lock lock = new ReentrantLock();
 
     /**
      * 关注
@@ -107,11 +110,6 @@ public class NFTServiceImpl implements NFTService {
     @Override
     @Transactional(rollbackFor = Throwable.class)
     public int upload(FilePO filePO) {
-        FilePO fileItem = fileMapper.selectById(filePO.getId());
-        if (fileItem != null && !StringUtils.isEmpty(fileItem.getId())) {
-            return -1;
-        }
-
         // 保存文件
         int result = fileMapper.insert(filePO);
 
@@ -136,19 +134,36 @@ public class NFTServiceImpl implements NFTService {
      * @return
      */
     @Override
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     public int pub(PubVO pubVO) {
-        FilePO fileItem = fileMapper.selectById(pubVO.getTokenId());
-        if (fileItem == null || StringUtils.isEmpty(fileItem.getId())) {
-            return -1;
-        }
-        fileItem.setFileStatus(2);
-        fileItem.setPubTime(new Date());
-        fileMapper.updateById(fileItem);
+        try {
+            lock.lock();
+            FilePO fileItem = fileMapper.selectById(pubVO.getTokenId());
+            if (fileItem == null || StringUtils.isEmpty(fileItem.getId())) {
+                return -1;
+            }
 
-        FileLogAttach fileLogAttach = new FileLogAttach();
-        fileLogAttach.setTractionId(pubVO.getTractionId());
-        fileLogService.saveLog(fileItem.getId(), pubVO.getUserAddress() + "发布了这个NFT", 0, fileLogAttach);
-        return 1;
+            QueryWrapper queryWrapper = new QueryWrapper();
+            queryWrapper.eq("md5", fileItem.getMd5());
+            queryWrapper.ge("file_status", 2);
+            List<FilePO> pubFiles = fileMapper.selectList(queryWrapper);
+            if(pubFiles != null && pubFiles.size() > 0){
+                return -2;
+            }
+
+            fileItem.setFileStatus(2);
+            fileItem.setPubTime(new Date());
+            fileMapper.updateById(fileItem);
+
+            FileLogAttach fileLogAttach = new FileLogAttach();
+            fileLogAttach.setTractionId(pubVO.getTractionId());
+            fileLogService.saveLog(fileItem.getId(), pubVO.getUserAddress() + "发布了这个NFT", 0, fileLogAttach);
+            return 1;
+        } catch (Exception e){
+            lock.unlock();
+            log.error("发行NFT失败,tokenId:{}", pubVO.getTokenId(), e);
+            return -3;
+        }
     }
 
     /**

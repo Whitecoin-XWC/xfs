@@ -143,6 +143,10 @@ public class NFTController {
             int result = nftService.pub(pubVO);
             if (result > 0) {
                 return ResultVO.successMsg("发布成功");
+            } else if(result == -1){
+                return ResultVO.successMsg("文件不存在");
+            } else if(result == -2){
+                return ResultVO.successMsg("文件已经被别人发行过了");
             }
             return ResultVO.fail("发布失败");
         } catch (Exception e) {
