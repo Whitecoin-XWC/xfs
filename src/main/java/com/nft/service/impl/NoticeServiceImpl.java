@@ -153,6 +153,7 @@ public class NoticeServiceImpl extends ServiceImpl<NoticeMapper, NoticeEntity> i
         copyrightFee.setFilePath(filePO.getFileName());
         copyrightFee.setCoinType(record.getCoinType());
         copyrightFee.setProvider(record.getRecipient());
+        copyrightFee.setTokenId(filePO.getId());
         return copyrightFee;
     }
 
@@ -188,6 +189,7 @@ public class NoticeServiceImpl extends ServiceImpl<NoticeMapper, NoticeEntity> i
         myAuction.setNFTName(filePO.getFileTitle());
         myAuction.setFilePath(filePO.getFileName());
         myAuction.setCoinType(coinType);
+        myAuction.setTokenId(filePO.getId());
         return myAuction;
     }
 }

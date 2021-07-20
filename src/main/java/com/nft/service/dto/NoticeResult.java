@@ -61,6 +61,7 @@ public class NoticeResult {
         private long remainingTime;
         private String coinType;
         private String filePath;
+        private String tokenId;
     }
 
     @Getter
@@ -76,5 +77,6 @@ public class NoticeResult {
         private BigDecimal copyrightFeeUsdt;
         private String coinType;
         private String filePath;
+        private String tokenId;
     }
 }
