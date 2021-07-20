@@ -160,9 +160,10 @@ public class NFTServiceImpl implements NFTService {
             fileLogService.saveLog(fileItem.getId(), pubVO.getUserAddress() + "发布了这个NFT", 0, fileLogAttach);
             return 1;
         } catch (Exception e){
-            lock.unlock();
             log.error("发行NFT失败,tokenId:{}", pubVO.getTokenId(), e);
             return -3;
+        } finally {
+            lock.unlock();
         }
     }
 
