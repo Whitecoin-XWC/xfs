@@ -243,16 +243,4 @@ public class NFTController {
             return ResultVO.fail("获取文件变化日志异常" + e.getMessage());
         }
     }
-
-    @ApiOperation("获取通知接口")
-    @PostMapping("/notice")
-    public ResultVO getNotice(NoticeVo noticeVo) {
-        if (noticeVo == null
-                || StringUtils.isBlank(noticeVo.getUserAddress())
-                || noticeVo.getPageNo() == null || noticeVo.getPageSize() == null) {
-            return ResultVO.fail("参数错误");
-        }
-        NoticeResult noticeResult = nftService.getNotice(noticeVo);
-        return ResultVO.success(noticeResult);
-    }
 }

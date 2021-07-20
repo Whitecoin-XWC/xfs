@@ -11,6 +11,7 @@ import com.nft.dao.mapper.SellInfoMapper;
 import com.nft.dao.mapper.UserFileMapper;
 import com.nft.service.FileLogService;
 import com.nft.service.NFTService;
+import com.nft.service.NoticeService;
 import com.nft.service.SellService;
 import com.nft.service.dto.FileLogAttach;
 import org.springframework.stereotype.Service;
@@ -34,7 +35,7 @@ public class SellServiceImpl implements SellService {
     private FileLogService fileLogService;
 
     @Resource
-    private NFTService nftService;
+    private NoticeService noticeService;
 
     @Override
     @Transactional
@@ -107,7 +108,7 @@ public class SellServiceImpl implements SellService {
         fileLogAttach.setTractionId(buyVO.getTractionId());
         saveLog(buyVO.getTokenId(), buyVO.getBuyUserAddress(), "购买了这个NFT", fileLogAttach);
         /* 插入通知记录 */
-        nftService.insertCopyrightFeeNotice(buyVO.getTokenId(),buyVO.getBuyUserAddress(),sellInfoPO.getPrice(),sellInfoPO.getUnit());
+        noticeService.insertCopyrightFeeNotice(buyVO.getTokenId(),buyVO.getBuyUserAddress(),sellInfoPO.getPrice(),sellInfoPO.getUnit());
         return 0;
     }
 

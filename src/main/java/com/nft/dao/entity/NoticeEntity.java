@@ -21,7 +21,7 @@ import java.util.Date;
 @Data
 @Getter
 @Setter
-@TableName("nft_auction")
+@TableName("nft_notice")
 public class NoticeEntity {
     /**
      * 主键
@@ -57,6 +57,10 @@ public class NoticeEntity {
     @TableField("auction_id")
     @ApiModelProperty(value = "拍卖id")
     private long auctionId;
+
+    @TableField("notice_status")
+    @ApiModelProperty(value = "通知是否已读")
+    private boolean noticeStatus;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
