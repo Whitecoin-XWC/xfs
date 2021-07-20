@@ -57,6 +57,9 @@ public class AuctionController {
     public ResultVO update(@RequestBody AuctionEntity update) {
         try {
             int count = auctionService.updateAuction(update);
+            if (count > 0) {
+                fileLogService.saveLog(update.getFileTokenId(), "修改拍卖记录", 1, new FileLogAttach(update.getTradeId()));
+            }
             return ResultVO.successMsg("更新记录成功");
         } catch (Exception e) {
             log.error("update auction fail,{}", e);
