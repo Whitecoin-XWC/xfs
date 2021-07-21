@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.nft.commons.util.FileUtil;
 import com.nft.commons.util.LogUtil;
 import com.nft.commons.vo.ResultVO;
 import com.nft.controller.vo.*;
@@ -15,6 +16,7 @@ import com.nft.service.NFTService;
 import com.nft.service.NoticeService;
 import com.nft.service.dto.FileLogAttach;
 import com.nft.service.dto.FileResultDTO;
+import io.swagger.models.auth.In;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import com.nft.service.dto.NoticeResult;
@@ -230,6 +232,11 @@ public class NFTServiceImpl implements NFTService {
         if (fileDetail == null || StringUtils.isEmpty(fileDetail.getId())) {
             return null;
         }
+
+        if(new Integer(0).compareTo(fileDetail.getMediaType()) == 0){
+            fileDetail.setTxtContent(FileUtil.getContent(fileDetail.getFilePath()));
+        }
+
         QueryWrapper<UserFilePO> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("file_id", filePO.getId());
         queryWrapper.eq("type", 0);
@@ -304,7 +311,16 @@ public class NFTServiceImpl implements NFTService {
         if (fileVO.getSource() != null && fileVO.getSource() > -1) {
             fileResultDTO.setSource(fileVO.getSource());
         }
-        return fileMapper.selectFileList(pageWrapper, fileResultDTO);
+
+        IPage<FileResultDTO> iPage = fileMapper.selectFileList(pageWrapper, fileResultDTO);
+        if(iPage != null && iPage.getRecords() != null){
+            for(FileResultDTO fileResultDTO1 : iPage.getRecords()) {
+                if(new Integer(0).compareTo(fileResultDTO1.getMediaType()) == 0){
+                    fileResultDTO1.setTxtContent(FileUtil.getContent(fileResultDTO1.getFilePath()));
+                }
+            }
+        }
+        return iPage;
     }
 
     /**

@@ -116,6 +116,11 @@ public class FileResultDTO {
     @ApiModelProperty("拍卖倒计时剩余时间")
     private long remainingTime;
 
+    /**
+     * 文件内容
+     */
+    @ApiModelProperty("文件内容")
+    private String txtContent;
 
     /**
      * 文件来源

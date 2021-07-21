@@ -98,6 +98,13 @@ public class FilePO {
     @ApiModelProperty("文件的MD5")
     @TableField("md5")
     private String md5;
+    /**
+     * 文件内容
+     */
+    @ApiModelProperty("文件内容")
+    @TableField(exist = false)
+    private String txtContent;
+
 
     @TableField(exist = false)
     private String userAddress;
