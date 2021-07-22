@@ -32,8 +32,6 @@ public class AuctionController {
     @Resource
     private FileLogService fileLogService;
     @Resource
-    private NFTService nftService;
-    @Resource
     private NoticeService noticeService;
 
     @ApiOperation("新增拍卖记录")
@@ -131,7 +129,7 @@ public class AuctionController {
             if (count == 0 && insert > 0) {
                 update.setAuctionStatus(AuctionStatus.AUCTIONING.getStatuCode());
                 update.setAuctionStartTime(new Date());
-                fileLogService.saveLog(historyEntity.getFileId(), historyEntity.getAuctioneer() + "开始拍卖", 1, new FileLogAttach(historyEntity.getTradeId()));
+//                fileLogService.saveLog(historyEntity.getFileId(), historyEntity.getAuctioneer() + "开始拍卖", 1, new FileLogAttach(historyEntity.getTradeId()));
             }
             update.setId(historyEntity.getAuctionId());
             update.setUpdateTime(new Date());
