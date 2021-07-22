@@ -57,6 +57,9 @@ public class NFTServiceImpl implements NFTService {
     @Resource
     private NoticeService noticeService;
 
+    @Resource
+    private AuctionService auctionService;
+
     @Value("${fileUpload.img-url}")
     private String imgUrl;
 
@@ -149,7 +152,7 @@ public class NFTServiceImpl implements NFTService {
             queryWrapper.eq("md5", fileItem.getMd5());
             queryWrapper.ge("file_status", 2);
             List<FilePO> pubFiles = fileMapper.selectList(queryWrapper);
-            if(pubFiles != null && pubFiles.size() > 0){
+            if (pubFiles != null && pubFiles.size() > 0) {
                 return -2;
             }
 
@@ -161,7 +164,7 @@ public class NFTServiceImpl implements NFTService {
             fileLogAttach.setTractionId(pubVO.getTractionId());
             fileLogService.saveLog(fileItem.getId(), pubVO.getUserAddress() + "发布了这个NFT", 0, fileLogAttach);
             return 1;
-        } catch (Exception e){
+        } catch (Exception e) {
             log.error("发行NFT失败,tokenId:{}", pubVO.getTokenId(), e);
             return -3;
         } finally {
@@ -233,13 +236,14 @@ public class NFTServiceImpl implements NFTService {
             return null;
         }
 
-        if(new Integer(0).compareTo(fileDetail.getMediaType()) == 0){
+        if (new Integer(0).compareTo(fileDetail.getMediaType()) == 0) {
             fileDetail.setTxtContent(FileUtil.getContent(fileDetail.getFilePath()));
         }
 
         QueryWrapper<UserFilePO> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("file_id", filePO.getId());
-        queryWrapper.eq("type", 0);
+        //TODO type待确认
+        queryWrapper.ne("type", 2);
         UserFilePO userFilePO = userFileMapper.selectOne(queryWrapper);
         fileDetail.setUserAddress(userFilePO.getUserId());
 
@@ -313,10 +317,15 @@ public class NFTServiceImpl implements NFTService {
         }
 
         IPage<FileResultDTO> iPage = fileMapper.selectFileList(pageWrapper, fileResultDTO);
-        if(iPage != null && iPage.getRecords() != null){
-            for(FileResultDTO fileResultDTO1 : iPage.getRecords()) {
-                if(new Integer(0).compareTo(fileResultDTO1.getMediaType()) == 0){
+        if (iPage != null && iPage.getRecords() != null) {
+            for (FileResultDTO fileResultDTO1 : iPage.getRecords()) {
+                if (new Integer(0).compareTo(fileResultDTO1.getMediaType()) == 0) {
                     fileResultDTO1.setTxtContent(FileUtil.getContent(fileResultDTO1.getFilePath()));
+                }
+                /* 查询拍卖信息 */
+                if (fileResultDTO1.getFileStatus() == 5) {
+                    AuctionEntity auctionEntity = auctionService.queryAuction(fileResultDTO1.getId());
+                    fileResultDTO1.setPmPrice(auctionEntity.getAuctionRetainPrice());
                 }
             }
         }

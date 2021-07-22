@@ -10,6 +10,7 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.tomcat.util.http.fileupload.impl.SizeLimitExceededException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.MultiValueMap;
@@ -92,6 +93,9 @@ public class FileUploadController {
             } else {
                 return ResultVO.fail("请使用formData格式请求此接口");
             }
+        } catch (SizeLimitExceededException e) {
+            log.error("上传文件超过20M");
+            return ResultVO.fail("上传文件最大20M");
         } catch (Exception e) {
             log.error("上传失败", e);
             return ResultVO.fail("上传出现异常:" + e.getMessage());

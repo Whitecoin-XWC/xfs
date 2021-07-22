@@ -77,6 +77,7 @@ public class AuctionController {
             }
             String fileTokenId = auctionEntity.getFileTokenId();
             auctionService.cancelAuction(fileTokenId);
+            fileLogService.saveLog(fileTokenId, query.getAuctionCreater() + "取消拍卖", 1, new FileLogAttach(auctionEntity.getTradeId()));
             return ResultVO.successMsg("取消成功");
         } catch (Exception e) {
             log.error("cancel auction fail,{}", e);
