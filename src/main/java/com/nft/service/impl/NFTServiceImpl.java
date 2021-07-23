@@ -124,7 +124,7 @@ public class NFTServiceImpl implements NFTService {
             userFilePO.setUserId(filePO.getUserAddress());
             userFileMapper.insert(userFilePO);
 
-            fileLogService.saveLog(filePO.getId(), filePO.getUserAddress() + "上传了这个NFT", 0, null);
+            fileLogService.saveLog(filePO.getId(), "上传了这个NFT", filePO.getUserAddress() ,0, null);
         }
         return 1;
     }
@@ -159,7 +159,7 @@ public class NFTServiceImpl implements NFTService {
 
             FileLogAttach fileLogAttach = new FileLogAttach();
             fileLogAttach.setTractionId(pubVO.getTractionId());
-            fileLogService.saveLog(fileItem.getId(), pubVO.getUserAddress() + "发布了这个NFT", 0, fileLogAttach);
+            fileLogService.saveLog(fileItem.getId(), "发布了这个NFT", pubVO.getUserAddress(), 0, fileLogAttach);
             return 1;
         } catch (Exception e){
             log.error("发行NFT失败,tokenId:{}", pubVO.getTokenId(), e);
@@ -187,7 +187,7 @@ public class NFTServiceImpl implements NFTService {
 
         FileLogAttach fileLogAttach = new FileLogAttach();
         fileLogAttach.setTractionId(pubVO.getTractionId());
-        fileLogService.saveLog(fileItem.getId(), pubVO.getUserAddress() + "付费了这个NFT", 0, fileLogAttach);
+        fileLogService.saveLog(fileItem.getId(),  "付费了这个NFT", pubVO.getUserAddress(), 0, fileLogAttach);
 
         return 1;
     }
@@ -212,7 +212,7 @@ public class NFTServiceImpl implements NFTService {
         FileLogAttach fileLogAttach = new FileLogAttach();
         fileLogAttach.setTractionId(fileUserChangeVO.getTractionId());
         fileLogService.saveLog(fileUserChangeVO.getTokenId(),
-                "这个NFT转从" + oldUser + "手里移给了" + fileUserChangeVO.getUserAddress(), 0, fileLogAttach);
+                "这个NFT转从," + oldUser + ",手里移给了," + fileUserChangeVO.getUserAddress(), oldUser, 0, fileLogAttach);
 
         noticeService.insertCopyrightFeeNotice(fileUserChangeVO.getTokenId(),
                 fileUserChangeVO.getUserAddress(), fileUserChangeVO.getPrice(), fileUserChangeVO.getName());

@@ -125,6 +125,6 @@ public class SellServiceImpl implements SellService {
      * @param action
      */
     private void saveLog(String fileId, String userTag, String action, FileLogAttach logAttach){
-        fileLogService.saveLog(fileId,userTag + action, 2, logAttach);
+        fileLogService.saveLog(fileId, action, userTag, 2, logAttach);
     }
 }

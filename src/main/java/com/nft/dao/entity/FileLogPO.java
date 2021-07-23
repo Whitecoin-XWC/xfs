@@ -23,6 +23,12 @@ public class FileLogPO {
      */
     @TableField("file_id")
     private String fileId;
+
+    /**
+     * 用户地址
+     */
+    @TableField("user_id")
+    private String userId;
     /**
      * 日志内容
      */
