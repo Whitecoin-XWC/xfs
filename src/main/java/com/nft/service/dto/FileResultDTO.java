@@ -116,6 +116,9 @@ public class FileResultDTO {
     @ApiModelProperty("拍卖倒计时剩余时间")
     private long remainingTime;
 
+    @ApiModelProperty("拍卖最高价")
+    private String coinType;
+
     /**
      * 文件内容
      */

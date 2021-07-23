@@ -115,6 +115,7 @@ public class NFTController {
                         AuctionEntity auctionEntity = auctionService.queryAuction(record.getId());
                         record.setAuctionMaxPrice(auctionEntity.getAuctionMaxPrice());
                         record.setRemainingTime(auctionEntity.getRemainingTime());
+                        record.setCoinType(auctionEntity.getAuctionCoin());
                     }
                 }
                 pageResultVO.setCount(iPage.getTotal());
@@ -144,9 +145,9 @@ public class NFTController {
             int result = nftService.pub(pubVO);
             if (result > 0) {
                 return ResultVO.successMsg("发布成功");
-            } else if(result == -1){
+            } else if (result == -1) {
                 return ResultVO.fail("文件不存在");
-            } else if(result == -2){
+            } else if (result == -2) {
                 return ResultVO.fail("文件已经被别人发行过了");
             }
             return ResultVO.fail("发布失败");

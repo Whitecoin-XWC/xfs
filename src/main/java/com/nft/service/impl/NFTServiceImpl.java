@@ -127,7 +127,7 @@ public class NFTServiceImpl implements NFTService {
             userFilePO.setUserId(filePO.getUserAddress());
             userFileMapper.insert(userFilePO);
 
-            fileLogService.saveLog(filePO.getId(), "上传了这个NFT", filePO.getUserAddress() ,0, null);
+            fileLogService.saveLog(filePO.getId(), "上传了这个NFT", filePO.getUserAddress(), 0, null);
         }
         return 1;
     }
@@ -190,7 +190,7 @@ public class NFTServiceImpl implements NFTService {
 
         FileLogAttach fileLogAttach = new FileLogAttach();
         fileLogAttach.setTractionId(pubVO.getTractionId());
-        fileLogService.saveLog(fileItem.getId(),  "付费了这个NFT", pubVO.getUserAddress(), 0, fileLogAttach);
+        fileLogService.saveLog(fileItem.getId(), "付费了这个NFT", pubVO.getUserAddress(), 0, fileLogAttach);
 
         return 1;
     }
@@ -245,7 +245,22 @@ public class NFTServiceImpl implements NFTService {
         //TODO type待确认
         queryWrapper.ne("type", 2);
         UserFilePO userFilePO = userFileMapper.selectOne(queryWrapper);
-        fileDetail.setUserAddress(userFilePO.getUserId());
+        /* 获取用户昵称 */
+        if (userFilePO != null) {
+            UserinfoPO userinfoPO = userInfoMapper.selectById(userFilePO.getUserId());
+            if (userinfoPO != null && !StringUtils.isEmpty(userinfoPO.getNickName())) {
+                fileDetail.setUserAddress(userinfoPO.getNickName());
+            } else {
+                fileDetail.setUserAddress(userFilePO.getUserId());
+            }
+        }
+
+        /* 获取创作者的昵称 */
+        String creater = fileDetail.getCreater();
+        UserinfoPO userinfoPO = userInfoMapper.selectById(creater);
+        if (userinfoPO != null && !StringUtils.isEmpty(userinfoPO.getNickName())) {
+            fileDetail.setCreater(userinfoPO.getNickName());
+        }
 
 
         QueryWrapper queryWrapper1 = new QueryWrapper();
