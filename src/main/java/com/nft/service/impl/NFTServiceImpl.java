@@ -215,7 +215,7 @@ public class NFTServiceImpl implements NFTService {
         FileLogAttach fileLogAttach = new FileLogAttach();
         fileLogAttach.setTractionId(fileUserChangeVO.getTractionId());
         fileLogService.saveLog(fileUserChangeVO.getTokenId(),
-                "这个NFT转从," + oldUser + ",手里移给了," + fileUserChangeVO.getUserAddress(), oldUser, 0, fileLogAttach);
+                "转移了这个NFT", oldUser, 0, fileLogAttach);
 
         noticeService.insertCopyrightFeeNotice(fileUserChangeVO.getTokenId(),
                 fileUserChangeVO.getUserAddress(), fileUserChangeVO.getPrice(), fileUserChangeVO.getName());
