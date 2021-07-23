@@ -47,7 +47,7 @@ public class SellServiceImpl implements SellService {
         QueryWrapper queryWrapper = new QueryWrapper();
         queryWrapper.eq("token_id", sellVO.getTokenId());
         SellInfoPO sellInfoPO = sellInfoMapper.selectOne(queryWrapper);
-        if(sellInfoPO != null){
+        if (sellInfoPO != null) {
             sellInfoPO.setPrice(sellVO.getPrice());
             sellInfoPO.setUnit(sellVO.getUnit());
             sellInfoMapper.updateById(sellInfoPO);
@@ -90,11 +90,12 @@ public class SellServiceImpl implements SellService {
         queryWrapper.eq("file_id", buyVO.getTokenId());
         queryWrapper.eq("type", 0);
         UserFilePO userFilePO = userFileMapper.selectOne(queryWrapper);
-        if(userFilePO == null){
+        if (userFilePO == null) {
             return -1;
         }
 
         userFilePO.setUserId(buyVO.getBuyUserAddress());
+        userFilePO.setType(1);
         userFileMapper.updateById(userFilePO);
 
         UpdateWrapper updateWrapper = new UpdateWrapper();
@@ -108,11 +109,11 @@ public class SellServiceImpl implements SellService {
         fileLogAttach.setTractionId(buyVO.getTractionId());
         saveLog(buyVO.getTokenId(), buyVO.getBuyUserAddress(), "购买了这个NFT", fileLogAttach);
         /* 插入通知记录 */
-        noticeService.insertCopyrightFeeNotice(buyVO.getTokenId(),buyVO.getBuyUserAddress(),sellInfoPO.getPrice(),sellInfoPO.getUnit());
+        noticeService.insertCopyrightFeeNotice(buyVO.getTokenId(), buyVO.getBuyUserAddress(), sellInfoPO.getPrice(), sellInfoPO.getUnit());
         return 0;
     }
 
-    private void updateFileStatus(String tokenId, Integer status){
+    private void updateFileStatus(String tokenId, Integer status) {
         FilePO filePO = fileMapper.selectById(tokenId);
         filePO.setFileStatus(status);
         fileMapper.updateById(filePO);
@@ -120,6 +121,7 @@ public class SellServiceImpl implements SellService {
 
     /**
      * 保存日志
+     *
      * @param fileId
      * @param userTag
      * @param action

@@ -32,8 +32,6 @@ public class AuctionController {
     @Resource
     private FileLogService fileLogService;
     @Resource
-    private NFTService nftService;
-    @Resource
     private NoticeService noticeService;
 
     @ApiOperation("新增拍卖记录")
@@ -42,7 +40,7 @@ public class AuctionController {
         try {
             int insert = auctionService.insertAuction(auctionEntity);
             if (insert > 0) {
-                fileLogService.saveLog(auctionEntity.getFileTokenId(), "创建拍卖", 1, new FileLogAttach(auctionEntity.getTradeId()));
+                fileLogService.saveLog(auctionEntity.getFileTokenId(), auctionEntity.getAuctionCreater() + "创建拍卖", 1, new FileLogAttach(auctionEntity.getTradeId()));
             }
             return ResultVO.successMsg("插入拍卖记录成功");
         } catch (Exception e) {
@@ -58,9 +56,11 @@ public class AuctionController {
         try {
             int count = auctionService.updateAuction(update);
             if (count > 0) {
-                fileLogService.saveLog(update.getFileTokenId(), "修改拍卖记录", 1, new FileLogAttach(update.getTradeId()));
+                AuctionEntity auctionEntity = auctionService.getById(update.getId());
+                fileLogService.saveLog(auctionEntity.getFileTokenId(), auctionEntity.getAuctionCreater() + "修改拍卖记录", 1, new FileLogAttach(update.getTradeId()));
+                return ResultVO.successMsg("更新记录成功");
             }
-            return ResultVO.successMsg("更新记录成功");
+            return ResultVO.fail("更新拍卖记录失败");
         } catch (Exception e) {
             log.error("update auction fail,{}", e);
             return ResultVO.fail("更新拍卖记录失败");
@@ -77,6 +77,7 @@ public class AuctionController {
             }
             String fileTokenId = auctionEntity.getFileTokenId();
             auctionService.cancelAuction(fileTokenId);
+            fileLogService.saveLog(fileTokenId, query.getAuctionCreater() + "取消拍卖", 1, new FileLogAttach(auctionEntity.getTradeId()));
             return ResultVO.successMsg("取消成功");
         } catch (Exception e) {
             log.error("cancel auction fail,{}", e);
@@ -129,7 +130,7 @@ public class AuctionController {
             if (count == 0 && insert > 0) {
                 update.setAuctionStatus(AuctionStatus.AUCTIONING.getStatuCode());
                 update.setAuctionStartTime(new Date());
-                fileLogService.saveLog(historyEntity.getFileId(), "拍卖开始", 1, new FileLogAttach(historyEntity.getTradeId()));
+//                fileLogService.saveLog(historyEntity.getFileId(), historyEntity.getAuctioneer() + "开始拍卖", 1, new FileLogAttach(historyEntity.getTradeId()));
             }
             update.setId(historyEntity.getAuctionId());
             update.setUpdateTime(new Date());

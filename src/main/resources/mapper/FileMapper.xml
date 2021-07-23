@@ -18,14 +18,12 @@
             nft_sell_info.price price,
             nft_sell_info.unit unit,
             nft_sell_info.`status` status,
-            nft_auction.auction_retain_price pmPrice,
             nft_user_file.user_id userAddress,
             nft_user_file.type source,
             nft_userinfo.nick_name userName
         FROM
             nft_file
         LEFT JOIN nft_sell_info ON nft_sell_info.token_id = nft_file.id
-        LEFT JOIN nft_auction ON nft_auction.file_token_id = nft_file.id
         LEFT JOIN nft_user_file ON nft_user_file.file_id = nft_file.id
         LEFT JOIN nft_userinfo ON nft_userinfo.id = nft_file.creater
         WHERE 1=1

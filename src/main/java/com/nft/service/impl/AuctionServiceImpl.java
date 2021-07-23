@@ -88,7 +88,9 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, AuctionEntity
         if (auctionEntity.getAuctionStatus() > 0 && auctionEntity.getAuctionStartTime() != null) {
             Date auctionStartTime = auctionEntity.getAuctionStartTime();
             LocalDateTime localDateTime = auctionStartTime.toInstant().atZone(ZoneId.of("GMT")).toLocalDateTime();
-            Duration between = Duration.between(LocalDateTime.now(), localDateTime.plusHours(24));
+            // TODO 拍卖剩余时间
+//            Duration between = Duration.between(LocalDateTime.now(), localDateTime.plusHours(24));
+            Duration between = Duration.between(LocalDateTime.now(), localDateTime.plusMinutes(10));
             long millis = between.toMillis();
             if (millis >= 0) {
                 auctionEntity.setRemainingTime(between.toMillis());

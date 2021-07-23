@@ -27,10 +27,12 @@ public class AuctionTask {
     /**
      * 修改拍卖倒计时结束的记录
      */
-//    @Scheduled(cron = "0 0/1 * * * ?")
+    @Scheduled(cron = "0 0/1 * * * ?")
     public void syncAuctionEnd() {
         QueryWrapper<AuctionEntity> queryWrapper = new QueryWrapper<>();
-        LocalDateTime time = LocalDateTime.now().minusHours(24);
+//        LocalDateTime time = LocalDateTime.now().minusHours(24);
+        //TODO 修改拍卖时长
+        LocalDateTime time = LocalDateTime.now().minusMinutes(10);
         queryWrapper.ge("auction_start_time", time);
         List<AuctionEntity> auctionEntities = auctionService.list(queryWrapper);
         for (AuctionEntity auctionEntity : auctionEntities) {
