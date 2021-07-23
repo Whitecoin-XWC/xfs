@@ -40,7 +40,7 @@ public class AuctionController {
         try {
             int insert = auctionService.insertAuction(auctionEntity);
             if (insert > 0) {
-                fileLogService.saveLog(auctionEntity.getFileTokenId(), auctionEntity.getAuctionCreater() + "创建拍卖", 1, new FileLogAttach(auctionEntity.getTradeId()));
+                fileLogService.saveLog(auctionEntity.getFileTokenId(), "创建拍卖", auctionEntity.getAuctionCreater(), 1, new FileLogAttach(auctionEntity.getTradeId()));
             }
             return ResultVO.successMsg("插入拍卖记录成功");
         } catch (Exception e) {
@@ -57,7 +57,7 @@ public class AuctionController {
             int count = auctionService.updateAuction(update);
             if (count > 0) {
                 AuctionEntity auctionEntity = auctionService.getById(update.getId());
-                fileLogService.saveLog(auctionEntity.getFileTokenId(), auctionEntity.getAuctionCreater() + "修改拍卖记录", 1, new FileLogAttach(update.getTradeId()));
+                fileLogService.saveLog(auctionEntity.getFileTokenId(), "修改拍卖记录", auctionEntity.getAuctionCreater(), 1, new FileLogAttach(update.getTradeId()));
                 return ResultVO.successMsg("更新记录成功");
             }
             return ResultVO.fail("更新拍卖记录失败");
@@ -77,7 +77,7 @@ public class AuctionController {
             }
             String fileTokenId = auctionEntity.getFileTokenId();
             auctionService.cancelAuction(fileTokenId);
-            fileLogService.saveLog(fileTokenId, query.getAuctionCreater() + "取消拍卖", 1, new FileLogAttach(auctionEntity.getTradeId()));
+            fileLogService.saveLog(fileTokenId, "取消拍卖", query.getAuctionCreater(), 1, new FileLogAttach(auctionEntity.getTradeId()));
             return ResultVO.successMsg("取消成功");
         } catch (Exception e) {
             log.error("cancel auction fail,{}", e);
