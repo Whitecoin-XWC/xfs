@@ -62,7 +62,7 @@ public class NoticeEntity {
     @ApiModelProperty(value = "通知是否已读")
     private boolean noticeStatus;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @TableField("create_time")
     private Date createTime;

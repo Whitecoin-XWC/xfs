@@ -101,7 +101,7 @@ public class AuctionController {
             return ResultVO.successMsg(receive);
         } catch (Exception e) {
             log.error("cancel auction fail,{}", e);
-            return ResultVO.fail("取消拍卖失败");
+            return ResultVO.fail("领取失败");
         }
     }
 

@@ -110,7 +110,7 @@ public class AuctionEntity {
     /**
      * 创建时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @TableField("create_time")
     private Date createTime;
@@ -118,7 +118,7 @@ public class AuctionEntity {
     /**
      * 拍卖开始时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @TableField("auction_start_time")
     private Date auctionStartTime;
@@ -127,7 +127,7 @@ public class AuctionEntity {
      * 记录修改时间
      */
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @TableField("update_time")
     private Date updateTime;

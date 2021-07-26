@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.Date;
 
 @Service("sellService")
 public class SellServiceImpl implements SellService {
@@ -86,17 +87,21 @@ public class SellServiceImpl implements SellService {
     @Transactional
     public int buySuccess(BuyVO buyVO) {
 
-        QueryWrapper queryWrapper = new QueryWrapper();
+        QueryWrapper<UserFilePO> queryWrapper = new QueryWrapper();
         queryWrapper.eq("file_id", buyVO.getTokenId());
-        queryWrapper.eq("type", 0);
         UserFilePO userFilePO = userFileMapper.selectOne(queryWrapper);
         if (userFilePO == null) {
-            return -1;
+            /* 插入用户拥有表 */
+            userFilePO = new UserFilePO();
+            userFilePO.setCreateTime(new Date());
+            userFilePO.setFileId(buyVO.getTokenId());
+            userFilePO.setUserId(buyVO.getBuyUserAddress());
+            userFileMapper.insert(userFilePO);
+        }else {
+            /* 修改拥有者 */
+            userFilePO.setUserId(buyVO.getBuyUserAddress());
+            userFileMapper.updateById(userFilePO);
         }
-
-        userFilePO.setUserId(buyVO.getBuyUserAddress());
-        userFilePO.setType(1);
-        userFileMapper.updateById(userFilePO);
 
         UpdateWrapper updateWrapper = new UpdateWrapper();
         updateWrapper.eq("token_id", buyVO.getTokenId());
@@ -126,7 +131,7 @@ public class SellServiceImpl implements SellService {
      * @param userTag
      * @param action
      */
-    private void saveLog(String fileId, String userTag, String action, FileLogAttach logAttach){
+    private void saveLog(String fileId, String userTag, String action, FileLogAttach logAttach) {
         fileLogService.saveLog(fileId, action, userTag, 2, logAttach);
     }
 }

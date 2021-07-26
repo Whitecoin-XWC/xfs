@@ -8,10 +8,13 @@ import lombok.Data;
 
 import java.util.Date;
 
+/**
+ * Description: nft
+ * Created by moloq on 2021/7/26 15:08
+ */
 @Data
-@TableName("nft_user_file")
-public class UserFilePO {
-
+@TableName("nft_follow_file")
+public class FollowFilePO {
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
     /**

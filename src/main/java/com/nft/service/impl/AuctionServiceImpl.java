@@ -140,17 +140,20 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, AuctionEntity
 
 
         /* 修改nft拥有者 */
-        QueryWrapper queryWrapper = new QueryWrapper();
+        QueryWrapper<UserFilePO> queryWrapper = new QueryWrapper();
         queryWrapper.eq("file_id", fileTokenId);
         UserFilePO userFilePO = userFileMapper.selectOne(queryWrapper);
         if (userFilePO == null) {
-            return "不存在的文件或用户";
-        }
-        userFilePO.setUserId(userAddress);
-        userFilePO.setType(1);
-        int updateUserFile = userFileMapper.updateById(userFilePO);
-        if (updateUserFile <= 0) {
-            return "修改文件用户对应关系失败";
+            /* 插入用户拥有表 */
+            userFilePO = new UserFilePO();
+            userFilePO.setCreateTime(new Date());
+            userFilePO.setFileId(fileTokenId);
+            userFilePO.setUserId(userAddress);
+            userFileMapper.insert(userFilePO);
+        } else {
+            /* 修改拥有者 */
+            userFilePO.setUserId(userAddress);
+            userFileMapper.updateById(userFilePO);
         }
         return "领取成功";
     }
