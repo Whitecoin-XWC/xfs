@@ -32,14 +32,14 @@ public class AuctionEntity {
     private Long id;
 
     @TableField("auction_creater")
-    @ApiModelProperty(value = "拍卖创建者",required = true)
+    @ApiModelProperty(value = "拍卖创建者", required = true)
     private String auctionCreater;
 
     /**
      * 拍卖的产品id
      */
     @TableField("file_token_id")
-    @ApiModelProperty(value = "拍卖的产品id",required = true)
+    @ApiModelProperty(value = "拍卖的产品id", required = true)
     private String fileTokenId;
 
     @TableField("trade_id")
@@ -56,21 +56,21 @@ public class AuctionEntity {
      * 拍卖的代币
      */
     @TableField("auction_coin")
-    @ApiModelProperty(value = "代币类型",required = true)
+    @ApiModelProperty(value = "代币类型", required = true)
     private String auctionCoin;
 
     /**
      * 拍卖保留价
      */
     @TableField("auction_retain_price")
-    @ApiModelProperty(value = "拍卖保留价",required = true)
+    @ApiModelProperty(value = "拍卖保留价", required = true)
     private BigDecimal auctionRetainPrice;
 
     /**
      * 最低加价幅度
      */
     @TableField("auction_min_markup")
-    @ApiModelProperty(value = "最低加价幅度",required = true)
+    @ApiModelProperty(value = "最低加价幅度", required = true)
     private BigDecimal auctionMinMarkup;
 
     /**
@@ -88,6 +88,9 @@ public class AuctionEntity {
     @TableField(exist = false)
     private long remainingTime;
 
+    @TableField(exist = false)
+    private String userName;
+
     /**
      * 拍卖最高价
      */
@@ -101,7 +104,7 @@ public class AuctionEntity {
      * 拍卖状态
      */
     @TableField("auction_status")
-    @ApiModelProperty(value = "拍卖状态，0-创建拍卖，未开始竞拍；1-竞拍中；2-竞拍结束，待领取；3-领取完成",required = true)
+    @ApiModelProperty(value = "拍卖状态，0-创建拍卖，未开始竞拍；1-竞拍中；2-竞拍结束，待领取；3-领取完成", required = true)
     private Integer auctionStatus;
 
     /**

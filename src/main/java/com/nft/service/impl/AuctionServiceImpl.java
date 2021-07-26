@@ -8,9 +8,11 @@ import com.nft.bean.AuctionStatus;
 import com.nft.dao.entity.AuctionEntity;
 import com.nft.dao.entity.FilePO;
 import com.nft.dao.entity.UserFilePO;
+import com.nft.dao.entity.UserinfoPO;
 import com.nft.dao.mapper.AuctionMapper;
 import com.nft.dao.mapper.FileMapper;
 import com.nft.dao.mapper.UserFileMapper;
+import com.nft.dao.mapper.UserInfoMapper;
 import com.nft.service.AuctionService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -46,6 +48,8 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, AuctionEntity
     private FileMapper fileMapper;
     @Resource
     private UserFileMapper userFileMapper;
+    @Resource
+    private UserInfoMapper userInfoMapper;
 
     @Value("${tokenswap.api.url}")
     private String apiUrl;
@@ -84,6 +88,11 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, AuctionEntity
         BigDecimal coinPrice = getCoinPrice(auctionEntity.getAuctionCoin());
         auctionEntity.setAuctionMinMarkupUsdt(auctionEntity.getAuctionMinMarkup().multiply(coinPrice));
         auctionEntity.setAuctionRetainPriceUsdt(auctionEntity.getAuctionRetainPrice().multiply(coinPrice));
+        String auctionMaxEr = auctionEntity.getAuctionMaxEr();
+        UserinfoPO userinfoPO = userInfoMapper.selectById(auctionMaxEr);
+        if (userinfoPO != null && StringUtils.isNotBlank(userinfoPO.getNickName())) {
+            auctionEntity.setUserName(userinfoPO.getNickName());
+        }
         /* 计算倒计时剩余时间 */
         if (auctionEntity.getAuctionStatus() > 0 && auctionEntity.getAuctionStartTime() != null) {
             Date auctionStartTime = auctionEntity.getAuctionStartTime();
@@ -138,6 +147,7 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, AuctionEntity
             return "不存在的文件或用户";
         }
         userFilePO.setUserId(userAddress);
+        userFilePO.setType(1);
         int updateUserFile = userFileMapper.updateById(userFilePO);
         if (updateUserFile <= 0) {
             return "修改文件用户对应关系失败";

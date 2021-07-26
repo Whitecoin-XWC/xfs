@@ -26,15 +26,16 @@ public class NFTSellController {
 
     /**
      * 设置/更新售价
+     *
      * @return
      */
     @ApiOperation("设置/更新售价")
     @RequestMapping(value = "/sell", method = RequestMethod.POST)
-    public ResultVO sell(@RequestBody SellVO sellVO){
+    public ResultVO sell(@RequestBody SellVO sellVO) {
         try {
             sellService.sell(sellVO);
             return ResultVO.successMsg("设置成功");
-        }catch (Exception e){
+        } catch (Exception e) {
             log.error("设置/更新售价异常", e);
             return ResultVO.fail("设置/更新售价异常");
         }
@@ -42,15 +43,16 @@ public class NFTSellController {
 
     /**
      * 取消售价
+     *
      * @return
      */
     @ApiOperation("取消售价")
     @RequestMapping(value = "/delSell", method = RequestMethod.POST)
-    public ResultVO delSell(@RequestBody SellVO sellVO){
+    public ResultVO delSell(@RequestBody SellVO sellVO) {
         try {
             sellService.delSell(sellVO);
             return ResultVO.successMsg("取消售价成功");
-        }catch (Exception e){
+        } catch (Exception e) {
             log.error("取消售价异常", e);
             return ResultVO.fail("取消售价异常");
         }
@@ -58,15 +60,19 @@ public class NFTSellController {
 
     /**
      * 购买成功
+     *
      * @return
      */
     @ApiOperation("购买成功")
     @RequestMapping(value = "/buySuccess", method = RequestMethod.POST)
-    public ResultVO buySuccess(@RequestBody BuyVO buyVO){
+    public ResultVO buySuccess(@RequestBody BuyVO buyVO) {
         try {
-            sellService.buySuccess(buyVO);
-            return ResultVO.successMsg("购买成功");
-        }catch (Exception e){
+            int success = sellService.buySuccess(buyVO);
+            if (success == 0) {
+                return ResultVO.successMsg("购买成功");
+            }
+            return ResultVO.fail("购买异常");
+        } catch (Exception e) {
             log.error("购买异常", e);
             return ResultVO.fail("购买异常");
         }

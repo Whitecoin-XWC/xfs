@@ -249,17 +249,16 @@ public class NFTServiceImpl implements NFTService {
         if (userFilePO != null) {
             UserinfoPO userinfoPO = userInfoMapper.selectById(userFilePO.getUserId());
             if (userinfoPO != null && !StringUtils.isEmpty(userinfoPO.getNickName())) {
-                fileDetail.setUserAddress(userinfoPO.getNickName());
-            } else {
-                fileDetail.setUserAddress(userFilePO.getUserId());
+                fileDetail.setUserAddressNickName(userinfoPO.getNickName());
             }
+            fileDetail.setUserAddress(userFilePO.getUserId());
         }
 
         /* 获取创作者的昵称 */
         String creater = fileDetail.getCreater();
         UserinfoPO userinfoPO = userInfoMapper.selectById(creater);
         if (userinfoPO != null && !StringUtils.isEmpty(userinfoPO.getNickName())) {
-            fileDetail.setCreater(userinfoPO.getNickName());
+            fileDetail.setCreaterNickName(userinfoPO.getNickName());
         }
 
 
@@ -300,7 +299,19 @@ public class NFTServiceImpl implements NFTService {
         queryWrapper.orderByDesc("create_time");
 
         Page<FileLogPO> fileLogPOPage = new Page<>(fileLogVO.getPage(), fileLogVO.getPageSize());
-        return fileLogMapper.selectPage(fileLogPOPage, queryWrapper);
+        Page<FileLogPO> resultPage = fileLogMapper.selectPage(fileLogPOPage, queryWrapper);
+        if (resultPage == null) {
+            return resultPage;
+        }
+        List<FileLogPO> records = resultPage.getRecords();
+        for (FileLogPO record : records) {
+            String userId = record.getUserId();
+            UserinfoPO userinfoPO = userInfoMapper.selectById(userId);
+            if (userinfoPO != null && !StringUtils.isEmpty(userinfoPO.getNickName())) {
+                record.setUserId(userinfoPO.getNickName());
+            }
+        }
+        return resultPage;
     }
 
     /**

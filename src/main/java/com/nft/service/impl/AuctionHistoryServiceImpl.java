@@ -3,9 +3,12 @@ package com.nft.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.nft.dao.entity.AuctionEntity;
 import com.nft.dao.entity.AuctionHistoryEntity;
+import com.nft.dao.entity.UserinfoPO;
 import com.nft.dao.mapper.AuctionHistoryMapper;
 import com.nft.dao.mapper.AuctionMapper;
+import com.nft.dao.mapper.UserInfoMapper;
 import com.nft.service.AuctionHistoryService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -24,6 +27,8 @@ public class AuctionHistoryServiceImpl implements AuctionHistoryService {
     private AuctionHistoryMapper auctionHistoryMapper;
     @Resource
     private AuctionMapper auctionMapper;
+    @Resource
+    private UserInfoMapper userInfoMapper;
 
     @Override
     public int insertAuctionHistory(AuctionHistoryEntity historyEntity) {
@@ -48,7 +53,16 @@ public class AuctionHistoryServiceImpl implements AuctionHistoryService {
         if (id != 0) {
             queryWrapper.eq("auction_id", id);
         }
-        return auctionHistoryMapper.selectList(queryWrapper);
+        List<AuctionHistoryEntity> auctionHistoryEntities = auctionHistoryMapper.selectList(queryWrapper);
+        for (AuctionHistoryEntity auctionHistoryEntity : auctionHistoryEntities) {
+            String auctioneer = auctionHistoryEntity.getAuctioneer();
+            UserinfoPO userinfoPO = userInfoMapper.selectById(auctioneer);
+            if (userinfoPO != null && StringUtils.isNotBlank(userinfoPO.getNickName())) {
+                auctionHistoryEntity.setAuctioneer(userinfoPO.getNickName());
+            }
+        }
+
+        return auctionHistoryEntities;
     }
 
     @Override

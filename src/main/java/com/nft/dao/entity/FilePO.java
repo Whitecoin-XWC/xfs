@@ -56,9 +56,13 @@ public class FilePO {
     @TableField("create_time")
     private Date createTime;
 
-    @ApiModelProperty("创建时间")
+    @ApiModelProperty("创建者")
     @TableField("creater")
     private String creater;
+
+    @ApiModelProperty("创建者昵称")
+    @TableField(exist = false)
+    private String createrNickName;
     /**
      * 发布时间
      */
@@ -108,6 +112,9 @@ public class FilePO {
 
     @TableField(exist = false)
     private String userAddress;
+
+    @TableField(exist = false)
+    private String userAddressNickName;
 
 
     @TableField(exist = false)
