@@ -96,6 +96,7 @@ public class AuctionController {
                 return ResultVO.fail("竞拍未结束,不能领取");
             }
             String receive = auctionService.receive(fileTokenId, userAddress, query.getId());
+            fileLogService.saveLog(fileTokenId, "领取了nft", userAddress, 1, new FileLogAttach());
             /* 插入版权费通知 */
             noticeService.insertCopyrightFeeNotice(fileTokenId, userAddress, query.getAuctionMaxPrice(), query.getAuctionCoin());
             return ResultVO.successMsg(receive);

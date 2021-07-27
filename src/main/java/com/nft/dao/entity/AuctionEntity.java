@@ -64,6 +64,7 @@ public class AuctionEntity {
      */
     @TableField("auction_retain_price")
     @ApiModelProperty(value = "拍卖保留价", required = true)
+    @JsonFormat
     private BigDecimal auctionRetainPrice;
 
     /**

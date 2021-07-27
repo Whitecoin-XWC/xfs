@@ -53,6 +53,7 @@ public class AuctionHistoryServiceImpl implements AuctionHistoryService {
         if (id != 0) {
             queryWrapper.eq("auction_id", id);
         }
+        queryWrapper.orderByDesc("auction_time");
         List<AuctionHistoryEntity> auctionHistoryEntities = auctionHistoryMapper.selectList(queryWrapper);
         for (AuctionHistoryEntity auctionHistoryEntity : auctionHistoryEntities) {
             String auctioneer = auctionHistoryEntity.getAuctioneer();

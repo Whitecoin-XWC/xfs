@@ -148,7 +148,7 @@ public class NoticeServiceImpl extends ServiceImpl<NoticeMapper, NoticeEntity> i
         NoticeResult.CopyrightFee copyrightFee = new NoticeResult.CopyrightFee();
         copyrightFee.setCopyrightFee(record.getCopyrightFee());
         BigDecimal coinPrice = auctionService.getCoinPrice(record.getCoinType());
-        copyrightFee.setCopyrightFeeUsdt(record.getCopyrightFee().multiply(coinPrice));
+        copyrightFee.setCopyrightFeeUsdt(record.getCopyrightFee().multiply(coinPrice).setScale(8, BigDecimal.ROUND_DOWN));
         copyrightFee.setNFTName(filePO.getFileTitle());
         copyrightFee.setFilePath(filePO.getFileName());
         copyrightFee.setCoinType(record.getCoinType());
@@ -167,7 +167,7 @@ public class NoticeServiceImpl extends ServiceImpl<NoticeMapper, NoticeEntity> i
             myAuction.setAuctionResult("拍卖最高价");
             myAuction.setAuctionPrice(auctionEntity.getAuctionMaxPrice());
             BigDecimal coinPrice = auctionService.getCoinPrice(auctionEntity.getAuctionCoin());
-            myAuction.setAuctionPriceUsdt(auctionEntity.getAuctionMaxPrice().multiply(coinPrice));
+            myAuction.setAuctionPriceUsdt(auctionEntity.getAuctionMaxPrice().multiply(coinPrice).setScale(8, BigDecimal.ROUND_DOWN));
             /* 计算拍卖倒计时 */
             Date auctionStartTime = auctionEntity.getAuctionStartTime();
             if (auctionStartTime != null) {

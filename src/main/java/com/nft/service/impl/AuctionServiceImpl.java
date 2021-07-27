@@ -86,8 +86,8 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, AuctionEntity
         }
         AuctionEntity auctionEntity = auctionEntities.get(0);
         BigDecimal coinPrice = getCoinPrice(auctionEntity.getAuctionCoin());
-        auctionEntity.setAuctionMinMarkupUsdt(auctionEntity.getAuctionMinMarkup().multiply(coinPrice));
-        auctionEntity.setAuctionRetainPriceUsdt(auctionEntity.getAuctionRetainPrice().multiply(coinPrice));
+        auctionEntity.setAuctionMinMarkupUsdt(auctionEntity.getAuctionMinMarkup().multiply(coinPrice).setScale(8, BigDecimal.ROUND_DOWN));
+        auctionEntity.setAuctionRetainPriceUsdt(auctionEntity.getAuctionRetainPrice().multiply(coinPrice).setScale(8, BigDecimal.ROUND_DOWN));
         String auctionMaxEr = auctionEntity.getAuctionMaxEr();
         UserinfoPO userinfoPO = userInfoMapper.selectById(auctionMaxEr);
         if (userinfoPO != null && StringUtils.isNotBlank(userinfoPO.getNickName())) {
