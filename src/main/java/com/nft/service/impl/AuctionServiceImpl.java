@@ -142,6 +142,7 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, AuctionEntity
         /* 修改nft拥有者 */
         QueryWrapper<UserFilePO> queryWrapper = new QueryWrapper();
         queryWrapper.eq("file_id", fileTokenId);
+        queryWrapper.eq("type", 1);
         UserFilePO userFilePO = userFileMapper.selectOne(queryWrapper);
         if (userFilePO == null) {
             /* 插入用户拥有表 */
@@ -149,6 +150,7 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, AuctionEntity
             userFilePO.setCreateTime(new Date());
             userFilePO.setFileId(fileTokenId);
             userFilePO.setUserId(userAddress);
+            userFilePO.setType(1);
             userFileMapper.insert(userFilePO);
         } else {
             /* 修改拥有者 */

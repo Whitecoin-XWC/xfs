@@ -10,8 +10,4 @@ import org.springframework.stereotype.Repository;
 public interface FileMapper extends BaseMapper<FilePO> {
 
     IPage<FileResultDTO> selectFileList(IPage<FileResultDTO> page, FileResultDTO fileResultDTO);
-
-//    IPage<FileResultDTO> selectCreateFileList(IPage<FileResultDTO> page, FileResultDTO fileResultDTO);
-//
-//    IPage<FileResultDTO> selectFollowFileList(IPage<FileResultDTO> page, FileResultDTO fileResultDTO);
 }

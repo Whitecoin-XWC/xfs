@@ -104,6 +104,9 @@ public class FileResultDTO {
     @ApiModelProperty("售价")
     private BigDecimal price;
 
+    @ApiModelProperty("售价币种")
+    private String unit;
+
     /**
      * 起拍价
      */

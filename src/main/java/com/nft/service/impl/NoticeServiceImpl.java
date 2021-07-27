@@ -110,7 +110,7 @@ public class NoticeServiceImpl extends ServiceImpl<NoticeMapper, NoticeEntity> i
         NoticeEntity noticeEntity = new NoticeEntity();
         noticeEntity.setNoticeFile(fileId);
         noticeEntity.setNoticePople(filePO.getCreater());
-        noticeEntity.setCopyrightFee(price.multiply(filePO.getCopyrightFee()).divide(new BigDecimal(100)));
+        noticeEntity.setCopyrightFee(new BigDecimal(filePO.getCopyrightFee()));
         noticeEntity.setCoinType(coinType);
         noticeEntity.setNoticeType(2);
         noticeEntity.setCreateTime(new Date());

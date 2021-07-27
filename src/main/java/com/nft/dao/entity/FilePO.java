@@ -94,7 +94,7 @@ public class FilePO {
      */
     @ApiModelProperty("版权费（百分比）")
     @TableField("copyright_fee")
-    private BigDecimal copyrightFee;
+    private Integer copyrightFee;
 
     /**
      * 文件的MD5
@@ -130,9 +130,9 @@ public class FilePO {
     private Integer collect;
 
     public void setCopyrightFee(String copyrightFeeStr) {
-        if(StringUtils.isEmpty(copyrightFeeStr)){
+        if (StringUtils.isEmpty(copyrightFeeStr)) {
             copyrightFeeStr = "0";
         }
-        this.copyrightFee = new BigDecimal(copyrightFeeStr);
+        this.copyrightFee = Integer.parseInt(copyrightFeeStr);
     }
 }
