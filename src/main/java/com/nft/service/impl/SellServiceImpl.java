@@ -5,12 +5,10 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.nft.controller.vo.BuyVO;
 import com.nft.controller.vo.SellVO;
 import com.nft.dao.entity.*;
-import com.nft.dao.mapper.FileLogMapper;
 import com.nft.dao.mapper.FileMapper;
 import com.nft.dao.mapper.SellInfoMapper;
 import com.nft.dao.mapper.UserFileMapper;
 import com.nft.service.FileLogService;
-import com.nft.service.NFTService;
 import com.nft.service.NoticeService;
 import com.nft.service.SellService;
 import com.nft.service.dto.FileLogAttach;
@@ -89,6 +87,7 @@ public class SellServiceImpl implements SellService {
 
         QueryWrapper<UserFilePO> queryWrapper = new QueryWrapper();
         queryWrapper.eq("file_id", buyVO.getTokenId());
+        queryWrapper.eq("type", 1);
         UserFilePO userFilePO = userFileMapper.selectOne(queryWrapper);
         if (userFilePO == null) {
             /* 插入用户拥有表 */
@@ -96,6 +95,7 @@ public class SellServiceImpl implements SellService {
             userFilePO.setCreateTime(new Date());
             userFilePO.setFileId(buyVO.getTokenId());
             userFilePO.setUserId(buyVO.getBuyUserAddress());
+            userFilePO.setType(1);
             userFileMapper.insert(userFilePO);
         }else {
             /* 修改拥有者 */

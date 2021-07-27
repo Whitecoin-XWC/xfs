@@ -50,12 +50,6 @@ public class NFTServiceImpl implements NFTService {
     private UserFileMapper userFileMapper;
 
     @Resource
-    private CreateFileMapper createFileMapper;
-
-    @Resource
-    private FollowFileMapper followFileMapper;
-
-    @Resource
     private UserInfoMapper userInfoMapper;
 
     @Resource
@@ -85,11 +79,11 @@ public class NFTServiceImpl implements NFTService {
         queryWrapper.eq("user_id", followVO.getUserAddress());
         queryWrapper.eq("file_id", followVO.getTokenId());
         queryWrapper.eq("type", 2);
-        FollowFilePO followFilePO = new FollowFilePO();
+        UserFilePO followFilePO = new UserFilePO();
         followFilePO.setUserId(followVO.getUserAddress());
         followFilePO.setFileId(followVO.getTokenId());
         followFilePO.setCreateTime(new Date());
-        return followFileMapper.insert(followFilePO);
+        return userFileMapper.insert(followFilePO);
     }
 
     /**
@@ -100,10 +94,11 @@ public class NFTServiceImpl implements NFTService {
      */
     @Override
     public int delFollow(FollowVO followVO) {
-        UpdateWrapper<FollowFilePO> queryWrapper = new UpdateWrapper();
+        UpdateWrapper<UserFilePO> queryWrapper = new UpdateWrapper();
         queryWrapper.eq("user_id", followVO.getUserAddress());
         queryWrapper.eq("file_id", followVO.getTokenId());
-        return followFileMapper.delete(queryWrapper);
+        queryWrapper.eq("type" ,2);
+        return userFileMapper.delete(queryWrapper);
     }
 
     /**
@@ -122,11 +117,18 @@ public class NFTServiceImpl implements NFTService {
         if (result > 0) {
 
             /* 插入创建表 */
-            CreateFilePO createFilePO = new CreateFilePO();
+            UserFilePO createFilePO = new UserFilePO();
             createFilePO.setCreateTime(new Date());
             createFilePO.setFileId(filePO.getId());
             createFilePO.setUserId(filePO.getUserAddress());
-            createFileMapper.insert(createFilePO);
+
+            UserinfoPO userinfoPO = userInfoMapper.selectById(filePO.getUserAddress());
+            if(userinfoPO != null){
+                createFilePO.setUserName(userinfoPO.getNickName());
+            }
+
+            createFilePO.setType(0);
+            userFileMapper.insert(createFilePO);
             fileLogService.saveLog(filePO.getId(), "上传了这个NFT", filePO.getUserAddress(), 0, null);
         }
         return 1;
@@ -204,6 +206,7 @@ public class NFTServiceImpl implements NFTService {
     public int fileUserChange(FileUserChangeVO fileUserChangeVO) {
         QueryWrapper<UserFilePO> queryWrapper = new QueryWrapper();
         queryWrapper.eq("file_id", fileUserChangeVO.getTokenId());
+        queryWrapper.eq("type", 1);
         UserFilePO userFilePO = userFileMapper.selectOne(queryWrapper);
         if (userFilePO == null) {
             /* 插入用户拥有表 */
@@ -249,13 +252,11 @@ public class NFTServiceImpl implements NFTService {
 
         QueryWrapper<UserFilePO> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("file_id", filePO.getId());
+        queryWrapper.eq("type", 1);
         UserFilePO userFilePO = userFileMapper.selectOne(queryWrapper);
         String userId = "";
         if (userFilePO == null) {
-            QueryWrapper<CreateFilePO> createFilePOQueryWrapper = new QueryWrapper<>();
-            createFilePOQueryWrapper.eq("file_id", filePO.getId());
-            CreateFilePO createFilePO = createFileMapper.selectOne(createFilePOQueryWrapper);
-            userId = createFilePO.getUserId();
+            userId = fileDetail.getCreater();
         } else {
             userId = userFilePO.getUserId();
         }
@@ -284,10 +285,11 @@ public class NFTServiceImpl implements NFTService {
         if (StringUtils.isEmpty(filePO.getUserAddress())) {
             fileDetail.setCollect(0);
         } else {
-            QueryWrapper<FollowFilePO> queryWrapper2 = new QueryWrapper();
+            QueryWrapper<UserFilePO> queryWrapper2 = new QueryWrapper();
             queryWrapper2.eq("user_id", filePO.getUserAddress());
             queryWrapper2.eq("file_id", filePO.getId());
-            FollowFilePO followFilePO = followFileMapper.selectOne(queryWrapper2);
+            queryWrapper2.eq("type", 2);
+            UserFilePO followFilePO = userFileMapper.selectOne(queryWrapper2);
             if (followFilePO != null) {
                 fileDetail.setCollect(1);
             } else {
@@ -349,17 +351,11 @@ public class NFTServiceImpl implements NFTService {
         if (!StringUtils.isEmpty(fileVO.getTokenId())) {
             fileResultDTO.setId(fileVO.getTokenId());
         }
-        IPage<FileResultDTO> iPage = null;
-
-        if (fileVO.getSource() == null) {
-            iPage = fileMapper.selectFileList(pageWrapper, fileResultDTO);
-        } else if (fileVO.getSource() == 0) {
-            iPage = fileMapper.selectCreateFileList(pageWrapper, fileResultDTO);
-        } else if (fileVO.getSource() == 1) {
-            iPage = fileMapper.selectFileList(pageWrapper, fileResultDTO);
-        } else {
-            iPage = fileMapper.selectFollowFileList(pageWrapper, fileResultDTO);
+        if (!StringUtils.isEmpty(fileVO.getSource())) {
+            fileResultDTO.setSource(fileVO.getSource());
         }
+
+        IPage<FileResultDTO> iPage = fileMapper.selectFileList(pageWrapper, fileResultDTO);
 
         if (iPage != null && iPage.getRecords() != null) {
             for (FileResultDTO fileResultDTO1 : iPage.getRecords()) {
@@ -416,9 +412,15 @@ public class NFTServiceImpl implements NFTService {
 
                 QueryWrapper<UserFilePO> queryWrapper2 = new QueryWrapper();
                 queryWrapper2.eq("file_id", filePO.getId());
+                queryWrapper2.eq("type", 1);
                 List<UserFilePO> userFilePOList = userFileMapper.selectList(queryWrapper2);
                 if (userFilePOList != null && userFilePOList.size() > 0) {
                     fileResultDTO.setUserName(userFilePOList.get(0).getUserName());
+                } else {
+                    UserinfoPO userinfoPO = userInfoMapper.selectById(filePO.getCreater());
+                    if(userinfoPO != null){
+                        fileResultDTO.setUserName(userinfoPO.getNickName());
+                    }
                 }
                 fileResultDTOList.add(fileResultDTO);
             }

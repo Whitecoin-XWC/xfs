@@ -29,7 +29,11 @@ public class UserFilePO {
      */
     @TableField("create_time")
     private Date createTime;
-
+    /**
+     * '类型，0创建， 1 商品，2 关注',
+     */
+    @TableField("type")
+    private Integer type;
     /**
      * 用户昵称
      */

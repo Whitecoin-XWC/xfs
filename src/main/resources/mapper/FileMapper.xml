@@ -19,7 +19,8 @@
             nft_sell_info.unit unit,
             nft_sell_info.`status` status,
             nft_user_file.user_id userAddress,
-            nft_userinfo.nick_name userName
+            nft_userinfo.nick_name userName,
+            nft_user_file.type source
         FROM
             nft_file
         LEFT JOIN nft_sell_info ON nft_sell_info.token_id = nft_file.id
@@ -41,97 +42,100 @@
         <if test="fileResultDTO.id != null and fileResultDTO.id != ''">
             and nft_file.id = #{fileResultDTO.id}
         </if>
-        <if test="fileResultDTO.isIndex != null and fileResultDTO.isIndex == 'yes'">
-            group by nft_file.id
-        </if>
-    </select>
-
-    <select id="selectCreateFileList" parameterType="com.nft.service.dto.FileResultDTO" resultType="com.nft.service.dto.FileResultDTO">
-        SELECT
-        nft_file.id,
-        nft_file.file_title fileTitle,
-        nft_file.file_name fileName,
-        nft_file.file_path filePath,
-        nft_file.pay_time payTime,
-        nft_file.create_time createTime,
-        nft_file.pub_time pubTime,
-        nft_file.media_type mediaType,
-        nft_file.file_status fileStatus,
-        nft_file.file_des fileDes,
-        nft_file.copyright_fee copyrightFee,
-        nft_sell_info.price price,
-        nft_sell_info.unit unit,
-        nft_sell_info.`status` status,
-        nft_create_file.user_id userAddress,
-        nft_userinfo.nick_name userName
-        FROM
-        nft_file
-        LEFT JOIN nft_sell_info ON nft_sell_info.token_id = nft_file.id
-        LEFT JOIN nft_create_file ON nft_create_file.file_id = nft_file.id
-        LEFT JOIN nft_userinfo ON nft_userinfo.id = nft_file.creater
-        WHERE 1=1
-        <if test="fileResultDTO.userAddress != null and fileResultDTO.userAddress != ''">
-            and nft_create_file.user_id = #{fileResultDTO.userAddress}
-        </if>
-        <if test="fileResultDTO.mediaType != null and fileResultDTO.mediaType > -1">
-            and nft_file.media_type = #{fileResultDTO.mediaType}
-        </if>
-        <if test="fileResultDTO.fileStatus != null and fileResultDTO.fileStatus > 1">
-            and nft_file.file_status = #{fileResultDTO.fileStatus}
-        </if>
-        <if test="fileResultDTO.fileStatus == null or fileResultDTO.fileStatus &lt;= 1">
-            and nft_file.file_status &gt; 1
-        </if>
-        <if test="fileResultDTO.id != null and fileResultDTO.id != ''">
-            and nft_file.id = #{fileResultDTO.id}
+        <if test="fileResultDTO.source != null and fileResultDTO.source > -1">
+            and nft_user_file.type = #{fileResultDTO.source}
         </if>
         <if test="fileResultDTO.isIndex != null and fileResultDTO.isIndex == 'yes'">
             group by nft_file.id
         </if>
     </select>
 
-    <select id="selectFollowFileList" parameterType="com.nft.service.dto.FileResultDTO" resultType="com.nft.service.dto.FileResultDTO">
-        SELECT
-        nft_file.id,
-        nft_file.file_title fileTitle,
-        nft_file.file_name fileName,
-        nft_file.file_path filePath,
-        nft_file.pay_time payTime,
-        nft_file.create_time createTime,
-        nft_file.pub_time pubTime,
-        nft_file.media_type mediaType,
-        nft_file.file_status fileStatus,
-        nft_file.file_des fileDes,
-        nft_file.copyright_fee copyrightFee,
-        nft_sell_info.price price,
-        nft_sell_info.unit unit,
-        nft_sell_info.`status` status,
-        nft_follow_file.user_id userAddress,
-        nft_userinfo.nick_name userName
-        FROM
-        nft_file
-        LEFT JOIN nft_sell_info ON nft_sell_info.token_id = nft_file.id
-        LEFT JOIN nft_follow_file ON nft_follow_file.file_id = nft_file.id
-        LEFT JOIN nft_userinfo ON nft_userinfo.id = nft_file.creater
-        WHERE 1=1
-        <if test="fileResultDTO.userAddress != null and fileResultDTO.userAddress != ''">
-            and nft_follow_file.user_id = #{fileResultDTO.userAddress}
-        </if>
-        <if test="fileResultDTO.mediaType != null and fileResultDTO.mediaType > -1">
-            and nft_file.media_type = #{fileResultDTO.mediaType}
-        </if>
-        <if test="fileResultDTO.fileStatus != null and fileResultDTO.fileStatus > 1">
-            and nft_file.file_status = #{fileResultDTO.fileStatus}
-        </if>
-        <if test="fileResultDTO.fileStatus == null or fileResultDTO.fileStatus &lt;= 1">
-            and nft_file.file_status &gt; 1
-        </if>
-        <if test="fileResultDTO.id != null and fileResultDTO.id != ''">
-            and nft_file.id = #{fileResultDTO.id}
-        </if>
-        <if test="fileResultDTO.isIndex != null and fileResultDTO.isIndex == 'yes'">
-            group by nft_file.id
-        </if>
-    </select>
+<!--    <select id="selectCreateFileList" parameterType="com.nft.service.dto.FileResultDTO" resultType="com.nft.service.dto.FileResultDTO">-->
+<!--        SELECT-->
+<!--        nft_file.id,-->
+<!--        nft_file.file_title fileTitle,-->
+<!--        nft_file.file_name fileName,-->
+<!--        nft_file.file_path filePath,-->
+<!--        nft_file.pay_time payTime,-->
+<!--        nft_file.create_time createTime,-->
+<!--        nft_file.pub_time pubTime,-->
+<!--        nft_file.media_type mediaType,-->
+<!--        nft_file.file_status fileStatus,-->
+<!--        nft_file.file_des fileDes,-->
+<!--        nft_file.copyright_fee copyrightFee,-->
+<!--        nft_sell_info.price price,-->
+<!--        nft_sell_info.unit unit,-->
+<!--        nft_sell_info.`status` status,-->
+<!--        nft_create_file.user_id userAddress,-->
+<!--        nft_userinfo.nick_name userName-->
+<!--        FROM-->
+<!--        nft_file-->
+<!--        LEFT JOIN nft_sell_info ON nft_sell_info.token_id = nft_file.id-->
+<!--        LEFT JOIN nft_create_file ON nft_create_file.file_id = nft_file.id-->
+<!--        LEFT JOIN nft_userinfo ON nft_userinfo.id = nft_file.creater-->
+<!--        WHERE 1=1-->
+<!--        <if test="fileResultDTO.userAddress != null and fileResultDTO.userAddress != ''">-->
+<!--            and nft_create_file.user_id = #{fileResultDTO.userAddress}-->
+<!--        </if>-->
+<!--        <if test="fileResultDTO.mediaType != null and fileResultDTO.mediaType > -1">-->
+<!--            and nft_file.media_type = #{fileResultDTO.mediaType}-->
+<!--        </if>-->
+<!--        <if test="fileResultDTO.fileStatus != null and fileResultDTO.fileStatus > 1">-->
+<!--            and nft_file.file_status = #{fileResultDTO.fileStatus}-->
+<!--        </if>-->
+<!--        <if test="fileResultDTO.fileStatus == null or fileResultDTO.fileStatus &lt;= 1">-->
+<!--            and nft_file.file_status &gt; 1-->
+<!--        </if>-->
+<!--        <if test="fileResultDTO.id != null and fileResultDTO.id != ''">-->
+<!--            and nft_file.id = #{fileResultDTO.id}-->
+<!--        </if>-->
+<!--        <if test="fileResultDTO.isIndex != null and fileResultDTO.isIndex == 'yes'">-->
+<!--            group by nft_file.id-->
+<!--        </if>-->
+<!--    </select>-->
+
+<!--    <select id="selectFollowFileList" parameterType="com.nft.service.dto.FileResultDTO" resultType="com.nft.service.dto.FileResultDTO">-->
+<!--        SELECT-->
+<!--        nft_file.id,-->
+<!--        nft_file.file_title fileTitle,-->
+<!--        nft_file.file_name fileName,-->
+<!--        nft_file.file_path filePath,-->
+<!--        nft_file.pay_time payTime,-->
+<!--        nft_file.create_time createTime,-->
+<!--        nft_file.pub_time pubTime,-->
+<!--        nft_file.media_type mediaType,-->
+<!--        nft_file.file_status fileStatus,-->
+<!--        nft_file.file_des fileDes,-->
+<!--        nft_file.copyright_fee copyrightFee,-->
+<!--        nft_sell_info.price price,-->
+<!--        nft_sell_info.unit unit,-->
+<!--        nft_sell_info.`status` status,-->
+<!--        nft_follow_file.user_id userAddress,-->
+<!--        nft_userinfo.nick_name userName-->
+<!--        FROM-->
+<!--        nft_file-->
+<!--        LEFT JOIN nft_sell_info ON nft_sell_info.token_id = nft_file.id-->
+<!--        LEFT JOIN nft_follow_file ON nft_follow_file.file_id = nft_file.id-->
+<!--        LEFT JOIN nft_userinfo ON nft_userinfo.id = nft_file.creater-->
+<!--        WHERE 1=1-->
+<!--        <if test="fileResultDTO.userAddress != null and fileResultDTO.userAddress != ''">-->
+<!--            and nft_follow_file.user_id = #{fileResultDTO.userAddress}-->
+<!--        </if>-->
+<!--        <if test="fileResultDTO.mediaType != null and fileResultDTO.mediaType > -1">-->
+<!--            and nft_file.media_type = #{fileResultDTO.mediaType}-->
+<!--        </if>-->
+<!--        <if test="fileResultDTO.fileStatus != null and fileResultDTO.fileStatus > 1">-->
+<!--            and nft_file.file_status = #{fileResultDTO.fileStatus}-->
+<!--        </if>-->
+<!--        <if test="fileResultDTO.fileStatus == null or fileResultDTO.fileStatus &lt;= 1">-->
+<!--            and nft_file.file_status &gt; 1-->
+<!--        </if>-->
+<!--        <if test="fileResultDTO.id != null and fileResultDTO.id != ''">-->
+<!--            and nft_file.id = #{fileResultDTO.id}-->
+<!--        </if>-->
+<!--        <if test="fileResultDTO.isIndex != null and fileResultDTO.isIndex == 'yes'">-->
+<!--            group by nft_file.id-->
+<!--        </if>-->
+<!--    </select>-->
 
 </mapper>
