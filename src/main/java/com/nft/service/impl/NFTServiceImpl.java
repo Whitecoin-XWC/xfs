@@ -75,7 +75,7 @@ public class NFTServiceImpl implements NFTService {
         queryWrapper.eq("type", 2);
 
         List<UserFilePO> userFilePOList = userFileMapper.selectList(queryWrapper);
-        if(userFilePOList == null || userFilePOList.size() < 1){
+        if (userFilePOList == null || userFilePOList.size() < 1) {
             UserFilePO followFilePO = new UserFilePO();
             followFilePO.setUserId(followVO.getUserAddress());
             followFilePO.setFileId(followVO.getTokenId());
@@ -97,7 +97,7 @@ public class NFTServiceImpl implements NFTService {
         UpdateWrapper<UserFilePO> queryWrapper = new UpdateWrapper();
         queryWrapper.eq("user_id", followVO.getUserAddress());
         queryWrapper.eq("file_id", followVO.getTokenId());
-        queryWrapper.eq("type" ,2);
+        queryWrapper.eq("type", 2);
         return userFileMapper.delete(queryWrapper);
     }
 
@@ -123,7 +123,7 @@ public class NFTServiceImpl implements NFTService {
             createFilePO.setUserId(filePO.getUserAddress());
 
             UserinfoPO userinfoPO = userInfoMapper.selectById(filePO.getUserAddress());
-            if(userinfoPO != null){
+            if (userinfoPO != null) {
                 createFilePO.setUserName(userinfoPO.getNickName());
             }
 
@@ -214,6 +214,7 @@ public class NFTServiceImpl implements NFTService {
             userFilePO.setCreateTime(new Date());
             userFilePO.setFileId(fileUserChangeVO.getTokenId());
             userFilePO.setUserId(fileUserChangeVO.getUserAddress());
+            userFilePO.setType(1);
             userFileMapper.insert(userFilePO);
         } else {
             /* 修改拥有者 */
@@ -418,7 +419,7 @@ public class NFTServiceImpl implements NFTService {
                     fileResultDTO.setUserName(userFilePOList.get(0).getUserName());
                 } else {
                     UserinfoPO userinfoPO = userInfoMapper.selectById(filePO.getCreater());
-                    if(userinfoPO != null){
+                    if (userinfoPO != null) {
                         fileResultDTO.setUserName(userinfoPO.getNickName());
                     }
                 }

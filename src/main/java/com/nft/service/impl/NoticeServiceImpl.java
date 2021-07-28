@@ -114,6 +114,7 @@ public class NoticeServiceImpl extends ServiceImpl<NoticeMapper, NoticeEntity> i
         noticeEntity.setCoinType(coinType);
         noticeEntity.setNoticeType(2);
         noticeEntity.setCreateTime(new Date());
+        noticeEntity.setRecipient(buyUserAddress);
         noticeMapper.insert(noticeEntity);
     }
 
@@ -134,6 +135,7 @@ public class NoticeServiceImpl extends ServiceImpl<NoticeMapper, NoticeEntity> i
         noticeEntity.setNoticeFile(fileId);
         noticeEntity.setNoticeType(1);
         noticeEntity.setCreateTime(new Date());
+        noticeMapper.insert(noticeEntity);
     }
 
     @Override
