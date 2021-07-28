@@ -81,7 +81,7 @@ public class NoticeServiceImpl extends ServiceImpl<NoticeMapper, NoticeEntity> i
                 if (auctionEntity == null) {
                     break;
                 }
-                NoticeResult.MyAuction myAuction = getMyAuction(auctionEntity, noticeVo.getUserAddress(), filePO, record.getCoinType());
+                NoticeResult.MyAuction myAuction = getMyAuction(auctionEntity, noticeVo.getUserAddress(), filePO, auctionEntity.getAuctionCoin());
 
                 myAuctions.add(myAuction);
             }

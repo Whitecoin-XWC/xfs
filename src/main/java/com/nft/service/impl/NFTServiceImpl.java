@@ -219,6 +219,7 @@ public class NFTServiceImpl implements NFTService {
             userFilePO.setType(1);
             userFileMapper.insert(userFilePO);
 
+            queryWrapper = new QueryWrapper();
             queryWrapper.eq("file_id", fileUserChangeVO.getTokenId());
             queryWrapper.eq("type", 0);
             userFilePO = userFileMapper.selectOne(queryWrapper);

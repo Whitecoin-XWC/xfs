@@ -98,6 +98,9 @@ public class AuctionEntity {
     @TableField("auction_max_price")
     private BigDecimal auctionMaxPrice;
 
+    @TableField(exist = false)
+    private BigDecimal auctionMaxPriceUsdt;
+
     @TableField("auction_max_er")
     private String auctionMaxEr;
 
