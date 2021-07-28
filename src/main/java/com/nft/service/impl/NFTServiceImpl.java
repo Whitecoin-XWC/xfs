@@ -23,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -208,6 +209,7 @@ public class NFTServiceImpl implements NFTService {
         queryWrapper.eq("file_id", fileUserChangeVO.getTokenId());
         queryWrapper.eq("type", 1);
         UserFilePO userFilePO = userFileMapper.selectOne(queryWrapper);
+        String oldUser = "";
         if (userFilePO == null) {
             /* 插入用户拥有表 */
             userFilePO = new UserFilePO();
@@ -216,12 +218,19 @@ public class NFTServiceImpl implements NFTService {
             userFilePO.setUserId(fileUserChangeVO.getUserAddress());
             userFilePO.setType(1);
             userFileMapper.insert(userFilePO);
+
+            queryWrapper.eq("file_id", fileUserChangeVO.getTokenId());
+            queryWrapper.eq("type", 0);
+            userFilePO = userFileMapper.selectOne(queryWrapper);
+            if (userFilePO != null) {
+                oldUser = userFilePO.getUserId();
+            }
         } else {
             /* 修改拥有者 */
             userFilePO.setUserId(fileUserChangeVO.getUserAddress());
             userFileMapper.updateById(userFilePO);
+            oldUser = userFilePO.getUserId();
         }
-        String oldUser = userFilePO.getUserId();
 
         FileLogAttach fileLogAttach = new FileLogAttach();
         fileLogAttach.setTractionId(fileUserChangeVO.getTractionId());
@@ -282,6 +291,8 @@ public class NFTServiceImpl implements NFTService {
         if (sellInfoPO != null) {
             fileDetail.setUnit(sellInfoPO.getUnit());
             fileDetail.setPrice(sellInfoPO.getPrice());
+            BigDecimal coinPrice = auctionService.getCoinPrice(sellInfoPO.getUnit());
+            fileDetail.setPriceUsdt(sellInfoPO.getPrice().multiply(coinPrice).setScale(8, BigDecimal.ROUND_DOWN));
         }
         if (StringUtils.isEmpty(filePO.getUserAddress())) {
             fileDetail.setCollect(0);

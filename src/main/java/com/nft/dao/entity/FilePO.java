@@ -127,6 +127,9 @@ public class FilePO {
     private BigDecimal price;
 
     @TableField(exist = false)
+    private BigDecimal priceUsdt;
+
+    @TableField(exist = false)
     private Integer collect;
 
     public void setCopyrightFee(String copyrightFeeStr) {

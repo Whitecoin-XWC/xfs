@@ -166,27 +166,30 @@ public class NoticeServiceImpl extends ServiceImpl<NoticeMapper, NoticeEntity> i
         /* 获取拍卖信息 */
 
         if (auctionEntity.getAuctionStatus() == 1 && userAddress.equals(auctionEntity.getAuctionMaxEr())) {
-            myAuction.setAuctionResult("拍卖最高价");
-            myAuction.setAuctionPrice(auctionEntity.getAuctionMaxPrice());
-            BigDecimal coinPrice = auctionService.getCoinPrice(auctionEntity.getAuctionCoin());
-            myAuction.setAuctionPriceUsdt(auctionEntity.getAuctionMaxPrice().multiply(coinPrice).setScale(8, BigDecimal.ROUND_DOWN));
-            /* 计算拍卖倒计时 */
-            Date auctionStartTime = auctionEntity.getAuctionStartTime();
-            if (auctionStartTime != null) {
-                LocalDateTime localDateTime = auctionStartTime.toInstant().atZone(ZoneId.of("GMT")).toLocalDateTime();
-                Duration between = Duration.between(LocalDateTime.now(), localDateTime.plusHours(24));
-                long millis = between.toMillis();
-                if (millis >= 0) {
-                    myAuction.setRemainingTime(between.toMillis());
-                }
-            }
+            myAuction.setAuctionResult("出价最高");
         }
         if (auctionEntity.getAuctionStatus() == 2 && userAddress.equals(auctionEntity.getAuctionMaxEr())) {
             myAuction.setAuctionResult("获胜");
         }
 
-        if (auctionEntity.getAuctionStatus() == 2 && !userAddress.equals(auctionEntity.getAuctionMaxEr())) {
+        if (!userAddress.equals(auctionEntity.getAuctionMaxEr())) {
             myAuction.setAuctionResult("淘汰");
+        }
+
+        myAuction.setAuctionPrice(auctionEntity.getAuctionMaxPrice());
+        BigDecimal coinPrice = auctionService.getCoinPrice(auctionEntity.getAuctionCoin());
+        myAuction.setAuctionPriceUsdt(auctionEntity.getAuctionMaxPrice().multiply(coinPrice).setScale(8, BigDecimal.ROUND_DOWN));
+        /* 计算拍卖倒计时 */
+        Date auctionStartTime = auctionEntity.getAuctionStartTime();
+        if (auctionStartTime != null) {
+            LocalDateTime localDateTime = auctionStartTime.toInstant().atZone(ZoneId.of("GMT")).toLocalDateTime();
+            //TODO
+//            Duration between = Duration.between(LocalDateTime.now(), localDateTime.plusHours(24));
+            Duration between = Duration.between(LocalDateTime.now(), localDateTime.plusMinutes(10));
+            long millis = between.toMillis();
+            if (millis >= 0) {
+                myAuction.setRemainingTime(between.toMillis());
+            }
         }
         myAuction.setNFTName(filePO.getFileTitle());
         myAuction.setFilePath(filePO.getFileName());
