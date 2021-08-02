@@ -67,4 +67,4 @@ fileUpload:
   img-url: http://media.xwcnft.com/
 
 
-tokenswap.api.url: http://154.209.69.121:8087/statistics/getPopularStatics
+tokenswap.api.url: https://cms-api.tokenswap.info/statistics/getPopularStatics
