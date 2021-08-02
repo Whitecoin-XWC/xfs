@@ -1,0 +1,70 @@
+server:
+  port: 8089
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driverClassName: com.mysql.cj.jdbc.Driver
+    druid:
+      url: jdbc:mysql://127.0.0.1:3306/nft?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=UTC
+      username: root
+      password: bz&*cmoYj2
+      # 初始连接数
+      initialSize: 5
+      # 最小连接池数量
+      minIdle: 10
+      # 最大连接池数量
+      maxActive: 20
+      # 配置获取连接等待超时的时间
+      maxWait: 60000
+      # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+      timeBetweenEvictionRunsMillis: 60000
+      # 配置一个连接在池中最小生存的时间，单位是毫秒
+      minEvictableIdleTimeMillis: 300000
+      # 配置一个连接在池中最大生存的时间，单位是毫秒
+      maxEvictableIdleTimeMillis: 900000
+      # 配置检测连接是否有效
+      validationQuery: SELECT 1 FROM DUAL
+      testWhileIdle: true
+      testOnBorrow: false
+      testOnReturn: false
+      webStatFilter:
+        enabled: true
+      statViewServlet:
+        enabled: true
+        # 设置白名单，不填则允许所有访问
+        allow:
+        url-pattern: /druid/*
+        # 控制台管理用户名和密码
+        login-username:
+        login-password:
+      filter:
+        stat:
+          enabled: true
+          # 慢SQL记录
+          log-slow-sql: true
+          slow-sql-millis: 1000
+          merge-sql: true
+        wall:
+          config:
+            multi-statement-allow: true
+  servlet:
+    multipart:
+      # 上传文件总的最大值
+      max-request-size: 20MB
+      # 单个文件的最大值
+      max-file-size: 20MB
+
+logging:
+  config: classpath:log/logback-prod.xml
+  level:
+    com.nft: DEBUG
+
+# 文件上传，本地测试的时候要加上盘符
+fileUpload:
+  # 媒体类型，后缀_类型，【0 文件，1图片，2 视频，3 音频】
+  type: "TXT_0,MD_0,JPG_1,JPEG_1,PNG_1,SVG_1,TIFF_1,MP4_2,MOV_2,AVI_2,WEBM_2,MP3_3,WAV_3,OGG_3,GIF_4"
+  save-path: /data/nginx/media
+  img-url: http://media.xwcnft.com/
+
+
+tokenswap.api.url: http://154.209.69.121:8087/statistics/getPopularStatics
