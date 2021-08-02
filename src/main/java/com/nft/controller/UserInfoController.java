@@ -97,13 +97,6 @@ public class UserInfoController {
             fileVO.setStatus(null);
             IPage<FileResultDTO> iPage = userFileService.selectFiles(fileVO);
             if (iPage != null) {
-                for (FileResultDTO record : iPage.getRecords()) {
-                    if (record.getFileStatus() == 5) {
-                        AuctionEntity auctionEntity = auctionService.queryAuction(record.getId());
-                        record.setAuctionMaxPrice(auctionEntity.getAuctionMaxPrice());
-                        record.setRemainingTime(auctionEntity.getRemainingTime());
-                    }
-                }
                 pageResultVO.setCount(iPage.getTotal());
                 pageResultVO.setCurrentPage(iPage.getCurrent());
                 pageResultVO.setPageSize(iPage.getSize());

@@ -110,14 +110,6 @@ public class NFTController {
             fileVO.setIsIndex("yes");
             IPage<FileResultDTO> iPage = nftService.selectFiles(fileVO);
             if (iPage != null) {
-                for (FileResultDTO record : iPage.getRecords()) {
-                    if (record.getFileStatus() == 5) {
-                        AuctionEntity auctionEntity = auctionService.queryAuction(record.getId());
-                        record.setAuctionMaxPrice(auctionEntity.getAuctionMaxPrice());
-                        record.setRemainingTime(auctionEntity.getRemainingTime());
-                        record.setCoinType(auctionEntity.getAuctionCoin());
-                    }
-                }
                 pageResultVO.setCount(iPage.getTotal());
                 pageResultVO.setCurrentPage(iPage.getCurrent());
                 pageResultVO.setPageSize(iPage.getSize());

@@ -37,9 +37,9 @@ public class AuctionTask {
     @Scheduled(cron = "0/30 * * * * ?")
     public void syncAuctionEnd() {
         QueryWrapper<AuctionEntity> queryWrapper = new QueryWrapper<>();
-//        LocalDateTime time = LocalDateTime.now().minusHours(24);
+        LocalDateTime time = LocalDateTime.now().minusHours(24);
         //TODO 修改拍卖时长
-        LocalDateTime time = LocalDateTime.now().minusMinutes(10);
+//        LocalDateTime time = LocalDateTime.now().minusMinutes(10);
         queryWrapper.le("auction_start_time", time);
         queryWrapper.eq("auction_status", 1);
         List<AuctionEntity> auctionEntities = auctionService.list(queryWrapper);

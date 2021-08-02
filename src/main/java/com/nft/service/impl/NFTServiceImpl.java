@@ -228,9 +228,9 @@ public class NFTServiceImpl implements NFTService {
             }
         } else {
             /* 修改拥有者 */
+            oldUser = userFilePO.getUserId();
             userFilePO.setUserId(fileUserChangeVO.getUserAddress());
             userFileMapper.updateById(userFilePO);
-            oldUser = userFilePO.getUserId();
         }
 
         FileLogAttach fileLogAttach = new FileLogAttach();
@@ -375,10 +375,14 @@ public class NFTServiceImpl implements NFTService {
                 if (new Integer(0).compareTo(fileResultDTO1.getMediaType()) == 0) {
                     fileResultDTO1.setTxtContent(FileUtil.getContent(fileResultDTO1.getFilePath()));
                 }
-                /* 查询拍卖信息 */
+
                 if (fileResultDTO1.getFileStatus() == 5) {
                     AuctionEntity auctionEntity = auctionService.queryAuction(fileResultDTO1.getId());
+                    fileResultDTO1.setAuctionMaxPrice(auctionEntity.getAuctionMaxPrice());
+                    fileResultDTO1.setRemainingTime(auctionEntity.getRemainingTime());
+                    fileResultDTO1.setCoinType(auctionEntity.getAuctionCoin());
                     fileResultDTO1.setPmPrice(auctionEntity.getAuctionRetainPrice());
+                    fileResultDTO1.setUnit(auctionEntity.getAuctionCoin());
                 }
             }
         }

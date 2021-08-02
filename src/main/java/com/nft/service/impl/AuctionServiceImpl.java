@@ -88,7 +88,9 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, AuctionEntity
         BigDecimal coinPrice = getCoinPrice(auctionEntity.getAuctionCoin());
         auctionEntity.setAuctionMinMarkupUsdt(auctionEntity.getAuctionMinMarkup().multiply(coinPrice).setScale(8, BigDecimal.ROUND_DOWN));
         auctionEntity.setAuctionRetainPriceUsdt(auctionEntity.getAuctionRetainPrice().multiply(coinPrice).setScale(8, BigDecimal.ROUND_DOWN));
-        auctionEntity.setAuctionMaxPriceUsdt(auctionEntity.getAuctionMaxPrice().multiply(coinPrice).setScale(8, BigDecimal.ROUND_DOWN));
+        if (auctionEntity.getAuctionMaxPrice() != null){
+            auctionEntity.setAuctionMaxPriceUsdt(auctionEntity.getAuctionMaxPrice().multiply(coinPrice).setScale(8, BigDecimal.ROUND_DOWN));
+        }
         String auctionMaxEr = auctionEntity.getAuctionMaxEr();
         UserinfoPO userinfoPO = userInfoMapper.selectById(auctionMaxEr);
         if (userinfoPO != null && StringUtils.isNotBlank(userinfoPO.getNickName())) {
@@ -99,8 +101,8 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, AuctionEntity
             Date auctionStartTime = auctionEntity.getAuctionStartTime();
             LocalDateTime localDateTime = auctionStartTime.toInstant().atZone(ZoneId.of("GMT")).toLocalDateTime();
             // TODO 拍卖剩余时间
-//            Duration between = Duration.between(LocalDateTime.now(), localDateTime.plusHours(24));
-            Duration between = Duration.between(LocalDateTime.now(), localDateTime.plusMinutes(10));
+            Duration between = Duration.between(LocalDateTime.now(), localDateTime.plusHours(24));
+//            Duration between = Duration.between(LocalDateTime.now(), localDateTime.plusMinutes(10));
             long millis = between.toMillis();
             if (millis >= 0) {
                 auctionEntity.setRemainingTime(between.toMillis());
