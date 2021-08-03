@@ -18,7 +18,7 @@
             nft_sell_info.price price,
             nft_sell_info.unit unit,
             nft_sell_info.`status` status,
-            nft_user_file.user_id userAddress,
+            nft_userinfo.id userAddress,
             nft_userinfo.nick_name userName,
             nft_user_file.type source
         FROM
@@ -46,7 +46,7 @@
             and nft_user_file.type = #{fileResultDTO.source}
         </if>
         <if test="fileResultDTO.isIndex != null and fileResultDTO.isIndex == 'yes'">
-            group by nft_file.id
+            and nft_user_file.type = 0
         </if>
     </select>
 
