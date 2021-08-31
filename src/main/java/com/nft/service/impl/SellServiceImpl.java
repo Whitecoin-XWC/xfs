@@ -50,6 +50,8 @@ public class SellServiceImpl implements SellService {
             sellInfoPO.setPrice(sellVO.getPrice());
             sellInfoPO.setUnit(sellVO.getUnit());
             sellInfoMapper.updateById(sellInfoPO);
+
+            fileLogAttach.setPrice(sellVO.getPrice());
             saveLog(sellVO.getTokenId(), sellVO.getUserAddress(), "更改了这个NFT的售价", fileLogAttach);
         } else {
             sellInfoPO = new SellInfoPO();
@@ -60,7 +62,7 @@ public class SellServiceImpl implements SellService {
             sellInfoMapper.insert(sellInfoPO);
 
             updateFileStatus(sellVO.getTokenId(), 4);
-
+            fileLogAttach.setPrice(sellVO.getPrice());
             saveLog(sellVO.getTokenId(), sellVO.getUserAddress(), "设置了这个NFT的售价", fileLogAttach);
         }
 
@@ -112,6 +114,7 @@ public class SellServiceImpl implements SellService {
 
         FileLogAttach fileLogAttach = new FileLogAttach();
         fileLogAttach.setTractionId(buyVO.getTractionId());
+        fileLogAttach.setPrice(sellInfoPO.getPrice());
         saveLog(buyVO.getTokenId(), buyVO.getBuyUserAddress(), "购买了这个NFT", fileLogAttach);
         /* 插入通知记录 */
         noticeService.insertCopyrightFeeNotice(buyVO.getTokenId(), buyVO.getBuyUserAddress(), sellInfoPO.getPrice(), sellInfoPO.getUnit());
