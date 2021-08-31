@@ -48,6 +48,7 @@
         <if test="fileResultDTO.isIndex != null and fileResultDTO.isIndex == 'yes'">
             and nft_user_file.type = 0
         </if>
+        order by nft_file.create_time desc
     </select>
 
 </mapper>
