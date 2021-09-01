@@ -44,7 +44,7 @@ public class AuctionController {
         try {
             int insert = auctionService.insertAuction(auctionEntity);
             if (insert > 0) {
-                fileLogService.saveLog(auctionEntity.getFileTokenId(), "创建拍卖", auctionEntity.getAuctionCreater(), 1, new FileLogAttach(auctionEntity.getTradeId()));
+                fileLogService.saveLog(auctionEntity.getFileTokenId(), "创建拍卖", auctionEntity.getAuctionCreater(), 1, new FileLogAttach(auctionEntity.getTradeId(), auctionEntity.getAuctionRetainPrice()));
             }
             log.info("create auction record end, :{}", auctionEntity.getFileTokenId());
             return ResultVO.successMsg("create auction record success");
@@ -63,7 +63,11 @@ public class AuctionController {
             int count = auctionService.updateAuction(update);
             if (count > 0) {
                 AuctionEntity auctionEntity = auctionService.getById(update.getId());
-                fileLogService.saveLog(auctionEntity.getFileTokenId(), "修改拍卖记录", auctionEntity.getAuctionCreater(), 1, new FileLogAttach(update.getTradeId()));
+                FileLogAttach fileLogAttach = new FileLogAttach(update.getTradeId());
+                if (update.getAuctionRetainPrice() != null) {
+                    fileLogAttach.setPrice(update.getAuctionRetainPrice());
+                }
+                fileLogService.saveLog(auctionEntity.getFileTokenId(), "修改拍卖记录", auctionEntity.getAuctionCreater(), 1, fileLogAttach);
                 return ResultVO.successMsg("update auction record success");
             }
             log.info("update auction record end, :{}", update.getFileTokenId());
@@ -106,7 +110,7 @@ public class AuctionController {
                 return ResultVO.fail("竞拍未结束,不能领取");
             }
             String receive = auctionService.receive(fileTokenId, userAddress, query.getId());
-            fileLogService.saveLog(fileTokenId, "领取了NFT", userAddress, 1, new FileLogAttach());
+            fileLogService.saveLog(fileTokenId, "领取了NFT", userAddress, 1, new FileLogAttach("", query.getAuctionMaxPrice()));
             /* 插入版权费通知 */
             noticeService.insertCopyrightFeeNotice(fileTokenId, userAddress, query.getAuctionMaxPrice(), query.getAuctionCoin());
             log.info("receive nft success, :{}", receivePO.getFileTokenId());
