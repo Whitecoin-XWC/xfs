@@ -25,7 +25,18 @@ public class FileLogAttach {
      */
     private BigDecimal price;
 
+    /**
+     * 币种
+     */
+    private String coinType;
+
     public FileLogAttach(String tractionId){
         this.tractionId = tractionId;
+        this.price = price;
+    }
+
+    public FileLogAttach(String tractionId, BigDecimal price){
+        this.tractionId = tractionId;
+        this.price = price;
     }
 }

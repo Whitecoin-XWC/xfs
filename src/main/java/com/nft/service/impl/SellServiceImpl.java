@@ -63,6 +63,7 @@ public class SellServiceImpl implements SellService {
 
             updateFileStatus(sellVO.getTokenId(), 4);
             fileLogAttach.setPrice(sellVO.getPrice());
+            fileLogAttach.setCoinType(sellVO.getUnit());
             saveLog(sellVO.getTokenId(), sellVO.getUserAddress(), "设置了这个NFT的售价", fileLogAttach);
         }
 
@@ -115,6 +116,7 @@ public class SellServiceImpl implements SellService {
         FileLogAttach fileLogAttach = new FileLogAttach();
         fileLogAttach.setTractionId(buyVO.getTractionId());
         fileLogAttach.setPrice(sellInfoPO.getPrice());
+        fileLogAttach.setCoinType(sellInfoPO.getUnit());
         saveLog(buyVO.getTokenId(), buyVO.getBuyUserAddress(), "购买了这个NFT", fileLogAttach);
         /* 插入通知记录 */
         noticeService.insertCopyrightFeeNotice(buyVO.getTokenId(), buyVO.getBuyUserAddress(), sellInfoPO.getPrice(), sellInfoPO.getUnit());
