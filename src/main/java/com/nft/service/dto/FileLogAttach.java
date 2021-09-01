@@ -24,4 +24,8 @@ public class FileLogAttach {
      * 价格
      */
     private BigDecimal price;
+
+    public FileLogAttach(String tractionId){
+        this.tractionId = tractionId;
+    }
 }
