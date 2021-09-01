@@ -3,16 +3,11 @@ package com.nft.service.impl;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.nft.bean.AuctionStatus;
-import com.nft.dao.entity.AuctionEntity;
-import com.nft.dao.entity.FilePO;
-import com.nft.dao.entity.UserFilePO;
-import com.nft.dao.entity.UserinfoPO;
-import com.nft.dao.mapper.AuctionMapper;
-import com.nft.dao.mapper.FileMapper;
-import com.nft.dao.mapper.UserFileMapper;
-import com.nft.dao.mapper.UserInfoMapper;
+import com.nft.dao.entity.*;
+import com.nft.dao.mapper.*;
 import com.nft.service.AuctionService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -50,6 +45,8 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, AuctionEntity
     private UserFileMapper userFileMapper;
     @Resource
     private UserInfoMapper userInfoMapper;
+    @Resource
+    private SellInfoMapper sellInfoMapper;
 
     @Value("${tokenswap.api.url}")
     private String apiUrl;
@@ -66,12 +63,26 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, AuctionEntity
             filePO.setFileStatus(5);
             fileMapper.updateById(filePO);
         }
+        SellInfoPO sellInfoPO = new SellInfoPO();
+        sellInfoPO.setUnit(auctionEntity.getAuctionCoin());
+        sellInfoPO.setPrice(auctionEntity.getAuctionRetainPrice());
+        sellInfoPO.setStatus(0);
+        sellInfoPO.setTokenId(auctionEntity.getFileTokenId());
+        sellInfoMapper.insert(sellInfoPO);
         return insert;
     }
 
     @Override
     public int updateAuction(AuctionEntity update) {
         update.setUpdateTime(new Date());
+        if (update.getAuctionRetainPrice() != null) {
+            QueryWrapper queryWrapper = new QueryWrapper();
+            queryWrapper.eq("token_id", update.getFileTokenId());
+            SellInfoPO sellInfoPO = sellInfoMapper.selectOne(queryWrapper);
+            sellInfoPO.setPrice(update.getAuctionRetainPrice());
+            sellInfoPO.setUnit(update.getAuctionCoin());
+            sellInfoMapper.updateById(sellInfoPO);
+        }
         return auctionMapper.updateById(update);
     }
 
@@ -88,7 +99,7 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, AuctionEntity
         BigDecimal coinPrice = getCoinPrice(auctionEntity.getAuctionCoin());
         auctionEntity.setAuctionMinMarkupUsdt(auctionEntity.getAuctionMinMarkup().multiply(coinPrice).setScale(8, BigDecimal.ROUND_DOWN));
         auctionEntity.setAuctionRetainPriceUsdt(auctionEntity.getAuctionRetainPrice().multiply(coinPrice).setScale(8, BigDecimal.ROUND_DOWN));
-        if (auctionEntity.getAuctionMaxPrice() != null){
+        if (auctionEntity.getAuctionMaxPrice() != null) {
             auctionEntity.setAuctionMaxPriceUsdt(auctionEntity.getAuctionMaxPrice().multiply(coinPrice).setScale(8, BigDecimal.ROUND_DOWN));
         }
         String auctionMaxEr = auctionEntity.getAuctionMaxEr();
@@ -117,6 +128,10 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, AuctionEntity
         filePO.setId(fileTokenId);
         filePO.setFileStatus(2);
         int update = fileMapper.updateById(filePO);
+
+        UpdateWrapper wrapper = new UpdateWrapper();
+        wrapper.eq("token_id", fileTokenId);
+        sellInfoMapper.delete(wrapper);
         return update;
     }
 

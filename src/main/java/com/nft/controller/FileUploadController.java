@@ -3,6 +3,7 @@ package com.nft.controller;
 import com.nft.commons.vo.ResultVO;
 import com.nft.controller.vo.UploadResultVO;
 import com.nft.dao.entity.FilePO;
+import com.nft.service.FileLogService;
 import com.nft.service.NFTService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -78,6 +79,7 @@ public class FileUploadController {
     })
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public ResultVO save(HttpServletRequest request) {
+        log.info("upload file start");
         try {
             if (request instanceof MultipartHttpServletRequest) {
                 MultipartHttpServletRequest params = (MultipartHttpServletRequest) request;
@@ -85,19 +87,21 @@ public class FileUploadController {
                 // 保存图片
                 FilePO filePO = upload(params);
 
+                log.info("upload file success, :{}", filePO.getId());
                 // 返回文件url和tokenId
                 UploadResultVO uploadResultVO = new UploadResultVO();
                 uploadResultVO.setTokenId(filePO.getId());
                 uploadResultVO.setUrl(imgUrl + filePO.getFileName());
                 return ResultVO.success(uploadResultVO);
             } else {
+                log.info("upload file fail, :use formData post");
                 return ResultVO.fail("请使用formData格式请求此接口");
             }
         } catch (SizeLimitExceededException e) {
-            log.error("上传文件超过20M");
+            log.error("upload file fail, : file size bigger than 20M");
             return ResultVO.fail("上传文件最大20M");
         } catch (Exception e) {
-            log.error("上传失败", e);
+            log.error("upload file has exception, :{}", e);
             return ResultVO.fail("上传出现异常:" + e.getMessage());
         }
     }

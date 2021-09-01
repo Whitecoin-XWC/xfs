@@ -2,27 +2,28 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.nft.dao.mapper.FileMapper">
 
-    <select id="selectFileList" parameterType="com.nft.service.dto.FileResultDTO" resultType="com.nft.service.dto.FileResultDTO">
+    <select id="selectFileList" parameterType="com.nft.service.dto.FileResultDTO"
+            resultType="com.nft.service.dto.FileResultDTO">
         SELECT
-            nft_file.id,
-            nft_file.file_title fileTitle,
-            nft_file.file_name fileName,
-            nft_file.file_path filePath,
-            nft_file.pay_time payTime,
-            nft_file.create_time createTime,
-            nft_file.pub_time pubTime,
-            nft_file.media_type mediaType,
-            nft_file.file_status fileStatus,
-            nft_file.file_des fileDes,
-            nft_file.copyright_fee copyrightFee,
-            nft_sell_info.price price,
-            nft_sell_info.unit unit,
-            nft_sell_info.`status` status,
-            nft_userinfo.id userAddress,
-            nft_userinfo.nick_name userName,
-            nft_user_file.type source
+        nft_file.id,
+        nft_file.file_title fileTitle,
+        nft_file.file_name fileName,
+        nft_file.file_path filePath,
+        nft_file.pay_time payTime,
+        nft_file.create_time createTime,
+        nft_file.pub_time pubTime,
+        nft_file.media_type mediaType,
+        nft_file.file_status fileStatus,
+        nft_file.file_des fileDes,
+        nft_file.copyright_fee copyrightFee,
+        nft_sell_info.price price,
+        nft_sell_info.unit unit,
+        nft_sell_info.`status` status,
+        nft_userinfo.id userAddress,
+        nft_userinfo.nick_name userName,
+        nft_user_file.type source
         FROM
-            nft_file
+        nft_file
         LEFT JOIN nft_sell_info ON nft_sell_info.token_id = nft_file.id
         LEFT JOIN nft_user_file ON nft_user_file.file_id = nft_file.id
         LEFT JOIN nft_userinfo ON nft_userinfo.id = nft_file.creater
@@ -33,8 +34,11 @@
         <if test="fileResultDTO.mediaType != null and fileResultDTO.mediaType > -1">
             and nft_file.media_type = #{fileResultDTO.mediaType}
         </if>
-        <if test="fileResultDTO.fileStatus != null and fileResultDTO.fileStatus > 1">
+        <if test="fileResultDTO.fileStatus != null and fileResultDTO.fileStatus > 1 and fileResultDTO.fileStatus &lt; 4">
             and nft_file.file_status = #{fileResultDTO.fileStatus}
+        </if>
+        <if test="fileResultDTO.fileStatus == null or fileResultDTO.fileStatus == 4">
+            and nft_file.file_status in (4,5)
         </if>
         <if test="fileResultDTO.fileStatus == null or fileResultDTO.fileStatus &lt;= 1">
             and nft_file.file_status &gt; 1

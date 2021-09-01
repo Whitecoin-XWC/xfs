@@ -22,14 +22,14 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import java.util.List;
 
-@Api(value = "文件管理", tags = "文件管理接口")
+@Api(value = "file manager", tags = "file manage api")
 @Slf4j
 @RestController
 @RequestMapping("/nft")
 public class NFTController {
 
     /**
-     * 图片访问前缀
+     * prefix path of get file
      */
     @Value("${fileUpload.img-url}")
     private String imgUrl;
@@ -41,48 +41,52 @@ public class NFTController {
 
 
     /**
-     * 关注
+     * follow nft
      *
      * @param followVO
      * @return
      */
-    @ApiOperation("关注")
+    @ApiOperation("follow nft")
     @RequestMapping(value = "/follow", method = RequestMethod.POST)
     public ResultVO follow(@RequestBody FollowVO followVO) {
+        log.info("follow nft start :{}", followVO.getTokenId());
         try {
             nftService.follow(followVO);
+            log.info("follow nft success :{}", followVO.getTokenId());
             return ResultVO.successMsg("关注成功");
         } catch (Exception e) {
-            log.error("关注异常", e);
+            log.error("follow nft fail :{},{}", followVO.getTokenId(), e);
             return ResultVO.fail("关注异常");
         }
     }
 
     /**
-     * 取消关注
+     * unsubscribe nft
      *
      * @param followVO
      * @return
      */
-    @ApiOperation("取消关注")
+    @ApiOperation("unsubscribe nft")
     @RequestMapping(value = "/delFollow", method = RequestMethod.POST)
     public ResultVO delFollow(@RequestBody FollowVO followVO) {
+        log.info("unsubscribe nft start :{}", followVO.getTokenId());
         try {
             nftService.delFollow(followVO);
+            log.info("unsubscribe nft success :{}", followVO.getTokenId());
             return ResultVO.successMsg("取消关注成功");
         } catch (Exception e) {
-            log.error("取消关注异常", e);
+            log.error("unsubscribe nft has exception :{},{}", followVO.getTokenId(), e);
             return ResultVO.fail("取消关注异常");
         }
     }
 
     /**
-     * 搜索
+     * search nft
      *
      * @param searchVO
      * @return
      */
-    @ApiOperation("搜索")
+    @ApiOperation("search nft")
     @RequestMapping(value = "/search", method = RequestMethod.POST)
     public ResultVO search(@RequestBody SearchVO searchVO) {
         try {
@@ -94,12 +98,12 @@ public class NFTController {
     }
 
     /**
-     * 查询首页文件列表
+     * search all files of homepage
      *
      * @param fileVO
      * @return
      */
-    @ApiOperation("查询首页文件列表")
+    @ApiOperation("files list of homepage")
     @RequestMapping(value = "/selectIndexList", method = RequestMethod.POST)
     public ResultVO selectIndexList(@RequestBody FileVO fileVO) {
         try {
@@ -125,26 +129,31 @@ public class NFTController {
     }
 
     /**
-     * 发布
+     * pub file
      *
      * @param pubVO
      * @return
      */
-    @ApiOperation("发布文件")
+    @ApiOperation("pub file")
     @RequestMapping(value = "/pub", method = RequestMethod.POST)
     public ResultVO pub(@RequestBody PubVO pubVO) {
+        log.info("pub file start :{}", pubVO.getTokenId());
         try {
             int result = nftService.pub(pubVO);
             if (result > 0) {
+                log.info("pub file success :{}", pubVO.getTokenId());
                 return ResultVO.successMsg("发布成功");
             } else if (result == -1) {
+                log.error("not found pub file :{}", pubVO.getTokenId());
                 return ResultVO.fail("文件不存在");
             } else if (result == -2) {
+                log.error("this file has pub by other user :{}", pubVO.getTokenId());
                 return ResultVO.fail("文件已经被别人发行过了");
             }
+            log.error("pub file fail :{}", pubVO.getTokenId());
             return ResultVO.fail("发布失败");
         } catch (Exception e) {
-            log.error("发布异常", e);
+            log.error("pub file has exception :{},{}", pubVO.getTokenId(), e);
             return ResultVO.fail("发布异常" + e.getMessage());
         }
     }
@@ -172,22 +181,25 @@ public class NFTController {
 
 
     /**
-     * 转移
+     * transfer nft
      *
      * @param fileUserChangeVO
      * @return
      */
-    @ApiOperation("文件转移")
+    @ApiOperation("transfer nft")
     @RequestMapping(value = "/fileUserChange", method = RequestMethod.POST)
     public ResultVO fileUserChange(@RequestBody FileUserChangeVO fileUserChangeVO) {
+        log.info("transfer nft start :{}", fileUserChangeVO.getTokenId());
         try {
             int result = nftService.fileUserChange(fileUserChangeVO);
             if (result > 0) {
+                log.info("transfer nft success :{}", fileUserChangeVO.getTokenId());
                 return ResultVO.successMsg("转移成功");
             }
+            log.info("transfer nft fail :{}", fileUserChangeVO.getTokenId());
             return ResultVO.fail("转移失败");
         } catch (Exception e) {
-            log.error("转移异常", e);
+            log.error("transfer nft has exception :{},{}", fileUserChangeVO.getTokenId(), e);
             return ResultVO.fail("转移异常" + e.getMessage());
         }
     }

@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 
-@Api(value = "文件出售", tags = "文件出售接口")
+@Api(value = "sell file", tags = "sell file api")
 @Slf4j
 @RestController
 @RequestMapping("nftSell")
@@ -25,18 +25,20 @@ public class NFTSellController {
 
 
     /**
-     * 设置/更新售价
+     * set or update sell price
      *
      * @return
      */
-    @ApiOperation("设置/更新售价")
+    @ApiOperation("set or update sell price")
     @RequestMapping(value = "/sell", method = RequestMethod.POST)
     public ResultVO sell(@RequestBody SellVO sellVO) {
+        log.info("set or update sell price start :{}", sellVO.getTokenId());
         try {
             sellService.sell(sellVO);
+            log.info("set or update sell price success :{}", sellVO.getTokenId());
             return ResultVO.successMsg("设置成功");
         } catch (Exception e) {
-            log.error("设置/更新售价异常", e);
+            log.error("set or update sell price has exception :{},{}", sellVO.getTokenId(), e);
             return ResultVO.fail("设置/更新售价异常");
         }
     }
@@ -59,21 +61,24 @@ public class NFTSellController {
     }
 
     /**
-     * 购买成功
+     * buy success
      *
      * @return
      */
-    @ApiOperation("购买成功")
+    @ApiOperation("buy success")
     @RequestMapping(value = "/buySuccess", method = RequestMethod.POST)
     public ResultVO buySuccess(@RequestBody BuyVO buyVO) {
+        log.info("buy nft start :{}", buyVO.getTokenId());
         try {
             int success = sellService.buySuccess(buyVO);
             if (success == 0) {
+                log.info("buy nft success :{}", buyVO.getTokenId());
                 return ResultVO.successMsg("购买成功");
             }
+            log.info("buy nft fail :{}", buyVO.getTokenId());
             return ResultVO.fail("购买异常");
         } catch (Exception e) {
-            log.error("购买异常", e);
+            log.error("buy nft has exception :{},{}", buyVO.getTokenId(), e);
             return ResultVO.fail("购买异常");
         }
     }
