@@ -34,8 +34,6 @@ public class AuctionController {
     private FileLogService fileLogService;
     @Resource
     private NoticeService noticeService;
-    @Resource
-    private SellService sellService;
 
     @ApiOperation("create auction record")
     @PostMapping("/create")
@@ -88,7 +86,7 @@ public class AuctionController {
                 return ResultVO.fail("竞拍中,不允许取消拍卖");
             }
             String fileTokenId = auctionEntity.getFileTokenId();
-            auctionService.cancelAuction(fileTokenId);
+            auctionService.cancelAuction(fileTokenId, query.getId());
             fileLogService.saveLog(fileTokenId, "取消拍卖", query.getAuctionCreater(), 1, new FileLogAttach(auctionEntity.getTradeId()));
             log.info("cancel auction record end, :{}", auctionEntity.getFileTokenId());
             return ResultVO.successMsg("取消成功");
