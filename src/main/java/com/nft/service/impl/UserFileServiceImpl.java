@@ -15,10 +15,7 @@ public class UserFileServiceImpl implements UserFileService {
     @Resource
     private NFTService nftService;
 
-    /**
-     * 查询当前用户的文件
-     * @return
-     */
+
     @Override
     public IPage<FileResultDTO> selectFiles(FileVO fileVO) {
         return nftService.selectFiles(fileVO);

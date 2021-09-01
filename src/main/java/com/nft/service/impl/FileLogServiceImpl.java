@@ -14,7 +14,7 @@ import javax.annotation.Resource;
 import java.util.Date;
 
 /**
- * 日志服务层
+ * log service
  */
 @Service("fileLogService")
 public class FileLogServiceImpl implements FileLogService {
@@ -25,7 +25,7 @@ public class FileLogServiceImpl implements FileLogService {
     private UserInfoMapper userInfoMapper;
 
     /**
-     * 保存日志
+     * save log
      *
      * @param fileId        文件ID，也就是文件的tokenId
      * @param action        日志动作描述，比如发布了nft，出售了nft

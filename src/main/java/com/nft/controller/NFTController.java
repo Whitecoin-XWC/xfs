@@ -159,7 +159,7 @@ public class NFTController {
     }
 
     /**
-     * 付费
+     * pay
      *
      * @param pubVO
      * @return
@@ -205,7 +205,7 @@ public class NFTController {
     }
 
     /**
-     * 查询文件详情
+     * get file detail
      *
      * @return
      */
@@ -227,7 +227,7 @@ public class NFTController {
     }
 
     /**
-     * 获取文件变化日志
+     * get file log
      *
      * @return
      */

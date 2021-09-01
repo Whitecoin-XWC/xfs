@@ -21,7 +21,7 @@ public class UserInfoServiceImpl implements UserInfoService {
     private UserFileMapper userFileMapper;
 
     /**
-     * 更新用户资料
+     * update user info
      * @param userinfoPO
      * @return
      */
@@ -49,7 +49,7 @@ public class UserInfoServiceImpl implements UserInfoService {
     }
 
     /**
-     * 查询用户详情
+     * search user info
      * @param id
      * @return
      */

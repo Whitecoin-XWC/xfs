@@ -6,9 +6,5 @@ import com.nft.service.dto.FileResultDTO;
 
 public interface UserFileService {
 
-    /**
-     * 查询本站的所有文件
-     * @return
-     */
     IPage<FileResultDTO> selectFiles(FileVO fileVO);
 }

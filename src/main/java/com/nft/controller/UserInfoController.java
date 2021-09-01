@@ -38,14 +38,14 @@ public class UserInfoController {
     private AuctionService auctionService;
 
     /**
-     * 图片访问前缀
+     * img url head
      */
     @Value("${fileUpload.img-url}")
     private String imgUrl;
 
 
     /**
-     * 修改用户资料
+     * update user info
      *
      * @return
      */
@@ -62,7 +62,7 @@ public class UserInfoController {
     }
 
     /**
-     * 查询用户资料
+     * get user info
      *
      * @return
      */
@@ -78,7 +78,7 @@ public class UserInfoController {
     }
 
     /**
-     * 查询当前用户的所有文件
+     * get all file for user
      *
      * @return
      */

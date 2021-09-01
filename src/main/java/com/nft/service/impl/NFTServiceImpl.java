@@ -62,7 +62,7 @@ public class NFTServiceImpl implements NFTService {
     private Lock lock = new ReentrantLock();
 
     /**
-     * 关注
+     * follow
      *
      * @param followVO
      * @return
@@ -88,7 +88,7 @@ public class NFTServiceImpl implements NFTService {
     }
 
     /**
-     * 取消关注
+     * chancel follow
      *
      * @param followVO
      * @return
@@ -103,7 +103,7 @@ public class NFTServiceImpl implements NFTService {
     }
 
     /**
-     * 上传文件
+     * update file
      *
      * @param filePO
      * @return
@@ -136,7 +136,7 @@ public class NFTServiceImpl implements NFTService {
     }
 
     /**
-     * 发布
+     * pub file
      *
      * @param pubVO
      * @return
@@ -176,7 +176,7 @@ public class NFTServiceImpl implements NFTService {
     }
 
     /**
-     * 付费
+     * pay
      *
      * @param pubVO
      * @return
@@ -199,7 +199,7 @@ public class NFTServiceImpl implements NFTService {
     }
 
     /**
-     * 转移
+     * change user
      *
      * @return
      */
@@ -245,7 +245,7 @@ public class NFTServiceImpl implements NFTService {
     }
 
     /**
-     * 获取一个文件
+     * get file detail
      *
      * @param filePO
      * @return
@@ -313,7 +313,7 @@ public class NFTServiceImpl implements NFTService {
     }
 
     /**
-     * 获取一个文件变化日志
+     * get log for file
      *
      * @param fileLogVO
      * @return
@@ -341,7 +341,7 @@ public class NFTServiceImpl implements NFTService {
     }
 
     /**
-     * 查询当前用户的所有文件
+     * get file list for user
      *
      * @return
      */
@@ -390,7 +390,7 @@ public class NFTServiceImpl implements NFTService {
     }
 
     /**
-     * 搜索
+     * search
      *
      * @param keyWord
      * @return

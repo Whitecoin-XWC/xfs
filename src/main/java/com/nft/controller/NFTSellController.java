@@ -44,7 +44,7 @@ public class NFTSellController {
     }
 
     /**
-     * 取消售价
+     * chancel price
      *
      * @return
      */
