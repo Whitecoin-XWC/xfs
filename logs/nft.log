@@ -1,0 +1,40 @@
+2021-09-01 06:16:45,981 [main] INFO (StartupInfoLogger.java:55)- Starting Start on moloqu with PID 22212 (D:\workspace\xfs\target\classes started by moloq in D:\workspace\xfs)
+2021-09-01 06:16:45,984 [main] DEBUG (StartupInfoLogger.java:56)- Running with Spring Boot v2.3.5.RELEASE, Spring v5.2.10.RELEASE
+2021-09-01 06:16:45,985 [main] INFO (SpringApplication.java:655)- The following profiles are active: dev
+2021-09-01 06:16:47,174 [main] INFO (TomcatWebServer.java:108)- Tomcat initialized with port(s): 8089 (http)
+2021-09-01 06:16:47,182 [main] INFO (DirectJDKLog.java:173)- Initializing ProtocolHandler ["http-nio-8089"]
+2021-09-01 06:16:47,183 [main] INFO (DirectJDKLog.java:173)- Starting service [Tomcat]
+2021-09-01 06:16:47,183 [main] INFO (DirectJDKLog.java:173)- Starting Servlet engine: [Apache Tomcat/9.0.39]
+2021-09-01 06:16:47,285 [main] INFO (DirectJDKLog.java:173)- Initializing Spring embedded WebApplicationContext
+2021-09-01 06:16:47,286 [main] INFO (ServletWebServerApplicationContext.java:285)- Root WebApplicationContext: initialization completed in 1251 ms
+2021-09-01 06:16:47,394 [main] INFO (DruidDataSourceAutoConfigure.java:56)- Init DruidDataSource
+2021-09-01 06:16:50,331 [main] INFO (DruidDataSource.java:985)- {dataSource-1} inited
+2021-09-01 06:16:51,451 [main] INFO (PropertySourcedRequestMappingHandlerMapping.java:69)- Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2Controller#getDocumentation(String, HttpServletRequest)]
+2021-09-01 06:16:51,678 [main] INFO (ExecutorConfigurationSupport.java:181)- Initializing ExecutorService 'taskScheduler'
+2021-09-01 06:16:51,711 [main] INFO (DirectJDKLog.java:173)- Starting ProtocolHandler ["http-nio-8089"]
+2021-09-01 06:16:51,729 [main] INFO (TomcatWebServer.java:220)- Tomcat started on port(s): 8089 (http) with context path ''
+2021-09-01 06:16:51,730 [main] INFO (DocumentationPluginsBootstrapper.java:160)- Context refreshed
+2021-09-01 06:16:51,743 [main] INFO (DocumentationPluginsBootstrapper.java:163)- Found 1 custom documentation plugin(s)
+2021-09-01 06:16:51,771 [main] INFO (ApiListingReferenceScanner.java:41)- Scanning for api listing references
+2021-09-01 06:16:51,955 [main] INFO (StartupInfoLogger.java:61)- Started Start in 6.447 seconds (JVM running for 7.299)
+2021-09-01 06:16:52,022 [scheduling-1] DEBUG (BaseJdbcLogger.java:137)- ==>  Preparing: SELECT id,file_title,file_name,file_path,pay_time,create_time,creater,pub_time,media_type,file_status,file_des,copyright_fee,md5 FROM nft_file WHERE (file_status = ?)
+2021-09-01 06:16:52,143 [scheduling-1] DEBUG (BaseJdbcLogger.java:137)- ==> Parameters: 1(Integer)
+2021-09-01 06:16:52,216 [scheduling-1] DEBUG (BaseJdbcLogger.java:137)- <==      Total: 0
+2021-09-01 06:17:00,016 [scheduling-1] DEBUG (BaseJdbcLogger.java:137)- ==>  Preparing: SELECT id,auction_creater,file_token_id,trade_id,auction_id,auction_coin,auction_retain_price,auction_min_markup,auction_max_price,auction_max_er,auction_status,create_time,auction_start_time,update_time FROM nft_auction WHERE (auction_start_time <= ? AND auction_status = ?)
+2021-09-01 06:17:00,020 [scheduling-1] DEBUG (BaseJdbcLogger.java:137)- ==> Parameters: 2021-08-31T06:17:00.005(LocalDateTime), 1(Integer)
+2021-09-01 06:17:00,074 [scheduling-1] DEBUG (BaseJdbcLogger.java:137)- <==      Total: 0
+2021-09-01 06:17:30,010 [scheduling-1] DEBUG (BaseJdbcLogger.java:137)- ==>  Preparing: SELECT id,auction_creater,file_token_id,trade_id,auction_id,auction_coin,auction_retain_price,auction_min_markup,auction_max_price,auction_max_er,auction_status,create_time,auction_start_time,update_time FROM nft_auction WHERE (auction_start_time <= ? AND auction_status = ?)
+2021-09-01 06:17:30,011 [scheduling-1] DEBUG (BaseJdbcLogger.java:137)- ==> Parameters: 2021-08-31T06:17:30.008(LocalDateTime), 1(Integer)
+2021-09-01 06:17:30,055 [scheduling-1] DEBUG (BaseJdbcLogger.java:137)- <==      Total: 0
+2021-09-01 06:17:51,959 [scheduling-1] DEBUG (BaseJdbcLogger.java:137)- ==>  Preparing: SELECT id,file_title,file_name,file_path,pay_time,create_time,creater,pub_time,media_type,file_status,file_des,copyright_fee,md5 FROM nft_file WHERE (file_status = ?)
+2021-09-01 06:17:51,961 [scheduling-1] DEBUG (BaseJdbcLogger.java:137)- ==> Parameters: 1(Integer)
+2021-09-01 06:17:52,008 [scheduling-1] DEBUG (BaseJdbcLogger.java:137)- <==      Total: 0
+2021-09-01 06:18:00,012 [scheduling-1] DEBUG (BaseJdbcLogger.java:137)- ==>  Preparing: SELECT id,auction_creater,file_token_id,trade_id,auction_id,auction_coin,auction_retain_price,auction_min_markup,auction_max_price,auction_max_er,auction_status,create_time,auction_start_time,update_time FROM nft_auction WHERE (auction_start_time <= ? AND auction_status = ?)
+2021-09-01 06:18:00,014 [scheduling-1] DEBUG (BaseJdbcLogger.java:137)- ==> Parameters: 2021-08-31T06:18:00.010(LocalDateTime), 1(Integer)
+2021-09-01 06:18:00,062 [scheduling-1] DEBUG (BaseJdbcLogger.java:137)- <==      Total: 0
+2021-09-01 06:18:30,011 [scheduling-1] DEBUG (BaseJdbcLogger.java:137)- ==>  Preparing: SELECT id,auction_creater,file_token_id,trade_id,auction_id,auction_coin,auction_retain_price,auction_min_markup,auction_max_price,auction_max_er,auction_status,create_time,auction_start_time,update_time FROM nft_auction WHERE (auction_start_time <= ? AND auction_status = ?)
+2021-09-01 06:18:30,013 [scheduling-1] DEBUG (BaseJdbcLogger.java:137)- ==> Parameters: 2021-08-31T06:18:30.010(LocalDateTime), 1(Integer)
+2021-09-01 06:18:30,068 [scheduling-1] DEBUG (BaseJdbcLogger.java:137)- <==      Total: 0
+2021-09-01 06:18:51,962 [scheduling-1] DEBUG (BaseJdbcLogger.java:137)- ==>  Preparing: SELECT id,file_title,file_name,file_path,pay_time,create_time,creater,pub_time,media_type,file_status,file_des,copyright_fee,md5 FROM nft_file WHERE (file_status = ?)
+2021-09-01 06:18:51,963 [scheduling-1] DEBUG (BaseJdbcLogger.java:137)- ==> Parameters: 1(Integer)
+2021-09-01 06:18:52,011 [scheduling-1] DEBUG (BaseJdbcLogger.java:137)- <==      Total: 0

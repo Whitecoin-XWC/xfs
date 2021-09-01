@@ -37,7 +37,7 @@
         <if test="fileResultDTO.fileStatus != null and fileResultDTO.fileStatus > 1 and fileResultDTO.fileStatus &lt; 4">
             and nft_file.file_status = #{fileResultDTO.fileStatus}
         </if>
-        <if test="fileResultDTO.fileStatus == null or fileResultDTO.fileStatus == 4">
+        <if test="fileResultDTO.fileStatus != null and fileResultDTO.fileStatus == 4">
             and nft_file.file_status in (4,5)
         </if>
         <if test="fileResultDTO.fileStatus == null or fileResultDTO.fileStatus &lt;= 1">
