@@ -45,8 +45,6 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, AuctionEntity
     private UserFileMapper userFileMapper;
     @Resource
     private UserInfoMapper userInfoMapper;
-    @Resource
-    private SellInfoMapper sellInfoMapper;
 
     @Value("${tokenswap.api.url}")
     private String apiUrl;
@@ -63,26 +61,12 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, AuctionEntity
             filePO.setFileStatus(5);
             fileMapper.updateById(filePO);
         }
-        SellInfoPO sellInfoPO = new SellInfoPO();
-        sellInfoPO.setUnit(auctionEntity.getAuctionCoin());
-        sellInfoPO.setPrice(auctionEntity.getAuctionRetainPrice());
-        sellInfoPO.setStatus(0);
-        sellInfoPO.setTokenId(auctionEntity.getFileTokenId());
-        sellInfoMapper.insert(sellInfoPO);
         return insert;
     }
 
     @Override
     public int updateAuction(AuctionEntity update) {
         update.setUpdateTime(new Date());
-        if (update.getAuctionRetainPrice() != null) {
-            QueryWrapper queryWrapper = new QueryWrapper();
-            queryWrapper.eq("token_id", update.getFileTokenId());
-            SellInfoPO sellInfoPO = sellInfoMapper.selectOne(queryWrapper);
-            sellInfoPO.setPrice(update.getAuctionRetainPrice());
-            sellInfoPO.setUnit(update.getAuctionCoin());
-            sellInfoMapper.updateById(sellInfoPO);
-        }
         return auctionMapper.updateById(update);
     }
 
@@ -123,15 +107,12 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, AuctionEntity
     }
 
     @Override
-    public int cancelAuction(String fileTokenId) {
+    public int cancelAuction(String fileTokenId, long id) {
         FilePO filePO = new FilePO();
         filePO.setId(fileTokenId);
         filePO.setFileStatus(2);
         int update = fileMapper.updateById(filePO);
-
-        UpdateWrapper wrapper = new UpdateWrapper();
-        wrapper.eq("token_id", fileTokenId);
-        sellInfoMapper.delete(wrapper);
+        auctionMapper.deleteById(id);
         return update;
     }
 
