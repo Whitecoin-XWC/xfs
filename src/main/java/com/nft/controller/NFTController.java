@@ -7,7 +7,9 @@ import com.nft.controller.vo.*;
 import com.nft.dao.entity.AuctionEntity;
 import com.nft.dao.entity.FileLogPO;
 import com.nft.dao.entity.FilePO;
+import com.nft.dao.entity.MessageEntity;
 import com.nft.service.AuctionService;
+import com.nft.service.MessageService;
 import com.nft.service.NFTService;
 import com.nft.service.dto.FileDTO;
 import com.nft.service.dto.FileResultDTO;
@@ -36,9 +38,9 @@ public class NFTController {
 
     @Resource
     private NFTService nftService;
-    @Resource
-    private AuctionService auctionService;
 
+    @Resource
+    private MessageService messageService;
 
     /**
      * follow nft
@@ -252,5 +254,17 @@ public class NFTController {
             log.error("获取文件变化日志异常", e);
             return ResultVO.fail("获取文件变化日志异常" + e.getMessage());
         }
+    }
+
+    @ApiOperation("add message")
+    @PostMapping("/addMessage")
+    public ResultVO addMessage(@RequestBody MessageEntity messageEntity) {
+        return messageService.addMessage(messageEntity);
+    }
+
+    @ApiOperation("query message")
+    @PostMapping("/queryMessage")
+    public ResultVO queryMessage(@RequestBody QueryMessageVo messageVo) {
+        return messageService.queryMessage(messageVo.getTokenId(), messageVo.getPage(), messageVo.getPageSize());
     }
 }
