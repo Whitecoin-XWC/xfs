@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 
-@Api(value = "用户信息管理", tags = "用户信息管理接口")
+@Api(value = "userinfo manager", tags = "userinfo manager api")
 @Slf4j
 @RestController
 @RequestMapping("userInfo")
@@ -33,9 +33,6 @@ public class UserInfoController {
 
     @Resource
     private UserInfoService userInfoService;
-
-    @Resource
-    private AuctionService auctionService;
 
     /**
      * img url head
@@ -49,14 +46,14 @@ public class UserInfoController {
      *
      * @return
      */
-    @ApiOperation("修改用户资料")
+    @ApiOperation("update userinfo api")
     @RequestMapping(value = "/updateUserInfo", method = RequestMethod.POST)
     public ResultVO updateUserInfo(@RequestBody UserinfoPO userinfoPO) {
         try {
             userInfoService.updateUserInfo(userinfoPO);
             return ResultVO.successMsg("更新成功");
         } catch (Exception e) {
-            log.error("更新用户信息异常", e);
+            log.error("update userinfo has exception: {}", e);
             return ResultVO.fail("更新用户信息异常" + e.getMessage());
         }
     }
@@ -66,13 +63,13 @@ public class UserInfoController {
      *
      * @return
      */
-    @ApiOperation("查询用户资料")
+    @ApiOperation("query userinfo api")
     @RequestMapping(value = "/getUserInfo", method = RequestMethod.POST)
     public ResultVO getUserInfo(@RequestBody UserinfoPO userinfoPO) {
         try {
             return ResultVO.success(userInfoService.getUserInfo(userinfoPO.getId()));
         } catch (Exception e) {
-            log.error("查询用户资料异常", e);
+            log.error("query userinfo has exception: {}", e);
             return ResultVO.fail("查询用户资料异常" + e.getMessage());
         }
     }
@@ -82,7 +79,7 @@ public class UserInfoController {
      *
      * @return
      */
-    @ApiOperation("查询当前用户上传的文件")
+    @ApiOperation("query user nft")
     @RequestMapping(value = "/selectFiles", method = RequestMethod.POST)
     public ResultVO selectFiles(@RequestBody SelectVO selectVO) {
         try {
@@ -106,7 +103,7 @@ public class UserInfoController {
             }
             return ResultVO.success(pageResultVO);
         } catch (Exception e) {
-            log.error("查询异常", e);
+            log.error("query user nft has exception: {}", e);
             return ResultVO.fail("查询异常" + e.getMessage());
         }
     }

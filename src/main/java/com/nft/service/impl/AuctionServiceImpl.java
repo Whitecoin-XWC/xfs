@@ -55,7 +55,7 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, AuctionEntity
         auctionEntity.setCreateTime(new Date());
         int insert = auctionMapper.insert(auctionEntity);
         if (insert > 0) {
-            //修改主流程状态为5--拍卖中
+            //update nft status to auctioning
             FilePO filePO = new FilePO();
             filePO.setId(auctionEntity.getFileTokenId());
             filePO.setFileStatus(5);
@@ -91,13 +91,11 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, AuctionEntity
         if (userinfoPO != null && StringUtils.isNotBlank(userinfoPO.getNickName())) {
             auctionEntity.setUserName(userinfoPO.getNickName());
         }
-        /* 计算倒计时剩余时间 */
+        /* Calculate the countdown time */
         if (auctionEntity.getAuctionStatus() > 0 && auctionEntity.getAuctionStartTime() != null) {
             Date auctionStartTime = auctionEntity.getAuctionStartTime();
             LocalDateTime localDateTime = auctionStartTime.toInstant().atZone(ZoneId.of("GMT")).toLocalDateTime();
-            // TODO 拍卖剩余时间
             Duration between = Duration.between(LocalDateTime.now(), localDateTime.plusHours(24));
-//            Duration between = Duration.between(LocalDateTime.now(), localDateTime.plusMinutes(10));
             long millis = between.toMillis();
             if (millis >= 0) {
                 auctionEntity.setRemainingTime(between.toMillis());
@@ -126,7 +124,7 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, AuctionEntity
             return "修改文件状态失败";
         }
 
-        /* 修改拍卖状态为领取成功 */
+        /* update auction status to receive success */
         AuctionEntity entity = auctionMapper.selectById(auctionId);
         if (entity == null) {
             return "不存在的拍卖";
@@ -139,12 +137,12 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, AuctionEntity
 
 
         /* 修改nft拥有者 */
-        QueryWrapper<UserFilePO> queryWrapper = new QueryWrapper();
+        QueryWrapper<UserFilePO> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("file_id", fileTokenId);
         queryWrapper.eq("type", 1);
         UserFilePO userFilePO = userFileMapper.selectOne(queryWrapper);
         if (userFilePO == null) {
-            /* 插入用户拥有表 */
+            /* update nft owner */
             userFilePO = new UserFilePO();
             userFilePO.setCreateTime(new Date());
             userFilePO.setFileId(fileTokenId);
@@ -152,7 +150,7 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, AuctionEntity
             userFilePO.setType(1);
             userFileMapper.insert(userFilePO);
         } else {
-            /* 修改拥有者 */
+            /* update nft owner */
             userFilePO.setUserId(userAddress);
             userFileMapper.updateById(userFilePO);
         }
@@ -171,7 +169,7 @@ public class AuctionServiceImpl extends ServiceImpl<AuctionMapper, AuctionEntity
             log.info("get tokenswap query coin price,httpStatus: {}", response.getStatusLine());
             int statusCode = response.getStatusLine().getStatusCode();
             if (statusCode != 200) {
-                log.error("get tokenswap query coin price,bad httpstatus,httpStatus: {}", statusCode);
+                log.error("get tokenswap query coin price,bad httpStatus,httpStatus: {}", statusCode);
                 return BigDecimal.ZERO;
             }
 

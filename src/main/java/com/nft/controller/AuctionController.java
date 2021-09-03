@@ -21,7 +21,7 @@ import java.util.List;
  * Description: nft
  * Created by moloq on 2021/6/17 9:35
  */
-@Api(value = "拍卖", tags = "拍卖接口")
+@Api(value = "auction", tags = "auction api")
 @Slf4j
 @RestController
 @RequestMapping("/auction")
@@ -56,7 +56,7 @@ public class AuctionController {
     @ApiOperation("update auction record")
     @PostMapping("/update")
     public ResultVO update(@RequestBody AuctionEntity update) {
-        log.info("update auction record start, :{}", update.getFileTokenId());
+        log.info("update auction record start: {}", update.getFileTokenId());
         try {
             int count = auctionService.updateAuction(update);
             if (count > 0) {
@@ -69,10 +69,10 @@ public class AuctionController {
                 fileLogService.saveLog(auctionEntity.getFileTokenId(), "修改拍卖记录", auctionEntity.getAuctionCreater(), 1, fileLogAttach);
                 return ResultVO.successMsg("update auction record success");
             }
-            log.info("update auction record end, :{}", update.getFileTokenId());
+            log.info("update auction record end: {}", update.getFileTokenId());
             return ResultVO.fail("update auction record fail");
         } catch (Exception e) {
-            log.error("update auction fail, :{},{}", update.getFileTokenId(), e);
+            log.error("update auction fail: {}, {}", update.getFileTokenId(), e);
             return ResultVO.fail("update auction record fail");
         }
     }
@@ -80,7 +80,7 @@ public class AuctionController {
     @ApiOperation("cancel auction record")
     @PostMapping("/cancel")
     public ResultVO cancelAuction(@RequestBody AuctionEntity auctionEntity) {
-        log.info("cancel auction record start, :{}", auctionEntity.getFileTokenId());
+        log.info("cancel auction record start: {}", auctionEntity.getFileTokenId());
         try {
             AuctionEntity query = auctionService.queryAuction(auctionEntity.getFileTokenId());
             if (query == null || query.getAuctionStatus() != 0) {
@@ -89,18 +89,18 @@ public class AuctionController {
             String fileTokenId = auctionEntity.getFileTokenId();
             auctionService.cancelAuction(fileTokenId, query.getId());
             fileLogService.saveLog(fileTokenId, "取消拍卖", query.getAuctionCreater(), 1, new FileLogAttach(auctionEntity.getTradeId()));
-            log.info("cancel auction record end, :{}", auctionEntity.getFileTokenId());
+            log.info("cancel auction record end: {}", auctionEntity.getFileTokenId());
             return ResultVO.successMsg("取消成功");
         } catch (Exception e) {
-            log.error("cancel auction fail, :{},{}", auctionEntity.getFileTokenId(), e);
+            log.error("cancel auction fail: {}, {}", auctionEntity.getFileTokenId(), e);
             return ResultVO.fail("取消拍卖失败");
         }
     }
 
-    @ApiOperation("领取成功")
+    @ApiOperation("receive nft")
     @PostMapping("/receive")
     public ResultVO receive(@RequestBody ReceivePO receivePO) {
-        log.info("receive nft start, :{}", receivePO.getFileTokenId());
+        log.info("receive nft start: {}", receivePO.getFileTokenId());
         try {
             String fileTokenId = receivePO.getFileTokenId();
             String userAddress = receivePO.getUserAddress();
@@ -112,27 +112,27 @@ public class AuctionController {
             fileLogService.saveLog(fileTokenId, "领取了NFT", userAddress, 1, new FileLogAttach("", query.getAuctionMaxPrice(), query.getAuctionCoin()));
             /* 插入版权费通知 */
             noticeService.insertCopyrightFeeNotice(fileTokenId, userAddress, query.getAuctionMaxPrice(), query.getAuctionCoin());
-            log.info("receive nft success, :{}", receivePO.getFileTokenId());
+            log.info("receive nft success: {}", receivePO.getFileTokenId());
             return ResultVO.successMsg(receive);
         } catch (Exception e) {
-            log.error("receive nft fail, :{},{}", receivePO.getFileTokenId(), e);
+            log.error("receive nft fail: {}, {}", receivePO.getFileTokenId(), e);
             return ResultVO.fail("领取失败");
         }
     }
 
-    @ApiOperation("获取最新的拍卖记录")
+    @ApiOperation("query latest auction record")
     @PostMapping("/query")
     public ResultVO query(@RequestBody AuctionEntity query) {
         try {
             AuctionEntity auctionEntity = auctionService.queryAuction(query.getFileTokenId());
             return ResultVO.success(auctionEntity);
         } catch (Exception e) {
-            log.error("update auction fail,{}", e);
+            log.error("update auction fail: {}", e);
             return ResultVO.fail("获取最新的拍卖记录失败");
         }
     }
 
-    @ApiOperation("新增一条拍卖出价记录")
+    @ApiOperation("add bid record")
     @PostMapping("/history/create")
     public ResultVO createHistory(@RequestBody AuctionHistoryEntity historyEntity) {
         try {
@@ -162,7 +162,7 @@ public class AuctionController {
         }
     }
 
-    @ApiOperation("查询所有的出价记录")
+    @ApiOperation("query all bid records")
     @GetMapping("/history/query")
     public ResultVO queryHistory(String mediaId, String auctionId) {
         try {

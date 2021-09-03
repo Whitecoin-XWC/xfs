@@ -32,14 +32,13 @@ public class AuctionTask {
     private FileLogService fileLogService;
 
     /**
-     * 修改拍卖倒计时结束的记录
+     * update nft status when auction end
+     * per 30 seconds
      */
     @Scheduled(cron = "0/30 * * * * ?")
     public void syncAuctionEnd() {
         QueryWrapper<AuctionEntity> queryWrapper = new QueryWrapper<>();
         LocalDateTime time = LocalDateTime.now().minusHours(24);
-        //TODO 修改拍卖时长
-//        LocalDateTime time = LocalDateTime.now().minusMinutes(10);
         queryWrapper.le("auction_start_time", time);
         queryWrapper.eq("auction_status", 1);
         List<AuctionEntity> auctionEntities = auctionService.list(queryWrapper);
@@ -48,7 +47,7 @@ public class AuctionTask {
             auctionEntity.setUpdateTime(new Date());
         }
         auctionService.updateBatchById(auctionEntities);
-        /* 插入拍卖结束的记录 */
+        /* insert log when auction end */
         for (AuctionEntity auctionEntity : auctionEntities) {
             fileLogService.saveLog(auctionEntity.getFileTokenId(), "拍卖结束", "", 1, new FileLogAttach());
         }

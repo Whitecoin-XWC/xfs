@@ -24,7 +24,7 @@ public class NoticeController {
     @Resource
     private NoticeService noticeService;
 
-    @ApiOperation("获取通知接口")
+    @ApiOperation("query notice api")
     @PostMapping("/notice")
     public ResultVO getNotice(@RequestBody NoticeVo noticeVo) {
         if (noticeVo == null
@@ -36,7 +36,7 @@ public class NoticeController {
         return ResultVO.success(noticeResult);
     }
 
-    @ApiOperation("获取通知总数接口")
+    @ApiOperation("query notice count api")
     @PostMapping("/noticeCount")
     public ResultVO getNoticeCount(@RequestBody NoticeVo noticeVo) {
         return ResultVO.success(noticeService.getNoticeCount(noticeVo.getUserAddress()));

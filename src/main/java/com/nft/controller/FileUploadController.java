@@ -3,7 +3,6 @@ package com.nft.controller;
 import com.nft.commons.vo.ResultVO;
 import com.nft.controller.vo.UploadResultVO;
 import com.nft.dao.entity.FilePO;
-import com.nft.service.FileLogService;
 import com.nft.service.NFTService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -34,7 +33,7 @@ import java.util.UUID;
  * 提供给客户端的接口
  */
 @Slf4j
-@Api(value = "文件上传", tags = "文件上传接口")
+@Api(value = "upload file", tags = "upload file api")
 @RestController
 @RequestMapping("fileUpload")
 public class FileUploadController {
@@ -69,13 +68,13 @@ public class FileUploadController {
      * @param request
      * @return
      */
-    @ApiOperation("文件上传")
+    @ApiOperation("upload file")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "file", value = "文件流"),
-            @ApiImplicitParam(name = "title", value = "标题"),
-            @ApiImplicitParam(name = "des", value = "描述"),
-            @ApiImplicitParam(name = "userAddress", value = "用户标识"),
-            @ApiImplicitParam(name = "copyrightFee", value = "版权费")
+            @ApiImplicitParam(name = "file", value = "file input stream"),
+            @ApiImplicitParam(name = "title", value = "nft title"),
+            @ApiImplicitParam(name = "des", value = "nft description"),
+            @ApiImplicitParam(name = "userAddress", value = "user tag"),
+            @ApiImplicitParam(name = "copyrightFee", value = "copyright fee")
     })
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public ResultVO save(HttpServletRequest request) {
@@ -84,11 +83,11 @@ public class FileUploadController {
             if (request instanceof MultipartHttpServletRequest) {
                 MultipartHttpServletRequest params = (MultipartHttpServletRequest) request;
 
-                // 保存图片
+                // save nft file
                 FilePO filePO = upload(params);
 
                 log.info("upload file success, :{}", filePO.getId());
-                // 返回文件url和tokenId
+                // return file url and file token id
                 UploadResultVO uploadResultVO = new UploadResultVO();
                 uploadResultVO.setTokenId(filePO.getId());
                 uploadResultVO.setUrl(imgUrl + filePO.getFileName());
@@ -98,10 +97,10 @@ public class FileUploadController {
                 return ResultVO.fail("请使用formData格式请求此接口");
             }
         } catch (SizeLimitExceededException e) {
-            log.error("upload file fail, : file size bigger than 20M");
+            log.error("upload file fail,file size bigger than 20M");
             return ResultVO.fail("上传文件最大20M");
         } catch (Exception e) {
-            log.error("upload file has exception, :{}", e);
+            log.error("upload file has exception: {}", e);
             return ResultVO.fail("上传出现异常:" + e.getMessage());
         }
     }
@@ -129,6 +128,7 @@ public class FileUploadController {
         String fileName = UUID.randomUUID().toString();
         String oldFileName = multipartFile.getOriginalFilename();
         String suffix = "blank";
+        assert oldFileName != null;
         if (oldFileName.lastIndexOf(".") > -1) {
             suffix = oldFileName.substring(oldFileName.lastIndexOf("."));
         }
@@ -141,7 +141,7 @@ public class FileUploadController {
             boolean isMatch = false;
             String[] mediaTypes = mediaSuffix.split(",");
             for (String type : mediaTypes) {
-                String tp[] = type.split("_");
+                String[] tp = type.split("_");
                 if (suffix.toUpperCase().endsWith(tp[0])) {
                     mediaType = tp[1];
                     isMatch = true;
