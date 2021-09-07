@@ -183,9 +183,8 @@ public class NoticeServiceImpl extends ServiceImpl<NoticeMapper, NoticeEntity> i
         Date auctionStartTime = auctionEntity.getAuctionStartTime();
         if (auctionStartTime != null) {
             LocalDateTime localDateTime = auctionStartTime.toInstant().atZone(ZoneId.of("GMT")).toLocalDateTime();
-            //TODO
-//            Duration between = Duration.between(LocalDateTime.now(), localDateTime.plusHours(24));
-            Duration between = Duration.between(LocalDateTime.now(), localDateTime.plusMinutes(10));
+            Duration between = Duration.between(LocalDateTime.now(), localDateTime.plusHours(24));
+//            Duration between = Duration.between(LocalDateTime.now(), localDateTime.plusMinutes(10));
             long millis = between.toMillis();
             if (millis >= 0) {
                 myAuction.setRemainingTime(between.toMillis());

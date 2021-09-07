@@ -11,6 +11,7 @@ import com.nft.service.dto.FileLogAttach;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -64,8 +65,8 @@ public class AuctionController {
                 FileLogAttach fileLogAttach = new FileLogAttach(update.getTradeId());
                 if (update.getAuctionRetainPrice() != null) {
                     fileLogAttach.setPrice(update.getAuctionRetainPrice());
-                    fileLogAttach.setCoinType(update.getAuctionCoin());
                 }
+                fileLogAttach.setCoinType(StringUtils.isBlank(update.getAuctionCoin()) ? auctionEntity.getAuctionCoin():update.getAuctionCoin());
                 fileLogService.saveLog(auctionEntity.getFileTokenId(), "修改拍卖记录", auctionEntity.getAuctionCreater(), 1, fileLogAttach);
                 return ResultVO.successMsg("update auction record success");
             }

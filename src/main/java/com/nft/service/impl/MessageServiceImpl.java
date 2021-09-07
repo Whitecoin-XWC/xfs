@@ -2,6 +2,7 @@ package com.nft.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.nft.commons.vo.PageResultVO;
 import com.nft.commons.vo.ResultVO;
 import com.nft.dao.entity.MessageEntity;
 import com.nft.dao.entity.UserFilePO;
@@ -84,6 +85,12 @@ public class MessageServiceImpl implements MessageService {
                 messageEntity.setOwner(Boolean.TRUE);
             }
         });
-        return ResultVO.success(messageEntityPage.getRecords());
+        PageResultVO resultVO = new PageResultVO();
+        resultVO.setCount(messageEntityPage.getTotal());
+        resultVO.setCurrentPage(messageEntityPage.getCurrent());
+        resultVO.setPageSize(messageEntityPage.getSize());
+        resultVO.setPageTotal(messageEntityPage.getPages());
+        resultVO.setRecords(messageEntityPage.getRecords());
+        return ResultVO.success(resultVO);
     }
 }

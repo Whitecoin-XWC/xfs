@@ -52,6 +52,7 @@ public class SellServiceImpl implements SellService {
             sellInfoMapper.updateById(sellInfoPO);
 
             fileLogAttach.setPrice(sellVO.getPrice());
+            fileLogAttach.setCoinType(sellVO.getUnit());
             saveLog(sellVO.getTokenId(), sellVO.getUserAddress(), "更改了这个NFT的售价", fileLogAttach);
         } else {
             sellInfoPO = new SellInfoPO();
