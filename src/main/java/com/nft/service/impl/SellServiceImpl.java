@@ -12,6 +12,7 @@ import com.nft.service.FileLogService;
 import com.nft.service.NoticeService;
 import com.nft.service.SellService;
 import com.nft.service.dto.FileLogAttach;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -52,7 +53,7 @@ public class SellServiceImpl implements SellService {
             sellInfoMapper.updateById(sellInfoPO);
 
             fileLogAttach.setPrice(sellVO.getPrice());
-            fileLogAttach.setCoinType(sellVO.getUnit());
+            fileLogAttach.setCoinType(StringUtils.isBlank(sellVO.getUnit()) ? sellInfoPO.getUnit() : sellVO.getUnit());
             saveLog(sellVO.getTokenId(), sellVO.getUserAddress(), "更改了这个NFT的售价", fileLogAttach);
         } else {
             sellInfoPO = new SellInfoPO();
@@ -101,7 +102,7 @@ public class SellServiceImpl implements SellService {
             userFilePO.setUserId(buyVO.getBuyUserAddress());
             userFilePO.setType(1);
             userFileMapper.insert(userFilePO);
-        }else {
+        } else {
             /* 修改拥有者 */
             userFilePO.setUserId(buyVO.getBuyUserAddress());
             userFileMapper.updateById(userFilePO);
