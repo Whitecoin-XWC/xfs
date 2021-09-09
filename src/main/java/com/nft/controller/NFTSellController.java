@@ -3,6 +3,8 @@ package com.nft.controller;
 import com.nft.commons.vo.ResultVO;
 import com.nft.controller.vo.BuyVO;
 import com.nft.controller.vo.SellVO;
+import com.nft.dao.entity.OrderPO;
+import com.nft.service.OrderService;
 import com.nft.service.SellService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -22,6 +24,8 @@ public class NFTSellController {
 
     @Resource
     private SellService sellService;
+    @Resource
+    private OrderService orderService;
 
 
     /**

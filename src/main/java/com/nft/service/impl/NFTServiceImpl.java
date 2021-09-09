@@ -45,6 +45,9 @@ public class NFTServiceImpl implements NFTService {
     private UserFileMapper userFileMapper;
 
     @Resource
+    private ShopMapper shopMapper;
+
+    @Resource
     private UserInfoMapper userInfoMapper;
 
     @Resource
@@ -367,6 +370,9 @@ public class NFTServiceImpl implements NFTService {
         if (!StringUtils.isEmpty(fileVO.getSource())) {
             fileResultDTO.setSource(fileVO.getSource());
         }
+        if (!StringUtils.isEmpty(fileVO.getEntity())) {
+            fileResultDTO.setEntity(fileVO.getEntity());
+        }
 
         IPage<FileResultDTO> iPage = fileMapper.selectFileList(pageWrapper, fileResultDTO);
 
@@ -383,6 +389,13 @@ public class NFTServiceImpl implements NFTService {
                     fileResultDTO1.setCoinType(auctionEntity.getAuctionCoin());
                     fileResultDTO1.setPmPrice(auctionEntity.getAuctionRetainPrice());
                     fileResultDTO1.setUnit(auctionEntity.getAuctionCoin());
+                }
+
+                if (fileResultDTO1.getCreater().equals(fileResultDTO1.getUserAddress())
+                        && shopMapper.selectById(fileResultDTO1.getCreater()) != null) {
+                    fileResultDTO1.setEntity("true");
+                } else {
+                    fileResultDTO1.setEntity("false");
                 }
             }
         }

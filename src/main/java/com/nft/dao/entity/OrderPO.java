@@ -5,7 +5,6 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -18,8 +17,9 @@ import java.util.Date;
 @TableName("nft_order")
 public class OrderPO {
     private Integer id;
+    private String userAddress;
     private String tokenId;
-    private BigDecimal price;
+    private String price;
     private String address;
     private String zipCode;
     private String phone;

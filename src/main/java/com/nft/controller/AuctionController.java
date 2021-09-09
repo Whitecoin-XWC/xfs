@@ -5,6 +5,7 @@ import com.nft.commons.vo.ResultVO;
 import com.nft.controller.vo.SellVO;
 import com.nft.dao.entity.AuctionEntity;
 import com.nft.dao.entity.AuctionHistoryEntity;
+import com.nft.dao.entity.OrderPO;
 import com.nft.dao.entity.ReceivePO;
 import com.nft.service.*;
 import com.nft.service.dto.FileLogAttach;
@@ -35,6 +36,8 @@ public class AuctionController {
     private FileLogService fileLogService;
     @Resource
     private NoticeService noticeService;
+    @Resource
+    private OrderService orderService;
 
     @ApiOperation("create auction record")
     @PostMapping("/create")
@@ -43,7 +46,9 @@ public class AuctionController {
         try {
             int insert = auctionService.insertAuction(auctionEntity);
             if (insert > 0) {
-                fileLogService.saveLog(auctionEntity.getFileTokenId(), "创建拍卖", auctionEntity.getAuctionCreater(), 1, new FileLogAttach(auctionEntity.getTradeId(), auctionEntity.getAuctionRetainPrice(), auctionEntity.getAuctionCoin()));
+                FileLogAttach fileLogAttach = new FileLogAttach(auctionEntity.getTradeId(), auctionEntity.getAuctionRetainPrice());
+                fileLogAttach.setCoinType(auctionEntity.getAuctionCoin());
+                fileLogService.saveLog(auctionEntity.getFileTokenId(), "创建拍卖", auctionEntity.getAuctionCreater(), 1, fileLogAttach);
             }
             log.info("create auction record end, :{}", auctionEntity.getFileTokenId());
             return ResultVO.successMsg("create auction record success");
@@ -66,7 +71,7 @@ public class AuctionController {
                 if (update.getAuctionRetainPrice() != null) {
                     fileLogAttach.setPrice(update.getAuctionRetainPrice());
                 }
-                fileLogAttach.setCoinType(StringUtils.isBlank(update.getAuctionCoin()) ? auctionEntity.getAuctionCoin():update.getAuctionCoin());
+                fileLogAttach.setCoinType(StringUtils.isBlank(update.getAuctionCoin()) ? auctionEntity.getAuctionCoin() : update.getAuctionCoin());
                 fileLogService.saveLog(auctionEntity.getFileTokenId(), "修改拍卖记录", auctionEntity.getAuctionCreater(), 1, fileLogAttach);
                 return ResultVO.successMsg("update auction record success");
             }
@@ -110,7 +115,15 @@ public class AuctionController {
                 return ResultVO.fail("竞拍未结束,不能领取");
             }
             String receive = auctionService.receive(fileTokenId, userAddress, query.getId());
-            fileLogService.saveLog(fileTokenId, "领取了NFT", userAddress, 1, new FileLogAttach("", query.getAuctionMaxPrice(), query.getAuctionCoin()));
+            /* buy success insert order */
+            OrderPO orderPO = new OrderPO();
+            orderPO.setUserAddress(userAddress);
+            orderPO.setPrice(query.getAuctionMaxPrice() + query.getAuctionCoin());
+            orderPO.setTokenId(fileTokenId);
+            orderService.saveOrder(orderPO);
+            FileLogAttach fileLogAttach = new FileLogAttach("", query.getAuctionMaxPrice());
+            fileLogAttach.setCoinType(query.getAuctionCoin());
+            fileLogService.saveLog(fileTokenId, "领取了NFT", userAddress, 1, fileLogAttach);
             /* 插入版权费通知 */
             noticeService.insertCopyrightFeeNotice(fileTokenId, userAddress, query.getAuctionMaxPrice(), query.getAuctionCoin());
             log.info("receive nft success: {}", receivePO.getFileTokenId());

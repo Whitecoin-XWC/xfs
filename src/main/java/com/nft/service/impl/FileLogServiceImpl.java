@@ -1,10 +1,12 @@
 package com.nft.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.nft.dao.entity.FileLogPO;
+import com.nft.dao.entity.FilePO;
+import com.nft.dao.entity.UserFilePO;
 import com.nft.dao.entity.UserinfoPO;
-import com.nft.dao.mapper.FileLogMapper;
-import com.nft.dao.mapper.UserInfoMapper;
+import com.nft.dao.mapper.*;
 import com.nft.service.FileLogService;
 import com.nft.service.dto.FileLogAttach;
 import org.springframework.stereotype.Service;
@@ -23,6 +25,10 @@ public class FileLogServiceImpl implements FileLogService {
     private FileLogMapper fileLogMapper;
     @Resource
     private UserInfoMapper userInfoMapper;
+    @Resource
+    private UserFileMapper userFileMapper;
+    @Resource
+    private ShopMapper shopMapper;
 
     /**
      * save log
@@ -47,6 +53,15 @@ public class FileLogServiceImpl implements FileLogService {
         }
         fileLogPO.setCreateTime(new Date());
         fileLogPO.setType(type);
+        /* check nft is entity or virtual */
+        QueryWrapper<UserFilePO> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("file_id",fileId);
+        queryWrapper.eq("type",0);
+        UserFilePO userFilePO = userFileMapper.selectOne(queryWrapper);
+        if (userFilePO != null && shopMapper.selectById(userFilePO.getUserId()) != null){
+            fileLogAttach.setEntity(Boolean.TRUE);
+        }
+
         if (fileLogAttach != null) {
             fileLogPO.setOther(JSON.toJSONString(fileLogAttach));
         }

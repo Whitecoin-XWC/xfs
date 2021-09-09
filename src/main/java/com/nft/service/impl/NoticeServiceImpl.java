@@ -167,12 +167,9 @@ public class NoticeServiceImpl extends ServiceImpl<NoticeMapper, NoticeEntity> i
 
         if (auctionEntity.getAuctionStatus() == 1 && userAddress.equals(auctionEntity.getAuctionMaxEr())) {
             myAuction.setAuctionResult("出价最高");
-        }
-        if (auctionEntity.getAuctionStatus() == 2 && userAddress.equals(auctionEntity.getAuctionMaxEr())) {
+        } else if (auctionEntity.getAuctionStatus() > 1 && userAddress.equals(auctionEntity.getAuctionMaxEr())) {
             myAuction.setAuctionResult("获胜");
-        }
-
-        if (!userAddress.equals(auctionEntity.getAuctionMaxEr())) {
+        } else if (!userAddress.equals(auctionEntity.getAuctionMaxEr())) {
             myAuction.setAuctionResult("淘汰");
         }
 

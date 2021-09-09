@@ -4,7 +4,7 @@ server:
 
 spring:
   profiles:
-    active: prod
+    active: dev
   messages:
     encoding: UTF-8
     basename: il8n.messages

@@ -39,6 +39,8 @@ public class FileResultDTO {
     @ApiModelProperty("文件存储路径")
     @TableField("file_path")
     private String filePath;
+
+    private String creater;
     /**
      * 付费时间，null 表示没付费
      */
@@ -138,4 +140,7 @@ public class FileResultDTO {
      * 是否首页
      */
     private String isIndex;
+
+    @TableField(exist = false)
+    private String entity;
 }

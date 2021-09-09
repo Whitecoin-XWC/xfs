@@ -10,6 +10,7 @@ import com.nft.dao.mapper.SellInfoMapper;
 import com.nft.dao.mapper.UserFileMapper;
 import com.nft.service.FileLogService;
 import com.nft.service.NoticeService;
+import com.nft.service.OrderService;
 import com.nft.service.SellService;
 import com.nft.service.dto.FileLogAttach;
 import org.apache.commons.lang3.StringUtils;
@@ -36,6 +37,9 @@ public class SellServiceImpl implements SellService {
 
     @Resource
     private NoticeService noticeService;
+
+    @Resource
+    private OrderService orderService;
 
     @Override
     @Transactional
@@ -111,6 +115,14 @@ public class SellServiceImpl implements SellService {
         UpdateWrapper updateWrapper = new UpdateWrapper();
         updateWrapper.eq("token_id", buyVO.getTokenId());
         SellInfoPO sellInfoPO = sellInfoMapper.selectOne(updateWrapper);
+
+        /* buy success insert order */
+        OrderPO orderPO = new OrderPO();
+        orderPO.setUserAddress(buyVO.getBuyUserAddress());
+        orderPO.setPrice(sellInfoPO.getPrice() + sellInfoPO.getUnit());
+        orderPO.setTokenId(buyVO.getTokenId());
+        orderService.saveOrder(orderPO);
+
         sellInfoMapper.delete(updateWrapper);
 
         updateFileStatus(buyVO.getTokenId(), 2);

@@ -16,8 +16,7 @@ import java.util.Date;
 @Setter
 @TableName("nft_shop")
 public class ShopPO {
-    private Integer id;
-    private String shopAddress;
+    private String id;
     private boolean shopStatus;
     private Date createTime;
     private Date updateTime;

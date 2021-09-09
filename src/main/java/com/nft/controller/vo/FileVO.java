@@ -54,4 +54,7 @@ public class FileVO {
      */
     @ApiModelProperty("是否首页，不用传")
     private String isIndex;
+
+    @ApiModelProperty("check entity or vr")
+    private String entity;
 }

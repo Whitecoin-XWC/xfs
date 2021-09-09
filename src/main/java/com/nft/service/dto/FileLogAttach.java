@@ -30,6 +30,8 @@ public class FileLogAttach {
      */
     private String coinType;
 
+    private boolean entity = Boolean.FALSE;
+
     public FileLogAttach(String tractionId){
         this.tractionId = tractionId;
         this.price = price;

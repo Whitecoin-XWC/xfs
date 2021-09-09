@@ -6,6 +6,7 @@ import com.nft.commons.vo.ResultVO;
 import com.nft.controller.vo.FileVO;
 import com.nft.controller.vo.SelectVO;
 import com.nft.dao.entity.AuctionEntity;
+import com.nft.dao.entity.UserAddressPO;
 import com.nft.dao.entity.UserinfoPO;
 import com.nft.service.AuctionService;
 import com.nft.service.UserFileService;
@@ -15,10 +16,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -55,6 +53,42 @@ public class UserInfoController {
         } catch (Exception e) {
             log.error("update userinfo has exception: {}", e);
             return ResultVO.fail("更新用户信息异常" + e.getMessage());
+        }
+    }
+
+    @ApiOperation("add address")
+    @PostMapping("/addAddress")
+    public ResultVO addAddress(@RequestBody UserAddressPO addressPO) {
+        try {
+            userInfoService.addAddress(addressPO);
+            return ResultVO.successMsg("add address success");
+        } catch (Exception e) {
+            log.error("add address error: {}", e);
+            return ResultVO.fail("add address error");
+        }
+    }
+
+    @ApiOperation("update address")
+    @PostMapping("/updateAddress")
+    public ResultVO updateAddress(@RequestBody UserAddressPO addressPO) {
+        try {
+            userInfoService.updateAddress(addressPO);
+            return ResultVO.successMsg("update address success");
+        } catch (Exception e) {
+            log.error("update address error: {}", e);
+            return ResultVO.fail("update address error");
+        }
+    }
+
+    @ApiOperation("query address")
+    @PostMapping("/queryAddress")
+    public ResultVO queryAddress(@RequestBody UserAddressPO addressPO) {
+        try {
+            UserAddressPO userAddressPO = userInfoService.queryAddress(addressPO);
+            return ResultVO.success(userAddressPO);
+        } catch (Exception e) {
+            log.error("query address error: {}", e);
+            return ResultVO.fail("query address error");
         }
     }
 
