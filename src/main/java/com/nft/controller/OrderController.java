@@ -7,6 +7,7 @@ import com.nft.service.OrderService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,7 +27,7 @@ public class OrderController {
 
     @ApiOperation("update order")
     @PostMapping("/updateOrder")
-    public ResultVO updateOrder(OrderPO orderPO) {
+    public ResultVO updateOrder(@RequestBody OrderPO orderPO) {
         int updateOrder = orderService.updateOrder(orderPO);
         if (updateOrder < 1) {
             return ResultVO.fail("update order fail");
@@ -36,7 +37,7 @@ public class OrderController {
 
     @ApiOperation("query order")
     @PostMapping("/queryOrder")
-    public ResultVO queryOrder(OrderVO orderVO) {
+    public ResultVO queryOrder(@RequestBody OrderVO orderVO) {
         return orderService.queryOrder(orderVO);
     }
 }

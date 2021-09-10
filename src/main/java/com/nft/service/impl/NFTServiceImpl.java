@@ -288,6 +288,12 @@ public class NFTServiceImpl implements NFTService {
             fileDetail.setCreaterNickName(createUserInfo.getNickName());
         }
 
+        if (userId.equals(creater) && shopMapper.selectById(creater) != null) {
+            fileDetail.setEntity("true");
+        } else {
+            fileDetail.setEntity("false");
+        }
+
 
         QueryWrapper<SellInfoPO> queryWrapper1 = new QueryWrapper();
         queryWrapper1.eq("token_id", filePO.getId());

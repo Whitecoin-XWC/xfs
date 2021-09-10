@@ -132,6 +132,9 @@ public class FilePO {
     @TableField(exist = false)
     private Integer collect;
 
+    @TableField(exist = false)
+    private String entity;
+
     public void setCopyrightFee(String copyrightFeeStr) {
         if (StringUtils.isEmpty(copyrightFeeStr)) {
             copyrightFeeStr = "0";
